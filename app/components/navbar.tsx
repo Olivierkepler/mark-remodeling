@@ -78,17 +78,17 @@ export default function Navbar() {
           </button>
         </div>
       </nav>
-
+{/* Overlay Background */}
+<div
+          className={`fixed top-0  left-0 w-full h-full  bg-gray-800/30 ${isOpen ? 'block' : 'hidden'}`}
+          onClick={() => setIsOpen(false)} // Close on outside click
+        ></div>
       {/* Mobile Menu (Right Side Overlay) */}
       <div
         className={`fixed top-0 right-0 w-64 h-full bg-gradient-to-r from-gray-800 to-gray-600 p-6 space-y-4 transform transition-transform duration-300 ease-in-out z-50 ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
         ref={menuRef}
       >
-        {/* Overlay Background */}
-        <div
-          className={`fixed top-0 left-0 w-full h-full  ${isOpen ? 'block' : 'hidden'}`}
-          onClick={() => setIsOpen(false)} // Close on outside click
-        ></div>
+        
 
         <div className="text-white text-2xl font-semibold">
           <Link href="/" className="hover:text-orange-400 transition duration-300 ease-in-out">ConstructionCo</Link>
@@ -96,10 +96,10 @@ export default function Navbar() {
 
         {/* Mobile Menu Links */}
         <div className="space-y-6">
-          <Link href="/" className="text-white block hover:text-orange-400 transition duration-300 ease-in-out">Home</Link>
-          <Link href="/about" className="text-white block hover:text-orange-400 transition duration-300 ease-in-out">About</Link>
-          <Link href="/services" className="text-white block hover:text-orange-400 transition duration-300 ease-in-out">Services</Link>
-          <Link href="/contact" className="text-white block hover:text-orange-400 transition duration-300 ease-in-out">Contact</Link>
+          <Link href="/" className="text-white cursor-pointer  block hover:text-orange-400 transition duration-300 ease-in-out">Home</Link>
+          <Link href="/about" className="text-white  cursor-pointer block hover:text-orange-400 transition duration-300 ease-in-out">About</Link>
+          <Link href="/services" className="text-white cursor-pointer block hover:text-orange-400 transition duration-300 ease-in-out">Services</Link>
+          <Link href="/contact" className="text-white cursor-pointer block hover:text-orange-400 transition duration-300 ease-in-out">Contact</Link>
         </div>
 
         {/* Mobile Search Bar */}
