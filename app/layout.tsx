@@ -13,10 +13,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Clairvil X",
-  description: "Mark",
+  title: "Mark Remodeling - Professional Home Remodeling Services",
+  description: "Transform your space with Mark Remodeling. Professional kitchen, bathroom, and home remodeling services in the Washington, D.C. metro area. Free consultations and estimates.",
+  keywords: "remodeling, kitchen remodeling, bathroom remodeling, home renovation, Washington DC, Maryland, Virginia",
   icons: {
-    icon: "/public/images/mark.png",
+    icon: "/images/mark.png",
+  },
+  openGraph: {
+    title: "Mark Remodeling - Professional Home Remodeling Services",
+    description: "Transform your space with Mark Remodeling. Professional kitchen, bathroom, and home remodeling services in the Washington, D.C. metro area.",
+    type: "website",
+    locale: "en_US",
   },
 };
 
