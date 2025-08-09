@@ -85,7 +85,7 @@ export default function Navbar() {
         ></div>
       {/* Mobile Menu (Right Side Overlay) */}
       <div
-        className={`fixed top-0 right-0 w-64 h-full bg-gradient-to-r from-gray-800 to-gray-600 p-6 space-y-4 transform transition-transform duration-300 ease-in-out z-50 ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
+        className={`fixed  top-0 right-0 w-64 h-full bg-gradient-to-r from-gray-800 to-gray-600 p-6 space-y-4 transform transition-transform duration-300 ease-in-out z-50 ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
         ref={menuRef}
       >
         
