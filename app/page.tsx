@@ -1,4 +1,4 @@
-import Image from "next/image";
+
 import Header from "./components/Header";
 import ServiceCard from "./components/ServiceCard";
 import ContactForm from "./components/ContactForm";
@@ -103,7 +103,7 @@ export default function Home() {
                 About Mark Remodeling
               </h2>
               <p className="text-lg text-gray-600 mb-6">
-                With over 15 years of experience in the remodeling industry, we've been helping homeowners 
+                With over 15 years of experience in the remodeling industry, we ve been helping homeowners 
                 transform their spaces into beautiful, functional, and comfortable environments.
               </p>
               <p className="text-lg text-gray-600 mb-6">
