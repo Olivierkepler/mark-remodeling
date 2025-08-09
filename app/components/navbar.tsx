@@ -96,10 +96,30 @@ export default function Navbar() {
 
         {/* Mobile Menu Links */}
         <div className="space-y-6">
-          <Link href="/" className="text-white cursor-pointer  block hover:text-orange-400 transition duration-300 ease-in-out">Home</Link>
-          <Link href="/about" className="text-white  cursor-pointer block hover:text-orange-400 transition duration-300 ease-in-out">About</Link>
-          <Link href="/services" className="text-white cursor-pointer block hover:text-orange-400 transition duration-300 ease-in-out">Services</Link>
-          <Link href="/contact" className="text-white cursor-pointer block hover:text-orange-400 transition duration-300 ease-in-out">Contact</Link>
+          <Link href="/" className="text-white cursor-pointer block hover:scale-105 transition duration-300 ease-in-out group">
+            <span className="flex items-center">
+              Home
+              <span className="opacity-0 group-hover:opacity-100 transform translate-x-[-10px] group-hover:translate-x-2 transition-all duration-300 ml-2">→</span>
+            </span>
+          </Link>
+          <Link href="/about" className="text-white cursor-pointer block hover:scale-105 transition duration-300 ease-in-out group">
+            <span className="flex items-center">
+              About
+              <span className="opacity-0 group-hover:opacity-100 transform translate-x-[-10px] group-hover:translate-x-2 transition-all duration-300 ml-2">→</span>
+            </span>
+          </Link>
+          <Link href="/services" className="text-white cursor-pointer block hover:scale-105 transition duration-300 ease-in-out group">
+            <span className="flex items-center">
+              Services
+              <span className="opacity-0 group-hover:opacity-100 transform translate-x-[-10px] group-hover:translate-x-2 transition-all duration-300 ml-2">→</span>
+            </span>
+          </Link>
+          <Link href="/contact" className="text-white cursor-pointer block hover:scale-105 transition duration-300 ease-in-out group">
+            <span className="flex items-center">
+              Contact
+              <span className="opacity-0 group-hover:opacity-100 transform translate-x-[-10px] group-hover:translate-x-2 transition-all duration-300 ml-2">→</span>
+            </span>
+          </Link>
         </div>
 
         {/* Mobile Search Bar */}
