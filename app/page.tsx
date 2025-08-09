@@ -1,7 +1,8 @@
 
-import Header from "./components/Header";
+import Header from "./components/navbar";
 import ServiceCard from "./components/ServiceCard";
 import ContactForm from "./components/ContactForm";
+import Navbar from "./components/navbar";
 
 const services = [
   {
@@ -39,7 +40,7 @@ const services = [
 export default function Home() {
   return (
     <div className="min-h-screen bg-white">
-      <Header />
+      <Navbar />
 
       {/* Hero Section */}
       <section id="home" className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
