@@ -22,7 +22,7 @@ export default function About() {
             <h2 className="text-3xl font-semibold text-gray-900 mb-6">Our Story</h2>
             <p className="text-gray-600 mb-4">
               For over 25 years, ConstructionCo has been at the forefront of innovative construction solutions. 
-              What started as a small family business has grown into one of the region's most trusted construction companies.
+              What started as a small family business has grown into one of the regions most trusted construction companies.
             </p>
             <p className="text-gray-600 mb-4">
               We pride ourselves on our commitment to quality, safety, and customer satisfaction. Our team of experienced 
@@ -66,7 +66,7 @@ export default function About() {
 
         <div className="text-center">
           <h2 className="text-3xl font-semibold text-gray-900 mb-6">Ready to Start Your Project?</h2>
-          <p className="text-xl text-gray-600 mb-8">Let's build something amazing together</p>
+          <p className="text-xl text-gray-600 mb-8">Let s build something amazing together</p>
           <a href="/contact" className="inline-block bg-orange-400 text-white px-8 py-3 rounded-full font-semibold hover:bg-orange-500 transition duration-300 ease-in-out transform hover:scale-105">
             Contact Us
           </a>
