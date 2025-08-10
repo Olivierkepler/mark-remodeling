@@ -1,12 +1,13 @@
 
-import Header from "./components/navbar";
+
 import ServiceCard from "./components/ServiceCard";
 import ContactForm from "./components/ContactForm";
-import Navbar from "./components/navbar";
+import HeroSection from "./components/Hero";
+import FeaturedProjects from "./components/FeaturedProjects";
 
 const services = [
   {
-    title: "Kitchen Remodeling",
+    title: "Kitchen Remodeling",  
     description: "Complete kitchen renovations including cabinets, countertops, appliances, and layout redesign.",
     icon: "🏠"
   },
@@ -40,36 +41,11 @@ const services = [
 export default function Home() {
   return (
     <div className="min-h-screen bg-white">
-      <Navbar />
+   
 
-      {/* Hero Section */}
-      <section id="home" className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              Transform Your Space
-            </h1>
-            <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
-              Professional remodeling services to turn your vision into reality. 
-              From kitchens and bathrooms to complete home renovations.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="#contact"
-                className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition duration-300"
-              >
-                Get Free Quote
-              </a>
-              <a
-                href="#services"
-                className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition duration-300"
-              >
-                View Services
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
+   <HeroSection />
+      
+        <FeaturedProjects />
 
       {/* Services Section */}
       <section id="services" className="py-20 bg-gray-50">
@@ -171,7 +147,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
+      {/* <footer className="bg-gray-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
@@ -202,7 +178,7 @@ export default function Home() {
             <p>&copy; 2024 Mark Remodeling. All rights reserved.</p>
           </div>
         </div>
-      </footer>
+      </footer> */}
     </div>
   );
 }
