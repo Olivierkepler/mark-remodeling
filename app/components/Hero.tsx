@@ -1,7 +1,7 @@
 'use client'
 import Image from 'next/image'
-import { useEffect, useRef, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+// import { useEffect, useRef, useState } from 'react'
+import { motion} from 'framer-motion'
 // import { Building2, Home, Wrench, Leaf, Landmark } from 'lucide-react'
 
 // Hero section component with background image + gradient overlay
