@@ -3,7 +3,7 @@
 import ServiceCard from "./components/ServiceCard";
 import ContactForm from "./components/ContactForm";
 import HeroSection from "./components/Hero";
-import FeaturedProjects from "./components/FeaturedProjects";
+import FeaturedProjects from "./components/FeaturedProjects";     
 
 const services = [
   {

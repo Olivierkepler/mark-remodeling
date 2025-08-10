@@ -32,8 +32,8 @@ const FALLBACK: Project[] = [
     title: 'Modern Kitchen Remodel',
     location: 'Cambridge, MA',
     scope: 'Cabinetry, counters, lighting',
-    before: '/images/before.jpg',
-    after: '/images/after2.jpg',
+    before: '/images/afterall.JPG',
+    after: '/images/after1.jpg',
   },
   {
     id: 'bath-01',
