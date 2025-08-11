@@ -134,7 +134,7 @@ export default function SubNav() {
     <AnimatePresence>
       {isVisible && (
         <motion.div 
-          className="w-full fixed top-22 left-0 right-0 z-50"
+          className="w-full fixed top-22 left-0 right-0 z-10"
           initial={{ y: -100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -100, opacity: 0 }}

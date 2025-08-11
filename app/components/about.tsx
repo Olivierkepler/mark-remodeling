@@ -22,7 +22,7 @@ function About() {
             className="text-center lg:text-left"
           >
             <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
-              About <span className="text-blue-600">Mark Remodeling</span>
+              About <span className="text-blue-600">ClairvilX Remodeling</span>
             </h2>
             <p className="text-lg text-gray-600 mb-6">
               With over 15 years of experience in the remodeling industry, we’ve been helping homeowners
@@ -63,7 +63,7 @@ function About() {
             <div className="relative rounded-2xl overflow-hidden shadow-lg group w-full max-w-md">
               <Image
                 src="https://holh1uldewromppp.public.blob.vercel-storage.com/images/hero/carpentry-1754927116032.jpg"
-                alt="About Mark Remodeling"
+                alt="About ClairvilX Remodeling"
                 width={500}
                 height={500}
                 className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
