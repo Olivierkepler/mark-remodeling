@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useMemo, useRef } from 'react';
 import { motion, MotionConfig, useMotionValue, useTransform } from 'framer-motion';
-import SearchBar from '../components/searchbar';
+// import SearchBar from '../components/searchbar';
 
 const services = [
   {
@@ -80,13 +80,13 @@ export default function ServicesPage() {
     'Kitchen', 'Bathroom', 'Basement', 'Additions', 'Exterior', 'Handyman'
   ]), []);
 
-  const handleSearch = useCallback((query: string) => {
-    setQ(query);
-    const filtered = services.filter(s =>
-      (s.title + s.description + s.details).toLowerCase().includes(query.toLowerCase())
-    );
-    setFiltered(filtered);
-  }, []);
+  // const handleSearch = useCallback((query: string) => {
+  //   setQ(query);
+  //   const filtered = services.filter(s =>
+  //     (s.title + s.description + s.details).toLowerCase().includes(query.toLowerCase())
+  //   );
+  //   setFiltered(filtered);
+  // }, []);
 
   const filterByTag = (t: string) => {
     const filtered = services.filter(s => s.title.toLowerCase().includes(t.toLowerCase()));

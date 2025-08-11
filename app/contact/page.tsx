@@ -145,7 +145,7 @@ export default function ContactForm() {
   Contact Us
 </h1>
 <p className='text-center text-gray-600'>
-  We're here to help you with your construction needs.
+  We are here to help you with your construction needs.
 </p>
 </div>
 
