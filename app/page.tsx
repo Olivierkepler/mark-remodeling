@@ -1,10 +1,13 @@
 
 
-import ServiceCard from "./components/ServiceCard";
+// import ServiceCard from "./components/ServiceCard";
 import ContactForm from "./components/ContactForm";
 import HeroSection from "./components/Hero";
 import FeaturedProjects from "./components/FeaturedProjects";     
-
+import ServicesSection from "./components/Services";
+import Image from "next/image";
+import About from "./components/about";
+import Contact from "./components/contact";
 const services = [
   {
     title: "Kitchen Remodeling",  
@@ -38,16 +41,57 @@ const services = [
   }
 ];
 
+
+
+
+
+
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-white">
    
 
    <HeroSection />
-      
-        <FeaturedProjects />
+  <FeaturedProjects />
+  <ServicesSection
+  services={[
+    { title: "Kitchen Remodeling",  description: "Cabinetry, countertops, lighting, appliance layout & workflow upgrades.", icon: "🍽️" },
+    { title: "Bathroom Remodeling", description: "Custom tile, vanities, walk-in showers, fixtures, waterproofing.",       icon: "🚿" },
+    { title: "Basement Finishing",  description: "Code-compliant framing, insulation, flooring, egress, and lighting.",    icon: "🏡" },
+    { title: "Room Additions",      description: "Seamless additions that match your home’s structure and style.",         icon: "➕" },
+    { title: "Exterior Renovations",description: "Siding, roofing, windows/doors, and outdoor living spaces.",             icon: "🏠" },
+    { title: "Handyman Services",   description: "Repairs, maintenance, and punch-list items—done right the first time.",  icon: "🧰" },
+  ]}
+/>
+<About />
 
-      {/* Services Section */}
+
+<div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
+    
+    {/* Left Content */}
+    <div className="max-w-xl text-center md:text-left flex-1">
+      <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        Contact Us
+      </h2>
+      <p className="text-lg text-gray-600 leading-relaxed">
+        Ready to start your remodeling project? 
+        <span className="block mt-1">
+          Contact us for a free consultation and estimate.
+        </span>
+      </p>
+    </div>
+
+    {/* Contact Form */}
+    <div className="w-full md:w-[65%] lg:w-[60%] bg-white  rounded-2xl p-6 sm:p-8">
+      <Contact />
+    </div>
+    
+  </div>
+
+
+
+      {/* Services Section
       <section id="services" className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -69,11 +113,11 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* About Section */}
-      <section id="about" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* <section id="about" className="py-20 bg-white">
+        <div className=" max-w-full px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
@@ -99,52 +143,13 @@ export default function Home() {
               </div>
             </div>
             <div className="relative">
-              <div className="bg-gray-200 rounded-lg h-96 flex items-center justify-center">
-                <span className="text-gray-400">Project Gallery</span>
-              </div>
+             <Image src="https://holh1uldewromppp.public.blob.vercel-storage.com/images/hero/carpentry-1754927116032.jpg" alt="About Mark Remodeling" width={500} height={500} />
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
-      {/* Contact Section */}
-      <section id="contact" className="py-20 bg-gray-50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Get Your Free Quote
-            </h2>
-            <p className="text-lg text-gray-600">
-              Ready to start your remodeling project? Contact us for a free consultation and estimate.
-            </p>
-          </div>
-          <div className="bg-white rounded-lg shadow-lg p-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Contact Information</h3>
-                <div className="space-y-4">
-                  <div className="flex items-center">
-                    <span className="text-blue-600 mr-3">📞</span>
-                    <span className="text-gray-600">(555) 123-4567</span>
-                  </div>
-                  <div className="flex items-center">
-                    <span className="text-blue-600 mr-3">📧</span>
-                    <span className="text-gray-600">info@markremodeling.com</span>
-                  </div>
-                  <div className="flex items-center">
-                    <span className="text-blue-600 mr-3">📍</span>
-                    <span className="text-gray-600">Washington, D.C. Metro Area</span>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Quick Contact Form</h3>
-                <ContactForm />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+   
 
       {/* Footer */}
       {/* <footer className="bg-gray-900 text-white py-12">

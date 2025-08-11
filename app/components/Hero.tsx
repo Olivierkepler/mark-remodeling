@@ -1,24 +1,26 @@
 'use client'
 import Image from 'next/image'
-// import { useEffect, useRef, useState } from 'react'
-import { motion} from 'framer-motion'
-// import { Building2, Home, Wrench, Leaf, Landmark } from 'lucide-react'
+import { motion } from 'framer-motion'
 
-// Hero section component with background image + gradient overlay
 function Hero() {
+  // Paste your actual Blob URL here:
+  const HERO_URL =
+    'https://holh1uldewromppp.public.blob.vercel-storage.com/images/hero/image-1754873406587.png'
+
   return (
-    <section className="relative text-white overflow-hidden ">
+    <section className="relative text-white overflow-hidden">
       {/* Background image */}
       <div className="absolute inset-0">
         <Image
-          src="/images/before.JPG"  
+          src={HERO_URL}
           alt="Construction Team at Work"
-          className="w-full h-full object-cover"
-          width={1000}
-          height={1000}
+          fill                     // use full container
+          priority                 // load fast for LCP
+          sizes="100vw"            // responsive hint
+          className="object-cover" // cover the whole section
         />
         {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#1E3A8A]/90 via-[#1E3A8A]/70 to-[#F59E0B]/70 " />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#1E3A8A]/90 via-[#1E3A8A]/70 to-[#F59E0B]/70" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-12 pt-60 pb-20 flex flex-col md:flex-row items-center gap-12">
@@ -32,6 +34,7 @@ function Hero() {
           >
             Building Your <span className="text-[#F59E0B]">Dream</span> Space
           </motion.h1>
+
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -40,6 +43,7 @@ function Hero() {
           >
             From concept to completion, we deliver top-tier construction and remodeling services tailored to your vision.
           </motion.p>
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

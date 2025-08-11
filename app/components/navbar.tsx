@@ -58,7 +58,7 @@ export default function Navbar() {
         <div className="text-3xl font-semibold hover:text-gray-200 transition-colors flex items-center text-opacity-100">
           <Home className="w-8 h-8 text-orange-400 mr-2" />
           <Link href="/" className="text-2xl font-semibold hover:text-gray-200 transition-colors text-opacity-50">
-            ConstructionCo
+            ClairvilX
           </Link>
         </div>
 
@@ -98,7 +98,7 @@ export default function Navbar() {
         ref={menuRef}
       >
         <div className="text-white text-2xl font-semibold">
-          <Link href="/" className="hover:text-orange-400 transition duration-300 ease-in-out">ConstructionCo</Link>
+          <Link href="/" className="hover:text-orange-400 transition duration-300 ease-in-out">ClairvilX</Link>
         </div>
 
         <div className="space-y-6">
