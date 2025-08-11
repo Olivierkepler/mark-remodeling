@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence, useAnimationControls } from 'framer-motion';
 
 type FormState = 'idle' | 'loading' | 'success' | 'error';
@@ -31,22 +31,22 @@ export default function ContactForm() {
   const statusRef = useRef<HTMLDivElement | null>(null);
 
   // Phone auto-format: (XXX) XXX-XXXX or +.. preserved
-  function formatPhone(input: string) {
+  const formatPhone = useCallback((input: string) => {
     const hasPlus = input.trim().startsWith('+');
     if (hasPlus) return input.replace(/[^\d+()\-\s]/g, '');
     const digits = input.replace(/\D/g, '').slice(0, 15);
     if (digits.length <= 3) return digits;
     if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
     return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`.trim();
-  }
+  }, []);
 
-  function setField<K extends keyof typeof values>(k: K, v: string) {
+  const setField = useCallback(<K extends keyof typeof values>(k: K, v: string) => {
     const next = k === 'phone' ? formatPhone(v) : v;
     setValues((s) => ({ ...s, [k]: next }));
     if (errors[k]) setErrors((e) => ({ ...e, [k]: '' }));
-  }
+  }, [errors, formatPhone]);
 
-  function validate(current = values) {
+  const validate = useCallback((current = values) => {
     const e: Errors = {};
     if (!current.name.trim()) e.name = 'Please enter your name.';
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(current.email)) e.email = 'Enter a valid email.';
@@ -55,7 +55,7 @@ export default function ContactForm() {
     if (current.message.length > MAX_MSG) e.message = `Keep it under ${MAX_MSG} characters.`;
     if (current.company) e.message = 'Spam detected.'; // honeypot
     return e;
-  }
+  }, [values]);
 
   function handleBlur<K extends keyof typeof values>(k: K) {
     setTouched((t) => ({ ...t, [k]: true }));
@@ -63,7 +63,7 @@ export default function ContactForm() {
     if (e[k as string]) setErrors((prev) => ({ ...prev, [k as string]: e[k as string] }));
   }
 
-  async function onSubmit(e?: React.FormEvent) {
+  const onSubmit = useCallback(async (e?: React.FormEvent) => {
     e?.preventDefault();
     const eNow = validate();
     setErrors(eNow);
@@ -105,7 +105,7 @@ export default function ContactForm() {
         setState('idle');
       }, 3500);
     }
-  }
+  }, [validate, nameId, emailId, phoneId, messageId, values, progress]);
 
   // textarea autoresize
   useEffect(() => {
@@ -123,7 +123,7 @@ export default function ContactForm() {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [values]);
+  }, [onSubmit]);
 
   const msgCount = useMemo(() => values.message.length, [values.message]);
   const msgPct = Math.min(100, Math.round((msgCount / MAX_MSG) * 100));
@@ -155,7 +155,7 @@ export default function ContactForm() {
         <div className="flex items-start justify-between gap-3">
           <div>
             <h3 className="text-xl font-bold text-gray-900">Tell us about your project</h3>
-            <p className="mt-1 text-sm text-gray-600">We’ll get back within 1 business day.</p>
+            <p className="mt-1 text-sm text-gray-600">Well get back within 1 business day.</p>
           </div>
           {/* Status live region for SR */}
           <div
@@ -308,7 +308,7 @@ export default function ContactForm() {
         {/* Toasts */}
         <ToastArea>
           {state === 'success' && (
-            <Toast intent="success" text="Thanks! We’ll be in touch shortly." />
+            <Toast intent="success" text="Thanks! We ll be in touch shortly." />
           )}
           {state === 'error' && (
             <Toast intent="error" text="Something went wrong. Please try again." />

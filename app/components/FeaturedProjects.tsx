@@ -8,10 +8,10 @@ import { ArrowLeft, ArrowRight, Sparkles } from 'lucide-react';
 const BRAND_BLUE = '#1E3A8A';
 const BRAND_GOLD = '#F59E0B';
 
-// Keep PH as a true placeholder
+// True placeholder
 const PH = '/images/placeholder.jpg';
 
-// Your AFTER image URL
+// Blob URLs
 const BEFORE_URL =
   'https://holh1uldewromppp.public.blob.vercel-storage.com/images/hero/before1-1754881762282.jpeg';
 
@@ -36,8 +36,8 @@ export type Project = {
   title: string;
   location?: string;
   scope?: string;
-  before?: string; // string, optional
-  after?: string;  // string, optional
+  before?: string;
+  after?: string;
 };
 
 const FALLBACK: Project[] = [
@@ -46,8 +46,8 @@ const FALLBACK: Project[] = [
     title: 'Modern Kitchen Remodel',
     location: 'Cambridge, MA',
     scope: 'Cabinetry, counters, lighting',
-    before: BEFORE_URL,          // replace with real "before" when you have it
-    after: AFTER_URL1,    // ← your Blob link
+    before: BEFORE_URL,
+    after: AFTER_URL1,
   },
   {
     id: 'bath-01',
@@ -75,8 +75,13 @@ export default function FeaturedProjects({ projects = FALLBACK }: { projects?: P
 
   const data = projects.length ? projects : FALLBACK;
 
-  const next = () => setIndex((i) => (i + 1) % data.length);
-  const prev = () => setIndex((i) => (i - 1 + data.length) % data.length);
+  const next = useCallback(() => {
+    setIndex((i) => (i + 1) % data.length);
+  }, [data.length]);
+
+  const prev = useCallback(() => {
+    setIndex((i) => (i - 1 + data.length) % data.length);
+  }, [data.length]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -85,10 +90,10 @@ export default function FeaturedProjects({ projects = FALLBACK }: { projects?: P
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, []);
+  }, [next, prev]);
 
   return (
-    <section id="projects" className="relative py-16 md:py-24 ">
+    <section id="projects" className="relative py-16 md:py-24">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10 opacity-70 blur-3xl"
@@ -104,16 +109,26 @@ export default function FeaturedProjects({ projects = FALLBACK }: { projects?: P
               Featured Projects
             </h2>
             <p className="mt-2 text-gray-600">
-              Before & after transformations that showcase our craftsmanship.
+              Before &amp; after transformations that showcase our craftsmanship.
             </p>
           </div>
 
           {/* Mobile-only controls */}
           <div className="md:hidden flex items-center gap-2">
-            <button onClick={prev} className="inline-flex cursor-pointer items-center justify-center rounded-full border bg-white/80 px-3 py-2 backdrop-blur-xl shadow" style={{ borderColor: `${BRAND_BLUE}26` }} aria-label="Previous project">
+            <button
+              onClick={prev}
+              className="inline-flex cursor-pointer items-center justify-center rounded-full border bg-white/80 px-3 py-2 backdrop-blur-xl shadow"
+              style={{ borderColor: `${BRAND_BLUE}26` }}
+              aria-label="Previous project"
+            >
               <ArrowLeft className="h-4 w-4 text-black" />
             </button>
-            <button onClick={next} className="inline-flex cursor-pointer items-center justify-center rounded-full border bg-white/80 px-3 py-2 backdrop-blur-xl shadow" style={{ borderColor: `${BRAND_BLUE}26` }} aria-label="Next project">
+            <button
+              onClick={next}
+              className="inline-flex cursor-pointer items-center justify-center rounded-full border bg-white/80 px-3 py-2 backdrop-blur-xl shadow"
+              style={{ borderColor: `${BRAND_BLUE}26` }}
+              aria-label="Next project"
+            >
               <ArrowRight className="h-4 w-4 text-black" />
             </button>
           </div>
@@ -159,12 +174,21 @@ export default function FeaturedProjects({ projects = FALLBACK }: { projects?: P
         </div>
 
         {/* CTA bar */}
-        <div className="mt-12 md:mt-16 flex flex-wrap items-center justify-between gap-4 rounded-2xl border bg-white/70 p-5 backdrop-blur-xl shadow" style={{ borderColor: `${BRAND_BLUE}26` }}>
+        <div
+          className="mt-12 md:mt-16 flex flex-wrap items-center justify-between gap-4 rounded-2xl border bg-white/70 p-5 backdrop-blur-xl shadow"
+          style={{ borderColor: `${BRAND_BLUE}26` }}
+        >
           <div className="flex items-center gap-3 text-gray-800">
             <Sparkles style={{ color: BRAND_GOLD }} className="h-5 w-5" />
-            <p className="text-sm md:text-base">Want to see more transformations? Explore our services and the work we ve done.</p>
+            <p className="text-sm md:text-base">
+              Want to see more transformations? Explore our services and the work we’ve done.
+            </p>
           </div>
-          <a href="#contact" className="inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold shadow-lg" style={{ background: `linear-gradient(90deg, ${BRAND_GOLD}, ${BRAND_GOLD}cc)`, color: '#111827' }}>
+          <a
+            href="#contact"
+            className="inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold shadow-lg"
+            style={{ background: `linear-gradient(90deg, ${BRAND_GOLD}, ${BRAND_GOLD}cc)`, color: '#111827' }}
+          >
             Request a Quote
           </a>
         </div>
@@ -173,16 +197,22 @@ export default function FeaturedProjects({ projects = FALLBACK }: { projects?: P
   );
 }
 
-function ProjectCard({ project, prefersReduced }: { project: Project; prefersReduced: boolean; }) {
+function ProjectCard({
+  project,
+  prefersReduced,
+}: {
+  project: Project;
+  prefersReduced: boolean;
+}) {
   const [split, setSplit] = useState(55);
   const sliderRef = useRef<HTMLDivElement>(null);
   const handleId = useId();
 
   const beforeSrc = project.before || PH;
-  const afterSrc  = project.after  || PH;
+  const afterSrc = project.after || PH;
 
-  const hasBefore = !!project.before; // just check presence
-  const hasAfter  = !!project.after;
+  const hasBefore = !!project.before;
+  const hasAfter = !!project.after;
 
   const startDrag = useCallback((clientX: number) => {
     const el = sliderRef.current;
@@ -254,11 +284,12 @@ function ProjectCard({ project, prefersReduced }: { project: Project; prefersRed
           )}
         </div>
 
-        {/* Divider + handle */}
+        {/* Divider */}
         <div className="absolute inset-y-0" style={{ left: `calc(${split}% - 1px)` }} aria-hidden>
           <div className="h-full w-[2px] bg-white/80 shadow" />
         </div>
 
+        {/* Handle */}
         <button
           id={handleId}
           aria-label="Drag to compare before and after"
@@ -290,7 +321,10 @@ function ProjectCard({ project, prefersReduced }: { project: Project; prefersRed
       <div className="relative p-5">
         <div className="flex items-center justify-between gap-3">
           <h3 className="text-lg font-semibold text-gray-900">{project.title}</h3>
-          <span className="rounded-full px-3 py-1 text-xs font-bold" style={{ backgroundColor: 'rgba(245,158,11,0.12)', color: BRAND_GOLD }}>
+          <span
+            className="rounded-full px-3 py-1 text-xs font-bold"
+            style={{ backgroundColor: 'rgba(245,158,11,0.12)', color: BRAND_GOLD }}
+          >
             Before / After
           </span>
         </div>
@@ -303,7 +337,11 @@ function ProjectCard({ project, prefersReduced }: { project: Project; prefersRed
         )}
       </div>
 
-      <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity group-hover:opacity-100" style={{ background: `linear-gradient(180deg, transparent, ${BRAND_BLUE}08)` }} aria-hidden />
+      <div
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity group-hover:opacity-100"
+        style={{ background: `linear-gradient(180deg, transparent, ${BRAND_BLUE}08)` }}
+        aria-hidden
+      />
     </motion.article>
   );
 }

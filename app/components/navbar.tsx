@@ -7,7 +7,7 @@ import SearchBar from './searchbar'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
+  const [, setSearchQuery] = useState('') // elide unused state variable to satisfy no-unused-vars
   const [isScrolled, setIsScrolled] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)
   const menuRef = useRef<HTMLDivElement | null>(null)
@@ -49,25 +49,25 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [isDesktop])
 
-  const opacityClass = isDesktop ? (isScrolled ? 'opacity-100' : 'opacity-70 ') : 'opacity-100'
+  const opacityClass = isDesktop ? (isScrolled ? 'opacity-100' : 'opacity-70') : 'opacity-100'
 
   return (
     <header className={`sticky top-0 z-50 bg-gradient-to-r from-gray-800 to-gray-600 text-white shadow-xl transition-opacity duration-300 ${opacityClass}`}>
-      <nav className="max-w-7xl mx-auto p-6 flex items-center justify-between"> 
+      <nav className="max-w-7xl mx-auto p-6 flex items-center justify-between">
         {/* Logo */}
-        <div className="text-3xl font-semibold hover:text-gray-200 transition-colors flex items-center text-opacity-100">
+        <div className="text-3xl font-semibold hover:text-gray-200 transition-colors flex items-center">
           <Home className="w-8 h-8 text-orange-400 mr-2" />
-          <Link href="/" className="text-2xl font-semibold hover:text-gray-200 transition-colors text-opacity-50">
+          <Link href="/" className="text-2xl font-semibold hover:text-gray-200 transition-colors">
             ClairvilX
           </Link>
         </div>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex space-x-10">
-          <Link href="/" className="hover:text-orange-400 transition duration-300 ease-in-out transform hover:scale-105 text-opacity-100">Home</Link>
-          <Link href="/about" className="hover:text-orange-400 transition duration-300 ease-in-out transform hover:scale-105 text-opacity-100">About</Link>
-          <Link href="/services" className="hover:text-orange-400 transition duration-300 ease-in-out transform hover:scale-105 text-opacity-100">Services</Link>
-          <Link href="/contact" className="hover:text-orange-400 transition duration-300 ease-in-out transform hover:scale-105 text-opacity-100">Contact</Link>
+          <Link href="/" className="hover:text-orange-400 transition duration-300 ease-in-out transform hover:scale-105">Home</Link>
+          <Link href="/about" className="hover:text-orange-400 transition duration-300 ease-in-out transform hover:scale-105">About</Link>
+          <Link href="/services" className="hover:text-orange-400 transition duration-300 ease-in-out transform hover:scale-105">Services</Link>
+          <Link href="/contact" className="hover:text-orange-400 transition duration-300 ease-in-out transform hover:scale-105">Contact</Link>
         </div>
 
         {/* Desktop Search */}
@@ -77,15 +77,21 @@ export default function Navbar() {
 
         {/* Mobile Hamburger */}
         <div className="md:hidden flex items-center">
-          <button onClick={toggleMenu} className="text-white text-opacity-100" aria-expanded={isOpen} aria-controls="mobile-menu">
+          <button
+            onClick={toggleMenu}
+            className="text-white"
+            aria-expanded={isOpen}
+            aria-controls="mobile-menu"
+            aria-label="Toggle navigation menu"
+          >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
       </nav>
 
-      {/* Mobile overlay */}
+      {/* Mobile overlay (click anywhere outside to close) */}
       <div
-        className={`fixed top-0 left-0 w-full h-full z-50 bg-gray-800/30 ${isOpen ? 'block' : 'hidden'}`}
+        className={`fixed top-0 left-0 w-full h-full z-40 bg-gray-800/30 ${isOpen ? 'block' : 'hidden'}`}
         onClick={() => setIsOpen(false)}
       />
 
@@ -96,9 +102,14 @@ export default function Navbar() {
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
         ref={menuRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Mobile navigation"
       >
         <div className="text-white text-2xl font-semibold">
-          <Link href="/" className="hover:text-orange-400 transition duration-300 ease-in-out">ClairvilX</Link>
+          <Link href="/" className="hover:text-orange-400 transition duration-300 ease-in-out" onClick={() => setIsOpen(false)}>
+            ClairvilX
+          </Link>
         </div>
 
         <div className="space-y-6">
@@ -108,7 +119,12 @@ export default function Navbar() {
             ['Services', '/services'],
             ['Contact', '/contact'],
           ].map(([label, href]) => (
-            <Link key={href} href={href} className="text-white block hover:scale-105 transition duration-300 ease-in-out group">
+            <Link
+              key={href}
+              href={href}
+              onClick={() => setIsOpen(false)}
+              className="text-white block hover:scale-105 transition duration-300 ease-in-out group"
+            >
               <span className="flex items-center">
                 {label}
                 <span className="opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-2 transition-all duration-300 ml-2">→</span>

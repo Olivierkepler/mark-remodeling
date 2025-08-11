@@ -1,45 +1,14 @@
 
 
 // import ServiceCard from "./components/ServiceCard";
-import ContactForm from "./components/ContactForm";
+
 import HeroSection from "./components/Hero";
 import FeaturedProjects from "./components/FeaturedProjects";     
 import ServicesSection from "./components/Services";
-import Image from "next/image";
+
 import About from "./components/about";
 import Contact from "./components/contact";
-const services = [
-  {
-    title: "Kitchen Remodeling",  
-    description: "Complete kitchen renovations including cabinets, countertops, appliances, and layout redesign.",
-    icon: "🏠"
-  },
-  {
-    title: "Bathroom Remodeling",
-    description: "Bathroom updates and complete renovations with modern fixtures and finishes.",
-    icon: "🚿"
-  },
-  {
-    title: "Basement Finishing",
-    description: "Transform your basement into usable living space with proper insulation and finishing.",
-    icon: "🏠"
-  },
-  {
-    title: "Room Additions",
-    description: "Add square footage to your home with professional room additions and expansions.",
-    icon: "➕"
-  },
-  {
-    title: "Exterior Renovations",
-    description: "Siding, roofing, windows, doors, and outdoor living spaces.",
-    icon: "🏡"
-  },
-  {
-    title: "Handyman Services",
-    description: "Small repairs, maintenance, and improvement projects around your home.",
-    icon: "🔧"
-  }
-];
+
 
 
 
