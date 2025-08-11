@@ -298,7 +298,7 @@ export default function ContactForm() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -6 }}
                 >
-                  Send message →
+                  Send <span className="ml-2  hidden md:block       ">message</span> →
                 </motion.span>
               )}
             </AnimatePresence>
