@@ -11,7 +11,7 @@ const Footer = () => {
           
           {/* Company Info */}
           <div>
-            <h3 className="text-xl font-semibold mb-4">ConstructionCo</h3>
+            <h3 className="text-xl font-semibold mb-4">ClairvilX</h3>
             <p className="text-gray-300">
               Building dreams into reality with quality craftsmanship and dedication to excellence.
             </p>
@@ -51,7 +51,7 @@ const Footer = () => {
               <li>123 Construction Ave</li>
               <li>Building City, BC 12345</li>
               <li>Phone: (555) 123-4567</li>
-              <li>Email: info@constructionco.com</li>
+              <li>Email: info@ClairvilX.com</li>
             </ul>
           </div>
 
@@ -78,7 +78,7 @@ const Footer = () => {
 
         {/* Copyright */}
         <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
-          <p>&copy; {new Date().getFullYear()} ConstructionCo. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} ClairvilX. All rights reserved.</p>
         </div>
       </div>
     </footer>

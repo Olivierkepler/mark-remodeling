@@ -63,7 +63,7 @@ export default function About() {
           >
             <h2 className="text-3xl font-extrabold text-gray-900 mb-4">Our Story</h2>
             <p className="text-gray-700 leading-relaxed">
-              For nearly three decades, ConstructionCo has led with craftsmanship, safety, and transparency.
+              For nearly three decades, ClairvilX has led with craftsmanship, safety, and transparency.
               What began as a family shop is now a trusted, technology-forward GC delivering complex builds
               across the region.
             </p>
