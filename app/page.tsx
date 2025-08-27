@@ -42,12 +42,7 @@ export default function Home() {
     <div className="max-w-xl text-center md:text-left flex-1">
       <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
         Contact Us.
-        <p className="text-lg text-gray-600 leading-relaxed">
-        Ready to start your remodeling project? 
-        <span className="block mt-1">
-          Contact us for a free consultation and estimate.
-        </span>
-      </p>
+        
       </h2>
       <p className="text-lg text-gray-600 leading-relaxed">
         Ready to start your remodeling project? 
