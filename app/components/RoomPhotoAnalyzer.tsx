@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 type AnalysisResult = {
   measurements?: {
@@ -72,9 +73,10 @@ export default function RoomPhotoAnalyzer() {
       }
 
       setResult(data.analysis);
-    } catch (err: any) {
+    } catch (err) {
       console.error("Analysis error:", err);
-      setError(err.message || "Failed to analyze the image. Please try again.");
+      const errorMessage = err instanceof Error ? err.message : "Failed to analyze the image. Please try again.";
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -108,11 +110,13 @@ export default function RoomPhotoAnalyzer() {
 
       {/* IMAGE PREVIEW */}
       {preview && (
-        <div className="mt-4">
-          <img
+        <div className="mt-4 relative w-full h-64 rounded-xl overflow-hidden shadow-md">
+          <Image
             src={preview}
             alt="Room preview"
-            className="w-full h-64 object-cover rounded-xl shadow-md"
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 50vw"
           />
         </div>
       )}

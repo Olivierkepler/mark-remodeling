@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence, useAnimationControls } from 'framer-motion';
 
 type FormState = 'idle' | 'loading' | 'success' | 'error';
@@ -65,7 +65,7 @@ export default function ContactForm() {
     if (e[k as string]) setErrors((prev) => ({ ...prev, [k as string]: e[k as string] }));
   }
 
-  async function onSubmit(e?: React.FormEvent) {
+  const onSubmit = useCallback(async (e?: React.FormEvent) => {
     e?.preventDefault();
     const eNow = validate();
     setErrors(eNow);
@@ -111,7 +111,7 @@ export default function ContactForm() {
         setState('idle');
       }, 3400);
     }
-  }
+  }, [values, nameId, emailId, phoneId, messageId, progress, setState, setValues, setTouched, setErrors, setFormShake]);
 
   // textarea autoresize
   useEffect(() => {

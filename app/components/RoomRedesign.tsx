@@ -2,11 +2,15 @@
 
 import { useState } from "react";
 
+type RedesignResult = {
+  output?: string;
+};
+
 export default function RoomRedesign() {
   const [style, setStyle] = useState("");
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<RedesignResult | null>(null);
 
   const styles = [
     "Modern",

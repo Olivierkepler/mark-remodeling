@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 const STYLES = [
   "Modern Minimalist",
@@ -63,9 +64,10 @@ export default function RoomRedesignImage() {
 
       const data = await res.json();
       setResultUrl(data.imageUrl);
-    } catch (err: any) {
+    } catch (err) {
       console.error(err);
-      setError(err.message || "Something went wrong.");
+      const errorMessage = err instanceof Error ? err.message : "Something went wrong.";
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -150,11 +152,13 @@ export default function RoomRedesignImage() {
               <h3 className="text-sm font-semibold text-gray-800 mb-2">
                 Before
               </h3>
-              <div className="rounded-xl overflow-hidden border bg-gray-50">
-                <img
+              <div className="rounded-xl overflow-hidden border bg-gray-50 relative w-full h-64">
+                <Image
                   src={URL.createObjectURL(file)}
                   alt="Original room"
-                  className="w-full h-64 object-cover"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
             </div>
@@ -166,11 +170,13 @@ export default function RoomRedesignImage() {
               <h3 className="text-sm font-semibold text-gray-800 mb-2">
                 After – {activeStyle}
               </h3>
-              <div className="rounded-xl overflow-hidden border bg-gray-50">
-                <img
+              <div className="rounded-xl overflow-hidden border bg-gray-50 relative w-full h-64">
+                <Image
                   src={resultUrl}
                   alt="Redesigned room"
-                  className="w-full h-64 object-cover"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
             </div>
