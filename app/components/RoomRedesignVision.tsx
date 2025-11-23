@@ -5,7 +5,7 @@ import { useState } from "react";
 export default function RoomRedesignVision() {
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<{ output?: string } | null>(null);
 
   const handleUpload = async () => {
     if (!file) return;

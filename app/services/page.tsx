@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { motion, MotionConfig, useMotionValue, useTransform } from 'framer-motion';
 // import SearchBar from '../components/searchbar';
 

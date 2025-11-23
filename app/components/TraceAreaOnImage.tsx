@@ -4,6 +4,7 @@ import useImage from "use-image";   // npm install use-image
 import { Ruler } from "lucide-react";
 
 import { useState, useRef } from "react";
+import type Konva from "konva";
 
 export default function TraceAreaOnImage() {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -13,7 +14,7 @@ export default function TraceAreaOnImage() {
   const [referencePixels, setReferencePixels] = useState("");
   const [areaFt, setAreaFt] = useState<number | null>(null);
 
-  const stageRef = useRef<any>(null);
+  const stageRef = useRef<Konva.Stage>(null);
   const [img] = useImage(imageUrl || "");
 
   // Handle file upload
@@ -27,10 +28,11 @@ export default function TraceAreaOnImage() {
   };
 
   // Add point on click
-  const handleClick = (e: any) => {
+  const handleClick = () => {
     if (isClosed) return;
 
     const stage = stageRef.current;
+    if (!stage) return;
     const pointer = stage.getPointerPosition();
     if (!pointer) return;
 

@@ -129,7 +129,7 @@ export default function ContactForm() {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [values]);
+  }, [values, onSubmit]);
 
   const msgCount = useMemo(() => values.message.length, [values.message]);
   const msgPct = Math.min(100, Math.round((msgCount / MAX_MSG) * 100));
