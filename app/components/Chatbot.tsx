@@ -318,16 +318,22 @@ export default function Chatbot() {
     navigator?.clipboard?.writeText(text);
 
   const markdownComponents: Partial<Components> = {
-    code: ({ inline, className, children }: any) => {
+    code: (props: {
+      inline?: boolean;
+      className?: string;
+      children?: React.ReactNode;
+    }) => {
+      const { inline, className, children } = props;
       const code = String(children ?? "").trim();
-
-      if (inline)
+  
+      if (inline) {
         return (
           <code className="px-1 py-0.5 rounded bg-black/10 text-xs font-mono">
             {children}
           </code>
         );
-
+      }
+  
       return (
         <div className="relative group my-2">
           <button
@@ -340,6 +346,7 @@ export default function Chatbot() {
           >
             <Copy className="w-3 h-3" />
           </button>
+  
           <pre className="text-xs md:text-sm rounded-xl p-3 overflow-auto bg-slate-900/95 text-slate-100">
             <code className={className}>{code}</code>
           </pre>
@@ -347,6 +354,7 @@ export default function Chatbot() {
       );
     },
   };
+  
 
   /* ----------------------------------------------------
      Estimator → Chat
