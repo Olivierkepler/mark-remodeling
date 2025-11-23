@@ -52,7 +52,7 @@ export default function Navbar() {
   const opacityClass = isDesktop ? (isScrolled ? 'opacity-100' : 'opacity-70') : 'opacity-100'
 
   return (
-    <header className={`sticky top-0 z-50 bg-gradient-to-r from-gray-800 to-gray-600 text-white shadow-xl transition-opacity duration-300 ${opacityClass}`}>
+    <header className={`sticky top-0 z-50 bg-gradient-to-r bg-black text-white shadow-xl transition-opacity duration-300 ${opacityClass}`}>
       <nav className="max-w-7xl mx-auto p-6 flex items-center justify-between">
         {/* Logo */}
         <div className="text-3xl font-semibold hover:text-gray-200 transition-colors flex items-center">

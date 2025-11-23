@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
         hostname: "holh1uldewromppp.public.blob.vercel-storage.com",
         
       },
+      
+    ],
+    domains: [
+      "images.unsplash.com",
+      "plus.unsplash.com"
     ],
   },
 };

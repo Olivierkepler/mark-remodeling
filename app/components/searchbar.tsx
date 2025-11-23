@@ -31,7 +31,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, placeholder = "Search..
   };
 
   return (
-    <div className="relative flex items-center w-full max-w-md mx-auto bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full  shadow-lg">
+    <div className="relative flex items-center w-full max-w-md mx-auto bg-gray-800 rounded-full  shadow-lg">
       {/* Search Icon */}
       <div className="absolute left-4">
         <SearchIcon className={`w-6 h-6 text-white transition-transform duration-300 ${isSearching ? 'transform rotate-180' : ''}`} />

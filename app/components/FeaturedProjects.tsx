@@ -1,75 +1,79 @@
-'use client';
+"use client";
 
-import { useCallback, useEffect, useId, useRef, useState } from 'react';
-import Image from 'next/image';
-import { motion, useReducedMotion } from 'framer-motion';
-import { ArrowLeft, ArrowRight, Sparkles } from 'lucide-react';
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from "react";
+import Image from "next/image";
+import { motion, useReducedMotion } from "framer-motion";
+import { ArrowLeft, ArrowRight, Sparkles } from "lucide-react";
 
-const BRAND_BLUE = '#1E3A8A';
-const BRAND_GOLD = '#F59E0B';
+const BRAND_BLUE = "#1E3A8A";
+const BRAND_GOLD = "#F59E0B";
 
-// True placeholder
-const PH = '/images/placeholder.jpg';
+const PH = "/images/placeholder.jpg";
 
-// Blob URLs
+// Existing blob images
 const BEFORE_URL =
-  'https://holh1uldewromppp.public.blob.vercel-storage.com/images/hero/before1-1754881762282.jpeg';
-
+  "https://holh1uldewromppp.public.blob.vercel-storage.com/images/hero/before1-1754881762282.jpeg";
 const AFTER_URL1 =
-  'https://holh1uldewromppp.public.blob.vercel-storage.com/images/hero/after1-1754875578651.jpeg';
-
+  "https://holh1uldewromppp.public.blob.vercel-storage.com/images/hero/after1-1754875578651.jpeg";
 const BEFORE_URL2 =
-  'https://holh1uldewromppp.public.blob.vercel-storage.com/images/hero/before2-1754881944144.jpeg';
-
+  "https://holh1uldewromppp.public.blob.vercel-storage.com/images/hero/before2-1754881944144.jpeg";
 const AFTER_URL2 =
-  'https://holh1uldewromppp.public.blob.vercel-storage.com/images/hero/after2-1754882098440.jpeg';
-
+  "https://holh1uldewromppp.public.blob.vercel-storage.com/images/hero/after2-1754882098440.jpeg";
 const BEFORE_URL3 =
-  'https://holh1uldewromppp.public.blob.vercel-storage.com/images/hero/before3-1754882346828.jpeg';
-
+  "https://holh1uldewromppp.public.blob.vercel-storage.com/images/hero/before3-1754882346828.jpeg";
 const AFTER_URL3 =
-  'https://holh1uldewromppp.public.blob.vercel-storage.com/images/hero/after3-1754882414605.jpeg';
+  "https://holh1uldewromppp.public.blob.vercel-storage.com/images/hero/after3-1754882414605.jpeg";
 
 export type Project = {
   id: string;
   url?: string;
   title: string;
-  location?: string;
-  scope?: string;
+  industry?: string;
+  impact?: string;
   before?: string;
   after?: string;
 };
 
 const FALLBACK: Project[] = [
   {
-    id: 'kitchen-01',
-    title: 'Modern Kitchen Remodel',
-    location: 'Cambridge, MA',
-    scope: 'Cabinetry, counters, lighting',
+    id: "support-automation",
+    title: "AI Support Automation",
+    industry: "SaaS · B2B",
+    impact: "↓ 62% response time · 24/7 coverage",
     before: BEFORE_URL,
     after: AFTER_URL1,
   },
   {
-    id: 'bath-01',
-    title: 'Luxury Bathroom Update',
-    location: 'Boston, MA',
-    scope: 'Tile, fixtures, walk-in shower',
+    id: "ecommerce-assistant",
+    title: "AI Sales Assistant",
+    industry: "E-commerce",
+    impact: "↑ 31% conversion on product pages",
     before: BEFORE_URL2,
     after: AFTER_URL2,
-    url: 'https://www.google.com',
+    url: "https://www.google.com",
   },
   {
-    id: 'office-01',
-    title: 'Office Build-Out',
-    location: 'Somerville, MA',
-    scope: 'Open concept, glass partitions',
+    id: "workflow-orchestration",
+    title: "Workflow Orchestration",
+    industry: "Operations",
+    impact: "↓ 48% manual processing time",
     before: BEFORE_URL3,
     after: AFTER_URL3,
-    url: 'https://www.google.com',
+    url: "https://www.google.com",
   },
 ];
 
-export default function FeaturedProjects({ projects = FALLBACK }: { projects?: Project[] }) {
+export default function FeaturedProjects({
+  projects = FALLBACK,
+}: {
+  projects?: Project[];
+}) {
   const [index, setIndex] = useState(0);
   const prefersReduced = useReducedMotion() ?? false;
 
@@ -85,89 +89,120 @@ export default function FeaturedProjects({ projects = FALLBACK }: { projects?: P
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowRight') next();
-      if (e.key === 'ArrowLeft') prev();
+      if (e.key === "ArrowRight") next();
+      if (e.key === "ArrowLeft") prev();
     };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, [next, prev]);
 
   return (
-    <section id="projects" className="relative py-16 md:py-24">
+    <section
+      id="projects"
+      className="relative py-16 md:py-24 px-0"
+    >
+      {/* Background glow */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 opacity-70 blur-3xl"
+        className="pointer-events-none absolute inset-0 -z-10 opacity-80 blur-3xl"
         style={{
-          background: `radial-gradient(40% 60% at 10% 20%, ${BRAND_GOLD}24, transparent 60%), radial-gradient(40% 60% at 90% 30%, ${BRAND_BLUE}26, transparent 60%)`,
+          background: `
+            radial-gradient(40% 60% at 10% 10%, ${BRAND_GOLD}18, transparent 60%),
+            radial-gradient(40% 60% at 80% 0%, ${BRAND_BLUE}24, transparent 65%)
+          `,
         }}
       />
 
-      <div className="mx-auto max-w-full px-4">
-        <div className="flex items-end justify-between gap-6">
+      {/* 🚀 FULL-WIDTH CONTAINER */}
+      <div className="mx-auto w-full max-w-full px-4 sm:px-6 lg:px-12 xl:px-20">
+
+        {/* Header */}
+        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
-            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900">
-              Featured Projects
+            <div className="inline-flex items-center gap-2 rounded-full  bg-white/70 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-700 shadow-lg backdrop-blur">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            <span>Featured</span>
+            </div>
+
+            <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900">
+              Real projects.{" "}
+              <span className="bg-gradient-to-r from-slate-900 via-indigo-700 to-orange-500 bg-clip-text text-transparent">
+                Visible impact.
+              </span>
             </h2>
-            <p className="mt-2 text-gray-600">
-              Before &amp; after transformations that showcase our craftsmanship.
+
+            <p className="mt-3 max-w-xl text-sm md:text-base text-slate-600">
+              A snapshot of how WebAIGen turns manual workflows into
+              intelligent, AI-driven systems. These examples demonstrate the
+              power of custom AI integrations.
             </p>
           </div>
 
-          {/* Mobile-only controls */}
-          <div className="md:hidden flex items-center gap-2">
+          {/* Mobile controls */}
+          <div className="mt-2 flex items-center justify-start gap-2 md:hidden">
             <button
               onClick={prev}
-              className="inline-flex cursor-pointer items-center justify-center rounded-full border bg-white/80 px-3 py-2 backdrop-blur-xl shadow"
-              style={{ borderColor: `${BRAND_BLUE}26` }}
-              aria-label="Previous project"
+              className="inline-flex cursor-pointer items-center justify-center rounded-full bg-white/80 px-3 py-2 text-slate-800 shadow-md backdrop-blur transition hover:shadow-lg hover:bg-white"
             >
-              <ArrowLeft className="h-4 w-4 text-black" />
+              <ArrowLeft className="h-4 w-4" />
             </button>
+
             <button
               onClick={next}
-              className="inline-flex cursor-pointer items-center justify-center rounded-full border bg-white/80 px-3 py-2 backdrop-blur-xl shadow"
-              style={{ borderColor: `${BRAND_BLUE}26` }}
-              aria-label="Next project"
+              className="inline-flex cursor-pointer items-center justify-center rounded-full bg-white/80 px-3 py-2 text-slate-800 shadow-md backdrop-blur transition hover:shadow-lg hover:bg-white"
             >
-              <ArrowRight className="h-4 w-4 text-black" />
+              <ArrowRight className="h-4 w-4" />
             </button>
           </div>
         </div>
 
-        {/* Desktop grid */}
-        <div className="mt-10 hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {data.map((p) => (
-            <ProjectCard key={p.id} project={p} prefersReduced={prefersReduced} />
+        {/* Desktop Grid */}
+        <div className="mt-10 hidden gap-8 md:grid md:grid-cols-2 lg:grid-cols-3">
+          {data.map((p, i) => (
+            <ProjectCard
+              key={p.id}
+              project={p}
+              prefersReduced={prefersReduced}
+              index={i}
+            />
           ))}
         </div>
 
-        {/* Mobile carousel */}
+        {/* Mobile Carousel */}
         <div className="mt-8 md:hidden relative overflow-hidden">
           <div
             className="flex"
             style={{
               transform: `translateX(-${index * 100}%)`,
-              transition: prefersReduced ? 'none' : 'transform 450ms cubic-bezier(0.22, 1, 0.36, 1)',
-              willChange: 'transform',
+              transition: prefersReduced
+                ? "none"
+                : "transform 450ms cubic-bezier(0.22, 1, 0.36, 1)",
+              willChange: "transform",
             }}
           >
-            {data.map((p) => (
+            {data.map((p, i) => (
               <div key={p.id} className="min-w-full pr-2">
-                <ProjectCard project={p} prefersReduced={prefersReduced} />
+                <ProjectCard
+                  project={p}
+                  prefersReduced={prefersReduced}
+                  index={i}
+                />
               </div>
             ))}
           </div>
 
-          {/* Dots */}
-          <div className="mt-4 flex justify-center gap-2">
+          {/* Slide dots */}
+          <div className="mt-5 flex justify-center gap-2">
             {data.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setIndex(i)}
                 className="h-1.5 w-6 rounded-full transition-all"
-                style={{ backgroundColor: i === index ? BRAND_GOLD : '#e5e7eb' }}
-                aria-label={`Go to slide ${i + 1}`}
-                aria-current={i === index}
+                style={{
+                  backgroundColor:
+                    i === index ? BRAND_GOLD : "rgba(148,163,184,0.6)",
+                  opacity: i === index ? 1 : 0.7,
+                }}
               />
             ))}
           </div>
@@ -175,21 +210,24 @@ export default function FeaturedProjects({ projects = FALLBACK }: { projects?: P
 
         {/* CTA bar */}
         <div
-          className="mt-12 md:mt-16 flex flex-wrap items-center justify-between gap-4 rounded-2xl border bg-white/70 p-5 backdrop-blur-xl shadow"
-          style={{ borderColor: `${BRAND_BLUE}26` }}
+          className="mt-12 md:mt-16 flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-white/80 p-5 md:p-6 backdrop-blur-xl shadow-md"
         >
-          <div className="flex items-center gap-3 text-gray-800">
-            <Sparkles style={{ color: BRAND_GOLD }} className="h-5 w-5" />
+          <div className="flex items-center gap-3 text-slate-800">
+            <div className="inline-flex h-9 w-9 items-center justify-center rounded-2xl bg-amber-100">
+              <Sparkles className="h-4 w-4" style={{ color: BRAND_GOLD }} />
+            </div>
+
             <p className="text-sm md:text-base">
-              Want to see more transformations? Explore our services and the work we’ve done.
+              Want a similar transformation for your business? Let’s design your
+              custom AI system.
             </p>
           </div>
+
           <a
             href="#contact"
-            className="inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold shadow-lg"
-            style={{ background: `linear-gradient(90deg, ${BRAND_GOLD}, ${BRAND_GOLD}cc)`, color: '#111827' }}
+            className="inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold shadow-lg hover:shadow-2xl transition bg-slate-900 text-white hover:bg-slate-800"
           >
-            Request a Quote
+            Book a consultation
           </a>
         </div>
       </div>
@@ -200,148 +238,116 @@ export default function FeaturedProjects({ projects = FALLBACK }: { projects?: P
 function ProjectCard({
   project,
   prefersReduced,
+  index,
 }: {
   project: Project;
   prefersReduced: boolean;
+  index: number;
 }) {
   const [split, setSplit] = useState(55);
-  const sliderRef = useRef<HTMLDivElement>(null);
+  const sliderRef = useRef<HTMLDivElement | null>(null);
   const handleId = useId();
 
   const beforeSrc = project.before || PH;
   const afterSrc = project.after || PH;
 
-  const hasBefore = !!project.before;
-  const hasAfter = !!project.after;
-
   const startDrag = useCallback((clientX: number) => {
     const el = sliderRef.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
-    const pct = Math.min(100, Math.max(0, ((clientX - rect.left) / rect.width) * 100));
+    const pct = Math.min(
+      100,
+      Math.max(0, ((clientX - rect.left) / rect.width) * 100)
+    );
     setSplit(pct);
   }, []);
 
-  const onPointerDown = (e: React.PointerEvent) => {
-    (e.target as Element).setPointerCapture?.(e.pointerId);
-    startDrag(e.clientX);
-  };
-  const onPointerMove = (e: React.PointerEvent) => {
-    if ((e.buttons & 1) !== 1) return;
-    startDrag(e.clientX);
-  };
-  const onKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'ArrowLeft') setSplit((v) => Math.max(0, v - 2));
-    if (e.key === 'ArrowRight') setSplit((v) => Math.min(100, v + 2));
-    if (e.key === 'Home') setSplit(0);
-    if (e.key === 'End') setSplit(100);
-  };
-
   return (
     <motion.article
-      whileHover={prefersReduced ? undefined : { y: -4 }}
-      transition={{ type: 'spring', stiffness: 250, damping: 20 }}
-      className="group relative overflow-hidden rounded-sm lg:rounded-2xl border bg-white/80 backdrop-blur-xl shadow-lg"
-      style={{ borderColor: `${BRAND_BLUE}26` }}
+      initial={{ opacity: 0, y: 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{
+        duration: 0.4,
+        delay: prefersReduced ? 0 : index * 0.06,
+      }}
+      whileHover={!prefersReduced ? { y: -4 } : undefined}
+      className="group relative overflow-hidden rounded-xl bg-white/85 backdrop-blur-xl shadow-md hover:shadow-lg transition-shadow"
     >
+      {/* Before/After slider */}
       <div
         ref={sliderRef}
         className="relative aspect-[4/3] select-none touch-none"
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        role="region"
-        aria-label={`${project.title}: before and after comparison`}
+        onPointerDown={(e) => startDrag(e.clientX)}
+        onPointerMove={(e) => {
+          if ((e.buttons & 1) !== 1) return;
+          startDrag(e.clientX);
+        }}
       >
-        {/* BEFORE */}
-        {hasBefore ? (
+        {/* Before */}
+        <Image
+          src={beforeSrc}
+          alt={`${project.title} — before`}
+          fill
+          className="object-cover"
+        />
+
+        {/* After */}
+        <div
+          className="absolute inset-0 overflow-hidden"
+          style={{ width: `${split}%` }}
+        >
           <Image
-            src={beforeSrc}
-            alt={`${project.title} — before`}
+            src={afterSrc}
+            alt=""
             fill
-            sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
             className="object-cover"
           />
-        ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-900 to-amber-500 flex items-center justify-center">
-            <span className="text-white text-lg font-semibold">Before Image</span>
-          </div>
-        )}
-
-        {/* AFTER (clipped) */}
-        <div className="absolute inset-0 overflow-hidden" style={{ width: `${split}%` }} aria-hidden>
-          {hasAfter ? (
-            <Image
-              src={afterSrc}
-              alt=""
-              fill
-              sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-              className="object-cover"
-            />
-          ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-amber-500 to-blue-900 flex items-center justify-center">
-              <span className="text-white text-lg font-semibold">After Image</span>
-            </div>
-          )}
         </div>
 
         {/* Divider */}
-        <div className="absolute inset-y-0" style={{ left: `calc(${split}% - 1px)` }} aria-hidden>
-          <div className="h-full w-[2px] bg-white/80 shadow" />
+        <div
+          className="absolute inset-y-0"
+          style={{ left: `calc(${split}% - 1px)` }}
+        >
+          <div className="h-full w-[2px] bg-white/90 shadow-md" />
         </div>
 
         {/* Handle */}
         <button
           id={handleId}
-          aria-label="Drag to compare before and after"
-          aria-describedby={`${handleId}-desc`}
-          onKeyDown={onKeyDown}
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border px-2 py-1 text-[11px] font-semibold text-gray-800 bg-white/95 shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
-          style={{ left: `calc(${split}% - 0px)`, borderColor: `${BRAND_BLUE}26` }}
+          className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 rounded-full px-2.5 py-1.5 text-[11px] font-semibold text-slate-800 bg-white/95 shadow-sm"
+          style={{
+            left: `calc(${split}% - 0px)`,
+          }}
         >
           Drag
         </button>
-        <span id={`${handleId}-desc`} className="sr-only">
-          Use Left/Right arrows to adjust, Home=0%, End=100%.
-        </span>
 
-        {/* Invisible range for accessibility */}
         <input
           type="range"
           min={0}
           max={100}
-          step={1}
-          value={Math.round(split)}
+          value={split}
           onChange={(e) => setSplit(Number(e.target.value))}
-          aria-label="Compare before and after"
-          className="absolute inset-0 h-full w-full appearance-none bg-transparent cursor-ew-resize"
+          className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize"
         />
       </div>
 
       {/* Info */}
       <div className="relative p-5">
-        <div className="flex items-center justify-between gap-3">
-          <h3 className="text-lg font-semibold text-gray-900">{project.title}</h3>
-          <span
-            className="rounded-full px-3 py-1 text-xs font-bold"
-            style={{ backgroundColor: 'rgba(245,158,11,0.12)', color: BRAND_GOLD }}
-          >
-            Before / After
-          </span>
-        </div>
-        {(project.location || project.scope) && (
-          <p className="mt-1 text-sm text-gray-600">
-            {project.location && <span>{project.location}</span>}
-            {project.location && project.scope && ' • '}
-            {project.scope}
+        <h3 className="text-lg font-semibold text-slate-900">
+          {project.title}
+        </h3>
+
+        {(project.industry || project.impact) && (
+          <p className="mt-1 text-sm text-slate-600">
+            {project.industry} • {project.impact}
           </p>
         )}
       </div>
 
-      <div
-        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity group-hover:opacity-100"
-        style={{ background: `linear-gradient(180deg, transparent, ${BRAND_BLUE}08)` }}
-        aria-hidden
-      />
+      <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity group-hover:opacity-100" />
     </motion.article>
   );
 }
