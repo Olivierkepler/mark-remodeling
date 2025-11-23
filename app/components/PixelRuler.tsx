@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Image from "next/image";
 
 type Point = { x: number; y: number };
 
@@ -14,8 +15,8 @@ export default function PixelRuler() {
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const handleUpload = (e: any) => {
-    const file = e.target.files[0];
+  const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (!file) return;
 
     setImage(URL.createObjectURL(file));
@@ -25,7 +26,7 @@ export default function PixelRuler() {
     setMeasurementResult(null);
   };
 
-  const handleCanvasClick = (e: any) => {
+  const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -93,18 +94,21 @@ export default function PixelRuler() {
             onClick={handleCanvasClick}
             className="border rounded-xl shadow w-full"
           />
+          {/* Using img instead of Image for canvas drawing compatibility */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={image}
             alt="Room"
             className="hidden"
-            onLoad={(e: any) => {
+            onLoad={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
               const canvas = canvasRef.current;
               const ctx = canvas?.getContext("2d");
               if (!canvas || !ctx) return;
 
-              canvas.width = e.target.width;
-              canvas.height = e.target.height;
-              ctx.drawImage(e.target, 0, 0);
+              const img = e.currentTarget;
+              canvas.width = img.width;
+              canvas.height = img.height;
+              ctx.drawImage(img, 0, 0);
             }}
           />
         </div>

@@ -140,11 +140,21 @@ export default function EstimatorPanel({
 
   const next = () => {
     if (!canNext()) return;
-    setStep((prev) => (prev < 5 ? ((prev + 1) as any) : prev));
+    setStep((prev) => {
+      if (prev < 5) {
+        return (prev + 1) as 1 | 2 | 3 | 4 | 5;
+      }
+      return prev;
+    });
   };
 
   const back = () => {
-    setStep((prev) => (prev > 1 ? ((prev - 1) as any) : prev));
+    setStep((prev) => {
+      if (prev > 1) {
+        return (prev - 1) as 1 | 2 | 3 | 4 | 5;
+      }
+      return prev;
+    });
   };
 
   const reset = () => {
@@ -370,18 +380,18 @@ export default function EstimatorPanel({
               </p>
 
               <div className="space-y-2 text-xs md:text-sm">
-                {[
-                  { key: "demolition", label: "Demolition / tear-out" },
-                  { key: "plumbing", label: "Plumbing adjustments" },
-                  { key: "electrical", label: "Electrical updates" },
-                ].map((opt) => (
+                {([
+                  { key: "demolition" as const, label: "Demolition / tear-out" },
+                  { key: "plumbing" as const, label: "Plumbing adjustments" },
+                  { key: "electrical" as const, label: "Electrical updates" },
+                ] as const).map((opt) => (
                   <label
                     key={opt.key}
                     className="flex items-center gap-2 cursor-pointer"
                   >
                     <input
                       type="checkbox"
-                      checked={(extras as any)[opt.key]}
+                      checked={extras[opt.key]}
                       onChange={(e) =>
                         setExtras((prev) => ({
                           ...prev,

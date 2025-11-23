@@ -27,9 +27,6 @@ export async function POST(req: Request) {
       );
     }
 
-    const arrayBuffer = await file.arrayBuffer();
-    const base64Image = Buffer.from(arrayBuffer).toString("base64");
-
     // Prompt engineering for redesign
     const prompt = `
 Redesign this interior room in the following style: "${style}".
@@ -48,8 +45,9 @@ Output a single high-quality interior render.
       model: "gpt-image-1",
       prompt,
       size: "1024x1024",
-      // We use the uploaded image as a reference via image[] input if supported,
-      // but if your account doesn't support that yet, you can start with pure prompt.
+      // Note: If image input is needed in the future, uncomment below:
+      // const arrayBuffer = await file.arrayBuffer();
+      // const base64Image = Buffer.from(arrayBuffer).toString("base64");
       // image: [{ data: base64Image, mime_type: file.type }],
     });
 
@@ -65,10 +63,11 @@ Output a single high-quality interior render.
     const imageUrl = `data:image/png;base64,${imageBase64}`;
 
     return NextResponse.json({ imageUrl });
-  } catch (err: any) {
+  } catch (err) {
     console.error("redesign-image error:", err);
+    const errorMessage = err instanceof Error ? err.message : "Failed to generate redesign image";
     return NextResponse.json(
-      { error: err.message || "Failed to generate redesign image" },
+      { error: errorMessage },
       { status: 500 }
     );
   }

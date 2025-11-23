@@ -48,7 +48,7 @@ export default function ContactForm() {
     if (errors[k]) setErrors((e) => ({ ...e, [k]: '' }));
   }
 
-  function validate(current = values) {
+  const validate = useCallback((current = values) => {
     const e: Errors = {};
     if (!current.name.trim()) e.name = 'Please enter your name.';
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(current.email)) e.email = 'Enter a valid email.';
@@ -57,7 +57,7 @@ export default function ContactForm() {
     if (current.message.length > MAX_MSG) e.message = `Keep it under ${MAX_MSG} characters.`;
     if (current.company) e.message = 'Spam detected.'; // honeypot
     return e;
-  }
+  }, [values]);
 
   function handleBlur<K extends keyof typeof values>(k: K) {
     setTouched((t) => ({ ...t, [k]: true }));
@@ -111,7 +111,7 @@ export default function ContactForm() {
         setState('idle');
       }, 3400);
     }
-  }, [values, nameId, emailId, phoneId, messageId, progress, setState, setValues, setTouched, setErrors]);
+  }, [values, nameId, emailId, phoneId, messageId, progress, setState, setValues, setTouched, setErrors, validate]);
 
   // textarea autoresize
   useEffect(() => {

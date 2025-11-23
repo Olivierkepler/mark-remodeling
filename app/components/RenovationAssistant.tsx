@@ -1,7 +1,5 @@
 "use client";
 
-import { Stage, Layer, Line } from "react-konva";
-
 import { useState } from "react";
 import RoomPhotoAnalyzer from "./RoomPhotoAnalyzer";
 import TraceAreaOnImage from "./TraceAreaOnImage";
@@ -51,7 +49,7 @@ export default function RenovationAssistant() {
           🏗 Renovation AI Assistant
         </h2>
         <p className="text-sm text-gray-500 mt-1">
-          Tell us what you're working on so Kepler can personalize your tools.
+          Tell us what you&apos;re working on so Kepler can personalize your tools.
         </p>
       </div>
 
@@ -224,7 +222,15 @@ export default function RenovationAssistant() {
 
 /* ---------- Shared Card Components ---------- */
 
-function ModeCard({ icon, title, description, active, onClick }: any) {
+type ModeCardProps = {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  active: boolean;
+  onClick: () => void;
+};
+
+function ModeCard({ icon, title, description, active, onClick }: ModeCardProps) {
   return (
     <button
       onClick={onClick}
@@ -245,7 +251,15 @@ function ModeCard({ icon, title, description, active, onClick }: any) {
   );
 }
 
-function MeasureCard({ icon, title, description, active, onClick }: any) {
+type MeasureCardProps = {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  active: boolean;
+  onClick: () => void;
+};
+
+function MeasureCard({ icon, title, description, active, onClick }: MeasureCardProps) {
   return (
     <button
       onClick={onClick}
@@ -266,7 +280,12 @@ function MeasureCard({ icon, title, description, active, onClick }: any) {
   );
 }
 
-function PlaceholderBlock({ title, text }: any) {
+type PlaceholderBlockProps = {
+  title: string;
+  text: string;
+};
+
+function PlaceholderBlock({ title, text }: PlaceholderBlockProps) {
   return (
     <div className="w-full mx-auto bg-white/80 backdrop-blur border border-dashed border-gray-200 rounded-xl p-5 text-sm text-gray-700">
       <h3 className="font-semibold text-gray-900 mb-1">{title}</h3>
