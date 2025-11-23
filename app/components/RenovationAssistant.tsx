@@ -1,5 +1,7 @@
 "use client";
 
+import { Stage, Layer, Line } from "react-konva";
+
 import { useState } from "react";
 import RoomPhotoAnalyzer from "./RoomPhotoAnalyzer";
 import TraceAreaOnImage from "./TraceAreaOnImage";

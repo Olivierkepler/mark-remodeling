@@ -1,11 +1,9 @@
 "use client";
-
-import { useState, useRef } from "react";
 import { Stage, Layer, Image as KonvaImage, Line } from "react-konva";   // npm install react-konva
 import useImage from "use-image";   // npm install use-image
 import { Ruler } from "lucide-react";
 
-
+import { useState, useRef } from "react";
 
 export default function TraceAreaOnImage() {
   const [imageUrl, setImageUrl] = useState<string | null>(null);

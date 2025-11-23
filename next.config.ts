@@ -15,9 +15,19 @@ const nextConfig: NextConfig = {
       "plus.unsplash.com"
     ],
   },
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.externals.push({
+        canvas: "canvas",
+      });
+    }
+    return config;
+  },
 };
 
 export default nextConfig;
+
+
 
 
 
