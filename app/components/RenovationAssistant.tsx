@@ -1,12 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import RoomPhotoAnalyzer from "./RoomPhotoAnalyzer";
-import TraceAreaOnImage from "./TraceAreaOnImage";
 import PixelRuler from "./PixelRuler";
 import RoomRedesign from "./RoomRedesign";
 import RoomRedesignVision from "./RoomRedesignVision";
 import RoomRedesignImage from "./RoomRedesignImage"; // <-- NEW Level 3
+
+// Dynamically import TraceAreaOnImage with SSR disabled to avoid canvas module issues
+const TraceAreaOnImage = dynamic(() => import("./TraceAreaOnImage"), {
+  ssr: false,
+});
 
 import { 
   Ruler, 
