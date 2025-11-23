@@ -1,6 +1,12 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
-import mockData from "@/data/mock.json"; // ← JSON import
+import mockData from "@/data/mock.json";
+
+// ---- Types ----
+type ChatMessage = {
+  role: "user" | "assistant" | "system";
+  content: string;
+};
 
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
@@ -8,7 +14,8 @@ const client = new OpenAI({
 
 export async function POST(req: Request) {
   try {
-    const { messages } = await req.json();
+    const body = await req.json();
+    const messages = body.messages as ChatMessage[] | undefined;
 
     if (!messages) {
       return NextResponse.json(
@@ -17,10 +24,10 @@ export async function POST(req: Request) {
       );
     }
 
-    // Convert front-end messages to OpenAI format
-    const formattedMessages = messages.map((msg: any) => ({
+    // Convert front-end messages to OpenAI format with correct types
+    const formattedMessages: ChatMessage[] = messages.map((msg) => ({
       role: msg.role,
-      content: msg.content
+      content: msg.content,
     }));
 
     /* -------------------------------------------------------------------
@@ -49,17 +56,17 @@ Your responsibilities:
 
 If the user requests an estimate:
 - Ask for missing details:
-   • project type (kitchen, bathroom, flooring, etc.)  
-   • square footage  
-   • material level (basic, standard, premium)  
+   • project type (kitchen, bathroom, flooring, etc.)
+   • square footage
+   • material level (basic, standard, premium)
 - Use the pricing rules from mockData.quotePricing:
      baseCostPerSqFt × materialMultiplier
 - Produce:
-   • Detailed cost breakdown  
-   • Low–high range (low = total × 0.9, high = total × 1.15)  
-   • Timeline estimate  
-   • Factors that affect cost  
-   • A friendly call to action  
+   • Detailed cost breakdown
+   • Low–high range (low = total × 0.9, high = total × 1.15)
+   • Timeline estimate
+   • Factors that affect cost
+   • A friendly call to action
 
 Never guess numbers — use ONLY the pricing from the JSON.
 
@@ -75,18 +82,19 @@ ${JSON.stringify(mockData, null, 2)}
     const completion = await client.chat.completions.create({
       model: "gpt-4.1",
       messages: formattedMessages,
-      temperature: 0.7
+      temperature: 0.7,
     });
 
     const reply =
-      completion.choices?.[0]?.message?.content ||
+      completion.choices?.[0]?.message?.content ??
       "I'm not sure how to respond to that.";
 
     return NextResponse.json({ reply });
-  } catch (error: any) {
-    console.error("Chat API error:", error);
+  } catch (error) {
+    const err = error as Error;
+    console.error("Chat API error:", err);
     return NextResponse.json(
-      { error: "Server error: " + error.message },
+      { error: "Server error: " + err.message },
       { status: 500 }
     );
   }

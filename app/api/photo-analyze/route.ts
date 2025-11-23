@@ -2,12 +2,12 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 
+// ---- Helper: compress image using sharp (install: `npm i sharp`) ----
+import sharp from "sharp";
+
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY!,
 });
-
-// ---- Helper: compress image using sharp (install: `npm i sharp`) ----
-import sharp from "sharp";
 
 export async function POST(req: Request) {
   try {
@@ -44,7 +44,8 @@ export async function POST(req: Request) {
       messages: [
         {
           role: "system",
-          content: "You analyze room photos and estimate dimensions. Respond ONLY with JSON.",
+          content:
+            "You analyze room photos and estimate dimensions. Respond ONLY with JSON.",
         },
         {
           role: "user",
@@ -74,10 +75,11 @@ Estimate:
     const json = JSON.parse(completion.choices[0].message.content ?? "{}");
 
     return NextResponse.json({ analysis: json });
-  } catch (err: any) {
-    console.error("❌ API Error:", err);
+  } catch (err) {
+    const error = err as Error;
+    console.error("❌ API Error:", error);
     return NextResponse.json(
-      { error: "Processing failed", details: err.message },
+      { error: "Processing failed", details: error.message },
       { status: 500 }
     );
   }

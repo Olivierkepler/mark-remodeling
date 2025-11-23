@@ -111,7 +111,7 @@ export default function ContactForm() {
         setState('idle');
       }, 3400);
     }
-  }, [values, nameId, emailId, phoneId, messageId, progress, setState, setValues, setTouched, setErrors, setFormShake]);
+  }, [values, nameId, emailId, phoneId, messageId, progress, setState, setValues, setTouched, setErrors]);
 
   // textarea autoresize
   useEffect(() => {
