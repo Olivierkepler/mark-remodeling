@@ -4,10 +4,11 @@ import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
 import { useRouter } from "next/navigation";
-import { Sparkles } from "lucide-react";
 
 import "swiper/css";
 import "swiper/css/pagination";
+ 
+
 
 export default function RenovationShowcase() {
   const router = useRouter();
@@ -169,7 +170,7 @@ export default function RenovationShowcase() {
           </p>
 
           <button className="mt-4 border-b border-white text-sm hover:opacity-80">
-            Shop Now
+            Shop Now 🛒
           </button>
         </div>
 
