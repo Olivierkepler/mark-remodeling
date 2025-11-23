@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "./components/navbar";
   import Footer from "./components/Footer";
   import SubNav from "./components/subanav";
+  import { GlobalShortcutsProvider } from "./providers";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -33,7 +34,9 @@ export default function RootLayout({
    <Navbar />
    <SubNav />
    </div>
-        {children}
+   <GlobalShortcutsProvider>
+          {children}
+        </GlobalShortcutsProvider>
         <Footer />
       </body>
     </html>

@@ -93,7 +93,7 @@ export default function FeaturedProjects({ projects = FALLBACK }: { projects?: P
   }, [next, prev]);
 
   return (
-    <section id="projects" className="relative py-16 md:py-24">
+    <section id="projects" className="relative py-16 px-4 lg:px-6 md:py-24">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10 opacity-70 blur-3xl"

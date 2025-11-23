@@ -24,3 +24,219 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* BOT AVATAR BLINKING */
+@keyframes blink {
+  0%, 90%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.1); }
+}
+
+.bot-eye {
+  animation: blink 4s infinite;
+}
+
+/* TYPING DOTS */
+@keyframes typingDot {
+  0% { opacity: 0.2; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(-3px); }
+  100% { opacity: 0.2; transform: translateY(0); }
+}
+
+.dot-1 { animation: typingDot 1s infinite; }
+.dot-2 { animation: typingDot 1s infinite 0.2s; }
+.dot-3 { animation: typingDot 1s infinite 0.4s; }
+
+/* AI WAVE ANIMATION */
+@keyframes wave {
+  0% { transform: scaleY(1); }
+  50% { transform: scaleY(2.4); }
+  100% { transform: scaleY(1); }
+}
+
+.wave-bar {
+  animation: wave 1.2s infinite ease-in-out;
+}
+
+/* ANIMATED GRADIENT BORDER */
+.gradient-border {
+  position: relative;
+}
+
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 16px;
+  padding: 2px;
+  background: linear-gradient(120deg, #ff7b00, #ff0099, #00f0ff);
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease infinite;
+  z-index: -1;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Message fade + slide animation */
+@keyframes messageFadeIn {
+  0% { opacity: 0; transform: translateY(6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.message-animate {
+  animation: messageFadeIn 0.25s ease-out both;
+}
+/* Curved bubble tail — left (assistant) */
+.bubble-tail-left {
+  position: absolute;
+  bottom: 0.4rem;
+  left: -6px;
+  width: 14px;
+  height: 14px;
+  background: white;
+  border-radius: 50%;
+  clip-path: ellipse(70% 100% at 100% 50%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Curved bubble tail — right (user) */
+.bubble-tail-right {
+  position: absolute;
+  bottom: 0.4rem;
+  right: -6px;
+  width: 14px;
+  height: 14px;
+  background: #ffe4c4; /* matches orange-100 */
+  border-radius: 50%;
+  clip-path: ellipse(70% 100% at 0% 50%);
+}
+
+/* Fade-in animation */
+.message-animate {
+  animation: fadeIn 0.35s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* Curved bubble tail — left (assistant) */
+.bubble-tail-left {
+  position: absolute;
+  bottom: 0.6rem;
+  left: -6px;
+  width: 14px;
+  height: 14px;
+  background: white;
+  border-radius: 50%;
+  clip-path: ellipse(70% 100% at 100% 50%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Curved bubble tail — right (user) */
+.bubble-tail-right {
+  position: absolute;
+  bottom: 0.6rem;
+  right: -6px;
+  width: 14px;
+  height: 14px;
+  background: #ffe4c4; /* close to tailwind orange-100 */
+  border-radius: 50%;
+  clip-path: ellipse(70% 100% at 0% 50%);
+}
+
+/* Message fade-in */
+.message-animate {
+  animation: fadeIn 0.35s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* Curved bubble tail — left (assistant) */
+.bubble-tail-left {
+  position: absolute;
+  bottom: 0.6rem;
+  left: -6px;
+  width: 14px;
+  height: 14px;
+  background: white;
+  border-radius: 50%;
+  clip-path: ellipse(70% 100% at 100% 50%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Curved bubble tail — right (user) */
+.bubble-tail-right {
+  position: absolute;
+  bottom: 0.6rem;
+  right: -6px;
+  width: 14px;
+  height: 14px;
+  background: #ffe4c4; /* close to orange-100 */
+  border-radius: 50%;
+  clip-path: ellipse(70% 100% at 0% 50%);
+}
+
+/* Message fade-in */
+.message-animate {
+  animation: fadeInMsg 0.28s ease-out forwards;
+}
+
+@keyframes fadeInMsg {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn .2s ease-out;
+}
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
+}
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+.glass-btn {
+  @apply inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 backdrop-blur-xl border border-white/40 shadow-md hover:bg-white/50 transition;
+}
+
+.modern-gold-btn {
+  background: linear-gradient(90deg, #F59E0B, #FBBF24);
+  color: #1f2937;
+  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.35);
+  transition: 0.25s ease;
+}
+
+.modern-gold-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(245, 158, 11, 0.45);
+}
