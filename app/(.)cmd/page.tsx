@@ -1,5 +1,5 @@
 "use client";
-import { Stage, Layer, Line } from "react-konva";
+
 import { useRouter } from "next/navigation";
 import RenovationAssistant from "@/app/components/RenovationAssistant";
 
