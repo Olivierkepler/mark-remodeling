@@ -21,14 +21,14 @@ Redesign the user's room.
 Style: ${style}
 Room Description: ${description}
 
-Return a design plan:
-- Color palette (hex values)
-- Furniture suggestions
-- Layout improvements
-- Materials & textures
-- Lighting plan
-- Optional decor tips
-`
+// Return a design plan:
+// - Color palette (hex values)
+// - Furniture suggestions
+// - Layout improvements
+// - Materials & textures
+// - Lighting plan
+// - Optional decor tips
+// `
       }
     ]
   });
