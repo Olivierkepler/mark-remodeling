@@ -6,18 +6,60 @@ import {
   MicOff,
   RotateCcw,
   Sun,
-  Trash,     // <-- ADD THIS
+ 
   Moon,
   Copy,
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import ReactMarkdown from "react-markdown";
+import type { Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import "highlight.js/styles/github-dark.css";
 
 import EstimatorPanel from "@/app/components/EstimatorPanel";
+
+// Speech Recognition API types (not in TypeScript by default)
+interface SpeechRecognition extends EventTarget {
+  lang: string;
+  interimResults: boolean;
+  maxAlternatives: number;
+  start(): void;
+  stop(): void;
+  onresult: ((event: SpeechRecognitionEvent) => void) | null;
+  onerror: ((event: SpeechRecognitionErrorEvent) => void) | null;
+  onend: (() => void) | null;
+}
+
+interface SpeechRecognitionEvent extends Event {
+  results: SpeechRecognitionResultList;
+}
+
+interface SpeechRecognitionErrorEvent extends Event {
+  error: string;
+}
+
+interface SpeechRecognitionResultList {
+  [index: number]: SpeechRecognitionResult;
+  length: number;
+}
+
+interface SpeechRecognitionResult {
+  [index: number]: SpeechRecognitionAlternative;
+  length: number;
+  isFinal: boolean;
+}
+
+interface SpeechRecognitionAlternative {
+  transcript: string;
+  confidence: number;
+}
+
+interface WindowWithSpeechRecognition extends Window {
+  SpeechRecognition?: new () => SpeechRecognition;
+  webkitSpeechRecognition?: new () => SpeechRecognition;
+}
 
 type Role = "user" | "assistant";
 
@@ -51,7 +93,7 @@ export default function Chatbot() {
   const [estimatorOpen, setEstimatorOpen] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
   const typewriterTimeoutRef = useRef<number | null>(null);
 
   const isDark = theme === "dark";
@@ -113,24 +155,25 @@ export default function Chatbot() {
 
   /* ---------- Voice input ---------- */
 
-  const initRecognition = () => {
+  const initRecognition = (): SpeechRecognition | null => {
     if (typeof window === "undefined") return null;
-    const SpeechRecognition =
-      (window as any).SpeechRecognition ||
-      (window as any).webkitSpeechRecognition;
-    if (!SpeechRecognition) return null;
+    
+    const SpeechRecognitionClass =
+      (window as WindowWithSpeechRecognition).SpeechRecognition ||
+      (window as WindowWithSpeechRecognition).webkitSpeechRecognition;
+    if (!SpeechRecognitionClass) return null;
 
-    const rec = new SpeechRecognition();
+    const rec = new SpeechRecognitionClass();
     rec.lang = "en-US";
     rec.interimResults = false;
     rec.maxAlternatives = 1;
 
-    rec.onresult = (event: any) => {
+    rec.onresult = (event: SpeechRecognitionEvent) => {
       const transcript = event.results[0][0].transcript;
       setInput((prev) => (prev ? `${prev} ${transcript}` : transcript));
     };
 
-    rec.onerror = (event: any) => {
+    rec.onerror = (event: SpeechRecognitionErrorEvent) => {
       console.error("Speech recognition error:", event.error);
       setIsRecording(false);
     };
@@ -200,6 +243,11 @@ export default function Chatbot() {
 
   /* ---------- Fetch wrapper ---------- */
 
+  type ChatApiResponse = {
+    reply?: string;
+    error?: string;
+  };
+
   const fetchReply = async (chatMessages: Message[]): Promise<string> => {
     const res = await fetch("/api/chat", {
       method: "POST",
@@ -207,9 +255,9 @@ export default function Chatbot() {
       body: JSON.stringify({ messages: chatMessages }),
     });
 
-    let data: any = null;
+    let data: ChatApiResponse | null = null;
     try {
-      data = await res.json();
+      data = await res.json() as ChatApiResponse;
     } catch {
       throw new Error("Invalid response from server.");
     }
@@ -325,24 +373,21 @@ export default function Chatbot() {
     navigator?.clipboard?.writeText(text).catch(console.error);
   };
 
-  const markdownComponents = {
-    code({
-      inline,
-      className,
-      children,
-      ...props
-    }: {
-      inline?: boolean;
-      className?: string;
-      children: any;
-    }) {
-      const code = String(children).replace(/\n$/, "");
+  const markdownComponents: Partial<Components> = {
+    code: (props) => {
+      const { inline, className, children, ...rest } = props as {
+        inline?: boolean;
+        className?: string;
+        children?: React.ReactNode;
+        [key: string]: unknown;
+      };
+      const code = String(children ?? "").replace(/\n$/, "");
 
       if (inline) {
         return (
           <code
             className="px-1 py-0.5 rounded bg-black/10 text-xs font-mono"
-            {...props}
+            {...(rest as React.HTMLAttributes<HTMLElement>)}
           >
             {children}
           </code>
@@ -565,7 +610,7 @@ export default function Chatbot() {
                       <ReactMarkdown
                         remarkPlugins={[remarkGfm]}
                         rehypePlugins={[rehypeHighlight]}
-                        components={markdownComponents as any}
+                        components={markdownComponents}
                       >
                         {m.content}
                       </ReactMarkdown>
@@ -612,7 +657,7 @@ export default function Chatbot() {
                     <ReactMarkdown
                       remarkPlugins={[remarkGfm]}
                       rehypePlugins={[rehypeHighlight]}
-                      components={markdownComponents as any}
+                      components={markdownComponents}
                     >
                       {typingText}
                     </ReactMarkdown>
