@@ -16,6 +16,8 @@ import type { Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import "highlight.js/styles/github-dark.css";
+const [showMore, setShowMore] = useState(false);
+
 
 import EstimatorPanel from "@/app/components/EstimatorPanel";
 
@@ -378,30 +380,29 @@ export default function Chatbot() {
 
   return (
     <div className="relative">
-      {/* Floating Chat Button */}
-      <button
-        onClick={() => setOpen((o) => !o)}
-        className="
-          fixed z-50 bottom-4 right-4 
-          p-3 sm:p-4 rounded-full shadow-2xl
-          transition-all duration-300 cursor-pointer 
-          bg-gradient-to-br from-orange-500 to-orange-600
-          hover:scale-110 hover:shadow-[0_0_20px_rgba(255,140,0,0.6)]
-          text-white flex items-center justify-center
-        "
-      >
-        {open ? (
-          <X className="w-5 h-5 sm:w-6 sm:h-6" />
-        ) : (
-          <Image
-            src="/images/robot.png"
-            alt="robot"
-            width={60}
-            height={60}
-            className="rounded-full sm:w-[75px] sm:h-[75px]"
-          />
-        )}
-      </button>
+    {/* Floating Chat Button (only when closed) */}
+{!open && (
+  <button
+    onClick={() => setOpen(true)}
+    className="
+      fixed z-50 bottom-4 right-4 
+      p-3 sm:p-4 rounded-full shadow-2xl
+      transition-all duration-300 cursor-pointer 
+      bg-gradient-to-br from-orange-500 to-orange-600
+      hover:scale-110 hover:shadow-[0_0_20px_rgba(255,140,0,0.6)]
+      text-white flex items-center justify-center
+    "
+  >
+    <Image
+      src="/images/robot.png"
+      alt="robot"
+      width={60}
+      height={60}
+      className="rounded-full sm:w-[75px] sm:h-[75px]"
+    />
+  </button>
+)}
+
 
       {/* Chat Window */}
       {open && (
@@ -686,36 +687,89 @@ export default function Chatbot() {
                   </button>
                 </div>
 
-                {/* Quick Replies */}
-                <div className="flex gap-2 flex-wrap mt-3 overflow-x-auto pb-1">
-                  {[
-                    "Get a Quote (Room Size)",
-                    "Kitchen Remodel",
-                    "Bathroom Remodel",
-                    "Flooring",
-                    "Contact",
-                    "Pricing",
-                  ].map((label) => (
-                    <button
-                      key={label}
-                      onClick={() =>
-                        label.includes("Quote")
-                          ? setInput("I want an estimate. My room is ___ sq ft.")
-                          : setInput(label)
-                      }
-                      className={`
-                        text-xs px-3 py-1 rounded-full border 
-                        ${
-                          isDark
-                            ? "bg-slate-800 border-slate-600 text-slate-100 hover:bg-slate-700"
-                            : "bg-white border-gray-300 text-gray-700 hover:bg-orange-100"
-                        }
-                      `}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
+               {/* Quick Replies */}
+<div className="flex gap-2 flex-wrap mt-3 overflow-x-auto pb-1">
+
+{/* --- First 2 buttons --- */}
+{["Get a Quote (Room Size)", "Kitchen Remodel"].map((label) => (
+  <button
+    key={label}
+    onClick={() =>
+      label.includes("Quote")
+        ? setInput("I want an estimate. My room is ___ sq ft.")
+        : setInput(label)
+    }
+    className={`
+      text-xs px-3 py-1 rounded-full border 
+      ${
+        isDark
+          ? "bg-slate-800 border-slate-600 text-slate-100 hover:bg-slate-700"
+          : "bg-white border-gray-300 text-gray-700 hover:bg-orange-100"
+      }
+    `}
+  >
+    {label}
+  </button>
+))}
+
+{/* --- Dropdown Menu --- */}
+<div className="relative">
+  <button
+    onClick={() => setShowMore((prev) => !prev)}
+    className={`
+      text-xs px-3 py-1 rounded-full border 
+      ${
+        isDark
+          ? "bg-slate-800 border-slate-600 text-slate-100 hover:bg-slate-700"
+          : "bg-white border-gray-300 text-gray-700 hover:bg-orange-100"
+      }
+    `}
+  >
+    More ▼
+  </button>
+
+  {/* Menu content */}
+  {showMore && (
+    <div
+      className={`
+        absolute left-0 top-full mt-2 p-2 rounded-xl shadow-lg z-50
+        min-w-[160px] flex flex-col gap-2
+        ${
+          isDark
+            ? "bg-slate-900 border border-slate-700 text-slate-100"
+            : "bg-white border border-gray-300 text-gray-700"
+        }
+      `}
+    >
+      {[
+        "Bathroom Remodel",
+        "Flooring",
+        "Contact",
+        "Pricing",
+      ].map((label) => (
+        <button
+          key={label}
+          onClick={() => {
+            setShowMore(false);
+            setInput(label);
+          }}
+          className={`
+            text-xs px-3 py-1 rounded-full border w-full text-left
+            ${
+              isDark
+                ? "bg-slate-800 border-slate-600 text-slate-100 hover:bg-slate-700"
+                : "bg-white border-gray-300 text-gray-700 hover:bg-orange-100"
+            }
+          `}
+        >
+          {label}
+        </button>
+      ))}
+    </div>
+  )}
+</div>
+</div>
+
               </div>
             </div>
           </div>
