@@ -9,15 +9,18 @@ import {
   Moon,
   Copy,
 } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import {
+  useState,
+  useEffect,
+  useRef,
+  type ReactNode,
+} from "react";
 import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 import type { Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import "highlight.js/styles/github-dark.css";
-
-
 
 import EstimatorPanel from "@/app/components/EstimatorPanel";
 
@@ -74,6 +77,11 @@ type Message = {
   time: string;
 };
 
+type ChatApiResponse = {
+  reply?: string;
+  error?: string;
+};
+
 const STORAGE_KEY = "chatbot-messages-v1";
 const createId = () => Math.random().toString(36).slice(2);
 
@@ -99,6 +107,7 @@ export default function Chatbot() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [estimatorOpen, setEstimatorOpen] = useState(false);
   const [showMore, setShowMore] = useState(false);
+
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
   const typewriterTimeoutRef = useRef<number | null>(null);
@@ -175,12 +184,12 @@ export default function Chatbot() {
     rec.interimResults = false;
     rec.maxAlternatives = 1;
 
-    rec.onresult = (e) => {
+    rec.onresult = (e: SpeechRecognitionEvent) => {
       const transcript = e.results[0][0].transcript;
       setInput((prev) => (prev ? `${prev} ${transcript}` : transcript));
     };
 
-    rec.onerror = (e) => {
+    rec.onerror = (e: SpeechRecognitionErrorEvent) => {
       console.error("Speech recognition error:", e.error);
       setIsRecording(false);
     };
@@ -198,7 +207,10 @@ export default function Chatbot() {
     }
 
     const rec = initRecognition();
-    if (!rec) return alert("Speech recognition unsupported");
+    if (!rec) {
+      alert("Speech recognition is not supported in this browser.");
+      return;
+    }
 
     recognitionRef.current = rec;
     setIsRecording(true);
@@ -212,6 +224,7 @@ export default function Chatbot() {
   const clearTypewriter = () => {
     if (typewriterTimeoutRef.current) {
       window.clearTimeout(typewriterTimeoutRef.current);
+      typewriterTimeoutRef.current = null;
     }
     setTypingText("");
   };
@@ -223,26 +236,29 @@ export default function Chatbot() {
 
     const step = () => {
       setTypingText((prev) => prev + clean.charAt(idx));
-      idx++;
+      idx += 1;
 
       if (idx < clean.length) {
         const prevChar = clean.charAt(idx - 1);
-        const delay = prevChar === "." || prevChar === "!" ? 120 : 20;
+        let delay = 20;
+        if (".!?".includes(prevChar)) delay = 120;
+        else if (",;:".includes(prevChar)) delay = 50;
+
         typewriterTimeoutRef.current = window.setTimeout(step, delay);
-      } else onDone();
+      } else {
+        onDone();
+      }
     };
 
-    step();
+    if (clean.length === 0) onDone();
+    else step();
   };
+
+  useEffect(() => () => clearTypewriter(), []);
 
   /* ----------------------------------------------------
      Chat API
   ---------------------------------------------------- */
-
-  type ChatApiResponse = {
-    reply?: string;
-    error?: string;
-  };
 
   const fetchReply = async (chatMessages: Message[]): Promise<string> => {
     const res = await fetch("/api/chat", {
@@ -313,21 +329,74 @@ export default function Chatbot() {
   };
 
   /* ----------------------------------------------------
+     Regenerate Last Assistant Message
+  ---------------------------------------------------- */
+
+  const regenerateLast = async () => {
+    if (loading || typingText) return;
+
+    const lastAssistantIndex = [...messages]
+      .map((m, idx) => ({ ...m, idx }))
+      .filter((m) => m.role === "assistant")
+      .slice(-1)[0]?.idx;
+
+    if (lastAssistantIndex === undefined) return;
+
+    const baseMessages = messages.filter((_, idx) => idx !== lastAssistantIndex);
+
+    setMessages(baseMessages);
+    setLoading(true);
+    clearTypewriter();
+
+    try {
+      const reply = await fetchReply(baseMessages);
+
+      runTypewriter(reply, () => {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: createId(),
+            role: "assistant",
+            content: reply,
+            time: new Date().toISOString(),
+          },
+        ]);
+        setTypingText("");
+        setLoading(false);
+      });
+    } catch {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: createId(),
+          role: "assistant",
+          content: "Something went wrong while regenerating.",
+          time: new Date().toISOString(),
+        },
+      ]);
+      setTypingText("");
+      setLoading(false);
+    }
+  };
+
+  /* ----------------------------------------------------
      Markdown Renderer
   ---------------------------------------------------- */
 
-  const copyToClipboard = (text: string) =>
-    navigator?.clipboard?.writeText(text);
+  const copyToClipboard = (text: string) => {
+    if (typeof navigator === "undefined") return;
+    navigator.clipboard?.writeText(text).catch(console.error);
+  };
 
   const markdownComponents: Partial<Components> = {
     code: (props: {
       inline?: boolean;
       className?: string;
-      children?: React.ReactNode;
+      children?: ReactNode;
     }) => {
       const { inline, className, children } = props;
       const code = String(children ?? "").trim();
-  
+
       if (inline) {
         return (
           <code className="px-1 py-0.5 rounded bg-black/10 text-xs font-mono">
@@ -335,7 +404,7 @@ export default function Chatbot() {
           </code>
         );
       }
-  
+
       return (
         <div className="relative group my-2">
           <button
@@ -348,7 +417,7 @@ export default function Chatbot() {
           >
             <Copy className="w-3 h-3" />
           </button>
-  
+
           <pre className="text-xs md:text-sm rounded-xl p-3 overflow-auto bg-slate-900/95 text-slate-100">
             <code className={className}>{code}</code>
           </pre>
@@ -356,7 +425,6 @@ export default function Chatbot() {
       );
     },
   };
-  
 
   /* ----------------------------------------------------
      Estimator → Chat
@@ -380,36 +448,35 @@ export default function Chatbot() {
 
   return (
     <div className="relative">
-    {/* Floating Chat Button (only when closed) */}
-{!open && (
-  <button
-    onClick={() => setOpen(true)}
-    className="
-      fixed z-50 bottom-4 right-4 
-      p-3 sm:p-4 rounded-full shadow-2xl
-      transition-all duration-300 cursor-pointer 
-      bg-gradient-to-br from-orange-500 to-orange-600
-      hover:scale-110 hover:shadow-[0_0_20px_rgba(255,140,0,0.6)]
-      text-white flex items-center justify-center
-    "
-  >
-    <Image
-      src="/images/robot.png"
-      alt="robot"
-      width={60}
-      height={60}
-      className="rounded-full sm:w-[75px] sm:h-[75px]"
-    />
-  </button>
-)}
-
+      {/* Floating Chat Button (only when closed) */}
+      {!open && (
+        <button
+          onClick={() => setOpen(true)}
+          className="
+            fixed z-50 bottom-4 right-4 
+            p-3 sm:p-4 rounded-full shadow-2xl
+            transition-all duration-300 cursor-pointer 
+            bg-gradient-to-br from-orange-500 to-orange-600
+            hover:scale-110 hover:shadow-[0_0_20px_rgba(255,140,0,0.6)]
+            text-white flex items-center justify-center
+          "
+        >
+          <Image
+            src="/images/robot.png"
+            alt="robot"
+            width={60}
+            height={60}
+            className="rounded-full sm:w-[75px] sm:h-[75px]"
+          />
+        </button>
+      )}
 
       {/* Chat Window */}
       {open && (
         <div
           className={`
             fixed 
-            bottom-20 sm:bottom-24 
+            bottom-10 sm:bottom-10 
             right-2 sm:right-4
             w-[95vw] sm:w-[460px] md:w-[650px] 
             ${estimatorOpen ? "md:w-[90vw] xl:w-[1200px]" : ""}
@@ -443,7 +510,9 @@ export default function Chatbot() {
               </div>
 
               <div>
-                <div className="font-semibold">Customer Support</div>
+                <div className="font-semibold text-sm sm:text-base">
+                  Customer Support
+                </div>
                 <div className="text-[11px] text-gray-500 dark:text-gray-400">
                   {loading || typingText ? "AI is typing..." : "Online"}
                 </div>
@@ -452,7 +521,7 @@ export default function Chatbot() {
 
             {/* Controls */}
             <div className="flex items-center gap-2">
-              {/* Estimator toggle */}
+              {/* Estimator toggle (desktop & tablet) */}
               <button
                 onClick={() => setEstimatorOpen((prev) => !prev)}
                 className="
@@ -523,15 +592,17 @@ export default function Chatbot() {
               />
             </div>
 
-            {/* Chat Messages */}
+            {/* Chat Messages + Input */}
             <div className="flex flex-1 flex-col">
+              {/* Messages */}
               <div className="flex-1 overflow-y-auto px-3 py-2 sm:p-4 space-y-3 sm:space-y-4 custom-scroll">
                 {messages.map((m) => {
                   const isUser = m.role === "user";
+                  const lastAssistantId = messages
+                    .filter((x) => x.role === "assistant")
+                    .slice(-1)[0]?.id;
                   const isLastAssistant =
-                    m.role === "assistant" &&
-                    messages.filter((mm) => mm.role === "assistant").slice(-1)[0]
-                      ?.id === m.id;
+                    m.role === "assistant" && m.id === lastAssistantId;
 
                   return (
                     <div
@@ -574,7 +645,7 @@ export default function Chatbot() {
                             </button>
 
                             <button
-                              onClick={sendMessage}
+                              onClick={regenerateLast}
                               className="
                                 inline-flex items-center gap-1 px-2 py-1 
                                 rounded-full bg-black/5 hover:bg-black/10
@@ -590,7 +661,7 @@ export default function Chatbot() {
                   );
                 })}
 
-                {/* Typing */}
+                {/* Typing bubble */}
                 {typingText && (
                   <div
                     className={`
@@ -610,6 +681,24 @@ export default function Chatbot() {
                     >
                       {typingText}
                     </ReactMarkdown>
+                  </div>
+                )}
+
+                {/* Loading dots when no typewriter text */}
+                {loading && !typingText && (
+                  <div
+                    className={`
+                      flex items-center gap-2 px-4 py-2 rounded-2xl shadow-sm w-fit
+                      ${
+                        isDark
+                          ? "bg-slate-800/90 border border-slate-700 text-slate-200"
+                          : "bg-white/90 backdrop-blur-md border border-white/60 text-gray-600"
+                      }
+                    `}
+                  >
+                    <span className="w-2 h-2 rounded-full bg-gray-500 animate-bounce" />
+                    <span className="w-2 h-2 rounded-full bg-gray-500 animate-bounce delay-150" />
+                    <span className="w-2 h-2 rounded-full bg-gray-500 animate-bounce delay-300" />
                   </div>
                 )}
 
@@ -665,8 +754,8 @@ export default function Chatbot() {
                       focus:outline-none focus:ring-2 focus:ring-orange-400
                       ${
                         isDark
-                          ? "bg-slate-800 text-slate-50 border-slate-600"
-                          : "bg-white text-gray-900 border-gray-300"
+                          ? "bg-slate-800 text-slate-50 border-slate-600 placeholder:text-slate-400"
+                          : "bg-white text-gray-900 border-gray-300 placeholder:text-gray-400"
                       }
                     `}
                   />
@@ -682,94 +771,92 @@ export default function Chatbot() {
                       alt="robot"
                       width={45}
                       height={45}
-                      className="rounded-full border border-transparent hover:border-orange-400 hover:ring-4 hover:ring-orange-400/40 hover:scale-[1.15] transition"
+                      className="
+                        rounded-full border border-transparent 
+                        hover:border-orange-400 hover:ring-4 hover:ring-orange-400/40 
+                        hover:scale-[1.15] transition
+                      "
                     />
                   </button>
                 </div>
 
-               {/* Quick Replies */}
-<div className="flex gap-2 flex-wrap mt-3 overflow-x-auto pb-1">
+                {/* Quick Replies */}
+                <div className="flex gap-2 flex-wrap mt-3 overflow-x-auto pb-1">
+                  {/* First 2 buttons */}
+                  {["Get a Quote (Room Size)", "Kitchen Remodel"].map((label) => (
+                    <button
+                      key={label}
+                      onClick={() =>
+                        label.includes("Quote")
+                          ? setInput("I want an estimate. My room is ___ sq ft.")
+                          : setInput(label)
+                      }
+                      className={`
+                        text-xs px-3 py-1 rounded-full border 
+                        ${
+                          isDark
+                            ? "bg-slate-800 border-slate-600 text-slate-100 hover:bg-slate-700"
+                            : "bg-white border-gray-300 text-gray-700 hover:bg-orange-100"
+                        }
+                      `}
+                    >
+                      {label}
+                    </button>
+                  ))}
 
-{/* --- First 2 buttons --- */}
-{["Get a Quote (Room Size)", "Kitchen Remodel"].map((label) => (
-  <button
-    key={label}
-    onClick={() =>
-      label.includes("Quote")
-        ? setInput("I want an estimate. My room is ___ sq ft.")
-        : setInput(label)
-    }
-    className={`
-      text-xs px-3 py-1 rounded-full border 
-      ${
-        isDark
-          ? "bg-slate-800 border-slate-600 text-slate-100 hover:bg-slate-700"
-          : "bg-white border-gray-300 text-gray-700 hover:bg-orange-100"
-      }
-    `}
-  >
-    {label}
-  </button>
-))}
+                  {/* Dropdown */}
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowMore((prev) => !prev)}
+                      className={`
+                        text-xs px-3 py-1 rounded-full border 
+                        ${
+                          isDark
+                            ? "bg-slate-800 border-slate-600 text-slate-100 hover:bg-slate-700"
+                            : "bg-white border-gray-300 text-gray-700 hover:bg-orange-100"
+                        }
+                      `}
+                    >
+                      More ▼
+                    </button>
 
-{/* --- Dropdown Menu --- */}
-<div className="relative">
-  <button
-    onClick={() => setShowMore((prev) => !prev)}
-    className={`
-      text-xs px-3 py-1 rounded-full border 
-      ${
-        isDark
-          ? "bg-slate-800 border-slate-600 text-slate-100 hover:bg-slate-700"
-          : "bg-white border-gray-300 text-gray-700 hover:bg-orange-100"
-      }
-    `}
-  >
-    More ▼
-  </button>
-
-  {/* Menu content */}
-  {showMore && (
-    <div
-      className={`
-        absolute left-0 top-full mt-2 p-2 rounded-xl shadow-lg z-50
-        min-w-[160px] flex flex-col gap-2
-        ${
-          isDark
-            ? "bg-slate-900 border border-slate-700 text-slate-100"
-            : "bg-white border border-gray-300 text-gray-700"
-        }
-      `}
-    >
-      {[
-        "Bathroom Remodel",
-        "Flooring",
-        "Contact",
-        "Pricing",
-      ].map((label) => (
-        <button
-          key={label}
-          onClick={() => {
-            setShowMore(false);
-            setInput(label);
-          }}
-          className={`
-            text-xs px-3 py-1 rounded-full border w-full text-left
-            ${
-              isDark
-                ? "bg-slate-800 border-slate-600 text-slate-100 hover:bg-slate-700"
-                : "bg-white border-gray-300 text-gray-700 hover:bg-orange-100"
-            }
-          `}
-        >
-          {label}
-        </button>
-      ))}
-    </div>
-  )}
-</div>
-</div>
-
+                    {showMore && (
+                      <div
+                        className={`
+                          absolute left-0 top-full mt-2 p-2 rounded-xl shadow-lg z-50
+                          min-w-[160px] flex flex-col gap-2
+                          ${
+                            isDark
+                              ? "bg-slate-900 border border-slate-700 text-slate-100"
+                              : "bg-white border border-gray-300 text-gray-700"
+                          }
+                        `}
+                      >
+                        {["Bathroom Remodel", "Flooring", "Contact", "Pricing"].map(
+                          (label) => (
+                            <button
+                              key={label}
+                              onClick={() => {
+                                setShowMore(false);
+                                setInput(label);
+                              }}
+                              className={`
+                                text-xs px-3 py-1 rounded-full border w-full text-left
+                                ${
+                                  isDark
+                                    ? "bg-slate-800 border-slate-600 text-slate-100 hover:bg-slate-700"
+                                    : "bg-white border-gray-300 text-gray-700 hover:bg-orange-100"
+                                }
+                              `}
+                            >
+                              {label}
+                            </button>
+                          )
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
