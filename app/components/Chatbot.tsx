@@ -16,7 +16,7 @@ import type { Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import "highlight.js/styles/github-dark.css";
-const [showMore, setShowMore] = useState(false);
+
 
 
 import EstimatorPanel from "@/app/components/EstimatorPanel";
@@ -98,7 +98,7 @@ export default function Chatbot() {
   const [isRecording, setIsRecording] = useState(false);
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [estimatorOpen, setEstimatorOpen] = useState(false);
-
+  const [showMore, setShowMore] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
   const typewriterTimeoutRef = useRef<number | null>(null);
