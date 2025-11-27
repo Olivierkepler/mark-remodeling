@@ -1,72 +1,130 @@
 'use client'
+
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 
-function Hero() {
-  // Paste your actual Blob URL here:
+export default function Hero() {
   const HERO_URL =
     'https://holh1uldewromppp.public.blob.vercel-storage.com/images/hero/image-1754873406587.png'
 
   return (
-    <section className="relative text-white overflow-hidden">
-      {/* Background image */}
+    <section className="relative w-full min-h-screen overflow-hidden text-white flex items-center justify-center">
+
+      {/* --- Background Image + Cinematic Effects --- */}
       <div className="absolute inset-0">
         <Image
           src={HERO_URL}
-          alt="Construction Team at Work"
-          fill                     // use full container
-          priority                 // load fast for LCP
-          sizes="100vw"            // responsive hint
-          className="object-cover" // cover the whole section
+          alt="Construction Team"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center scale-105 brightness-90"
         />
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#1E3A8A]/90 via-[#1E3A8A]/70 to-[#F59E0B]/70" />
+
+        {/* Vignette for cinematic depth */}
+        <div className="absolute inset-0 bg-black/50" />
+
+        {/* Directional gradient for dramatic lighting */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/40 to-transparent" />
+
+        {/* Glassy orange atmospheric glow */}
+        <div className="absolute bottom-0 right-0 w-[50vw] h-[50vh] bg-[#F59E0B]/20 blur-[130px]" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-12 pt-60 pb-20 flex flex-col md:flex-row items-center gap-12">
-        {/* Left content */}
-        <div className="flex-1 text-center md:text-left">
+      {/* --- Content Container --- */}
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 py-40 md:py-60">
+        <motion.div
+          initial="hidden"
+          animate="show"
+          variants={{
+            hidden: {},
+            show: {
+              transition: { staggerChildren: 0.15 }
+            }
+          }}
+          className="flex flex-col max-w-3xl space-y-8"
+        >
+
+          {/* Headline */}
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-4xl md:text-6xl font-extrabold leading-tight"
+            variants={{
+              hidden: { opacity: 0, y: 40 },
+              show: { opacity: 1, y: 0 }
+            }}
+            transition={{ duration: 0.7, ease: 'easeOut' }}
+            className="
+              text-4xl sm:text-5xl md:text-7xl font-extrabold leading-tight
+              tracking-tight text-white drop-shadow-xl
+            "
           >
-            Building Your <span className="text-[#F59E0B]">Dream</span> Space
+            Crafting the Spaces  
+            <span className="text-[#F59E0B]"> That Define You</span>
           </motion.h1>
 
+          {/* Subtitle */}
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="mt-6 text-lg md:text-xl text-white/90 max-w-xl"
+            variants={{
+              hidden: { opacity: 0, y: 40 },
+              show: { opacity: 1, y: 0 }
+            }}
+            transition={{ duration: 0.9, ease: 'easeOut' }}
+            className="
+              text-lg md:text-xl text-white/90 max-w-2xl leading-relaxed
+            "
           >
-            From concept to completion, we deliver top-tier construction and remodeling services tailored to your vision.
+            Premium construction, remodeling, and custom design services—
+            delivering craftsmanship that blends innovation, precision, and lasting beauty.
           </motion.p>
 
+          {/* CTA Buttons */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
-            className="mt-8 flex flex-wrap justify-center md:justify-start gap-4"
+            variants={{
+              hidden: { opacity: 0, y: 40 },
+              show: { opacity: 1, y: 0 }
+            }}
+            transition={{ duration: 1, ease: 'easeOut' }}
+            className="flex flex-wrap gap-4 mt-4"
           >
-            <a
+            {/* Primary CTA */}
+            <motion.a
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
               href="#services"
-              className="px-6 py-3 rounded-full bg-[#F59E0B] text-white font-semibold shadow-lg hover:bg-[#d98207] transition"
+              className="
+                px-8 py-4 rounded-full font-semibold text-white
+                bg-gradient-to-r from-[#F59E0B] to-[#d88b07]
+                shadow-[0_10px_25px_rgba(245,158,11,0.35)]
+                transition-all duration-300
+              "
             >
               Explore Services
-            </a>
-            <a
+            </motion.a>
+
+            {/* Secondary CTA with Glassmorphism */}
+            <motion.a
+              whileHover={{ scale: 1.05, backgroundColor: 'rgba(255,255,255,0.25)' }}
+              whileTap={{ scale: 0.98 }}
               href="#contact"
-              className="px-6 py-3 rounded-full bg-white/20 text-white font-semibold shadow-lg hover:bg-white/30 transition backdrop-blur"
+              className="
+                px-8 py-4 rounded-full font-semibold text-white
+                bg-white/10 backdrop-blur-lg border border-white/20
+                shadow-[0_8px_30px_rgba(0,0,0,0.2)]
+                transition-all duration-300
+              "
             >
               Get a Quote
-            </a>
+            </motion.a>
           </motion.div>
-        </div>
+        </motion.div>
       </div>
+
+      {/* --- Floating Particles / Motion Elements --- */}
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 0.35, y: 0 }}
+        transition={{ duration: 2.5, ease: 'easeOut' }}
+        className="absolute top-1/4 right-1/3 w-48 h-48 bg-white/10 rounded-full blur-[100px]"
+      />
     </section>
   )
 }
-
-export default Hero
