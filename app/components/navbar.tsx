@@ -6,137 +6,182 @@ import Link from 'next/link'
 import SearchBar from './searchbar'
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false)
-  const [, setSearchQuery] = useState('') // elide unused state variable to satisfy no-unused-vars
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [isDesktop, setIsDesktop] = useState(false)
+  const [open, setOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const [desktop, setDesktop] = useState(false)
   const menuRef = useRef<HTMLDivElement | null>(null)
 
-  const toggleMenu = () => setIsOpen((v) => !v)
-  const handleSearchChange = (q: string) => setSearchQuery(q)
+  const toggle = () => setOpen((v) => !v)
 
-  // Close menu if clicked outside
+  /* ------------ Close When Clicking Outside ------------ */
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) setIsOpen(false)
+    const close = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setOpen(false)
+      }
     }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
+    document.addEventListener('mousedown', close)
+    return () => document.removeEventListener('mousedown', close)
   }, [])
 
-  // Track desktop vs mobile (md = 768px)
+  /* ------------ Track Desktop Layout ------------ */
   useEffect(() => {
     const mq = window.matchMedia('(min-width: 768px)')
-    const apply = () => setIsDesktop(mq.matches)
+    const apply = () => setDesktop(mq.matches)
     apply()
     mq.addEventListener('change', apply)
     return () => mq.removeEventListener('change', apply)
   }, [])
 
-  // Only apply scroll listener on desktop
+  /* ------------ Scroll Shadow Effect ------------ */
   useEffect(() => {
-    if (!isDesktop) return
-    const update = () => setIsScrolled(window.scrollY > 0)
+    if (!desktop) return
+    const update = () => setScrolled(window.scrollY > 0)
     update()
+
     let ticking = false
     const onScroll = () => {
       if (!ticking) {
-        requestAnimationFrame(() => { update(); ticking = false })
+        requestAnimationFrame(() => {
+          update()
+          ticking = false
+        })
         ticking = true
       }
     }
+
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
-  }, [isDesktop])
+  }, [desktop])
 
-  const opacityClass = isDesktop ? (isScrolled ? 'opacity-100' : 'opacity-70') : 'opacity-100'
+  const opacity = desktop ? (scrolled ? 'opacity-100' : 'opacity-90') : 'opacity-100'
+
+  const links = [
+    { label: 'Home', href: '/' },
+    { label: 'About', href: '/about' },
+    { label: 'Services', href: '/services' },
+    { label: 'Contact', href: '/contact' }
+  ]
 
   return (
-    <header className={`sticky top-0 z-50 bg-gradient-to-r bg-black text-white shadow-xl transition-opacity duration-300 ${opacityClass}`}>
-      <nav className="max-w-7xl mx-auto p-6 flex items-center justify-between">
+    <header
+      className={`
+        sticky top-0 z-50 backdrop-blur-2xl ${opacity}
+        bg-white/10 border-b border-white/20
+        shadow-lg transition-all duration-300
+      `}
+    >
+      <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        
         {/* Logo */}
-        <div className="text-3xl font-semibold hover:text-gray-200 transition-colors flex items-center">
-          <Home className="w-8 h-8 text-orange-400 mr-2" />
-          <Link href="/" className="text-2xl font-semibold hover:text-gray-200 transition-colors">
-            ClairvilX
-          </Link>
-        </div>
+        <Link href="/" className="flex items-center group">
+          <Home className="w-8 h-8 text-orange-400 transition-transform group-hover:-translate-y-0.5" />
+          <span className="ml-2 text-2xl font-semibold tracking-wide text-white group-hover:text-orange-300 transition-colors">
+          Clairvil <span className="text-orange-400">X</span> Construction
+          </span>
+        </Link>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex space-x-10">
-          <Link href="/" className="hover:text-orange-400 transition duration-300 ease-in-out transform hover:scale-105">Home</Link>
-          <Link href="/about" className="hover:text-orange-400 transition duration-300 ease-in-out transform hover:scale-105">About</Link>
-          <Link href="/services" className="hover:text-orange-400 transition duration-300 ease-in-out transform hover:scale-105">Services</Link>
-          <Link href="/contact" className="hover:text-orange-400 transition duration-300 ease-in-out transform hover:scale-105">Contact</Link>
-        </div>
-
-        {/* Desktop Search */}
-        <div className="hidden md:flex items-center space-x-6">
-          <SearchBar onSearch={handleSearchChange as (q: string) => void} />
-        </div>
-
-        {/* Mobile Hamburger */}
-        <div className="md:hidden flex items-center">
-          <button
-            onClick={toggleMenu}
-            className="text-white"
-            aria-expanded={isOpen}
-            aria-controls="mobile-menu"
-            aria-label="Toggle navigation menu"
-          >
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
-        </div>
-      </nav>
-
-      {/* Mobile overlay (click anywhere outside to close) */}
-      <div
-        className={`fixed top-0 left-0 w-full h-full z-40 bg-gray-800/30 ${isOpen ? 'block' : 'hidden'}`}
-        onClick={() => setIsOpen(false)}
-      />
-
-      {/* Mobile drawer */}
-      <div
-        id="mobile-menu"
-        className={`fixed top-0 right-0 w-64 h-full bg-gradient-to-r from-gray-800 to-gray-600 p-6 space-y-4 transform transition-transform duration-300 ease-in-out z-50 ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
-        ref={menuRef}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Mobile navigation"
-      >
-        <div className="text-white text-2xl font-semibold">
-          <Link href="/" className="hover:text-orange-400 transition duration-300 ease-in-out" onClick={() => setIsOpen(false)}>
-            ClairvilX
-          </Link>
-        </div>
-
-        <div className="space-y-6">
-          {[
-            ['Home', '/'],
-            ['About', '/about'],
-            ['Services', '/services'],
-            ['Contact', '/contact'],
-          ].map(([label, href]) => (
+          {links.map(({ label, href }) => (
             <Link
               key={href}
               href={href}
-              onClick={() => setIsOpen(false)}
-              className="text-white block hover:scale-105 transition duration-300 ease-in-out group"
+              className="relative text-white/90 hover:text-white transition font-medium"
             >
-              <span className="flex items-center">
-                {label}
-                <span className="opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-2 transition-all duration-300 ml-2">→</span>
-              </span>
+              {label}
+              {/* animated underline */}
+              <span className="
+                absolute left-0 -bottom-1 h-[2px] w-0
+                bg-gradient-to-r from-orange-400 to-orange-600
+                transition-all duration-300
+                group-hover:w-full peer-hover:w-full
+                hover:w-full
+              " />
             </Link>
           ))}
         </div>
 
-        <div className="flex items-center space-x-6">
-          <SearchBar onSearch={handleSearchChange as (q: string) => void} />
+        {/* Desktop search */}
+        <div className="hidden md:flex">
+          <SearchBar onSearch={() => {}} />
         </div>
-      </div>
+
+        {/* Mobile toggle */}
+        <button
+          className="md:hidden text-white"
+          aria-expanded={open}
+          onClick={toggle}
+        >
+          {open ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
+        </button>
+      </nav>
+
+      {/* Overlay */}
+      <div
+        onClick={() => setOpen(false)}
+        className={`
+          fixed inset-0 bg-black/40 backdrop-blur-sm z-40
+          transition-opacity duration-300
+          ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'}
+        `}
+      />
+
+     {/* Mobile Drawer – Ultra Glassmorphism */}
+<div
+  ref={menuRef}
+  className={`
+    fixed top-0 left-0 h-full w-72 z-50 
+
+    /* GLASSMORPHISM MAGIC */
+    bg-white/10 backdrop-blur-2xl
+    border-r border-white/20
+    shadow-[0_8px_32px_rgba(0,0,0,0.35)]
+    saturate-150
+
+    /* LAYOUT */
+    p-6 flex flex-col space-y-8
+
+    /* SLIDE ANIMATION */
+    transform transition-transform duration-300 ease-out
+    ${open ? 'translate-x-0' : '-translate-x-full'}
+  `}
+>
+  {/* Drawer logo */}
+  <Link
+    href="/"
+    className="text-xl font-semibold tracking-wide text-white hover:text-orange-400 transition"
+    onClick={() => setOpen(false)}
+  >
+    ClairvilX
+  </Link>
+
+  {/* Drawer links */}
+  <div className="space-y-6 ">
+    {links.map(({ label, href }) => (
+      <Link
+        key={href}
+        href={href}
+        onClick={() => setOpen(false)}
+        className="text-white text-lg tracking-wide relative group block"
+      >
+        {label}
+        {/* underline animation */}
+        <span className="
+          absolute left-0 -bottom-1 h-[2px] w-0
+          bg-gradient-to-r from-orange-400 to-orange-600
+          transition-all duration-300 group-hover:w-3/4
+        " />
+      </Link>
+    ))}
+  </div>
+
+  {/* Mobile search */}
+  <div className="pt-6 border-t border-white/20">
+    <SearchBar onSearch={() => {}} />
+  </div>
+</div>
+
     </header>
   )
 }
