@@ -19,7 +19,7 @@ export default function RenovationShowcase() {
   ];
 
   return (
-    <div className="w-full px-4 sm:px-6 lg:px-10 py-10 flex flex-col gap-12">
+    <div className="w-full px-4 sm:px-6 lg:px-10 py-10 flex flex-col gap-12 ">
 
       {/* ======================================================== */}
       {/* LEFT SECTION – AI PROMO (FULLY RESPONSIVE LAYOUT)       */}
