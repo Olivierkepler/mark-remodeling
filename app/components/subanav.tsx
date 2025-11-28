@@ -4,15 +4,8 @@ import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Building2, Home, Wrench, Leaf, Landmark } from 'lucide-react'
 
-/** Brand Palette */
-const BRAND_BLUE = '#1E3A8A'   // steel blue
-const BRAND_GOLD = '#F59E0B'   // construction gold
-
-interface TabContent {
-  title: string
-  icon?: React.ComponentType<{ className?: string }>
-  content: React.ReactNode
-}
+const BRAND_BLUE = '#1E3A8A'
+const BRAND_GOLD = '#F59E0B'
 
 const Card = ({
   title,
@@ -24,54 +17,62 @@ const Card = ({
   accent?: string
 }) => (
   <motion.article
-    whileHover={{ y: -4 }}
-    className="group relative rounded-2xl border cursor-pointer p-6 shadow-lg hover:shadow-2xl transition-shadow bg-white/75 backdrop-blur-xl"
-    style={{ borderColor: `${BRAND_BLUE}26` /* ~15% */ }}
+    whileHover={{ y: -6, scale: 1.03 }}
+    transition={{ type: 'spring', stiffness: 280, damping: 24 }}
+    className="
+      group relative cursor-pointer p-6 rounded-2xl
+      bg-white/75 backdrop-blur-2xl shadow-xl border
+      hover:shadow-2xl transition-shadow
+    "
+    style={{ borderColor: `${BRAND_BLUE}2b` }}
   >
     <div
       className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"
       style={{
-        background: `linear-gradient(135deg, ${accent}40 0%, transparent 60%)`,
+        background: `linear-gradient(135deg, ${accent}44 0%, transparent 60%)`,
       }}
     />
-    <h3 className="relative text-lg font-semibold tracking-tight text-gray-900">
-      {title}
-    </h3>
-    <p className="relative mt-2 text-sm text-gray-600">{desc}</p>
+    <div className="relative space-y-2">
+      <h3 className="text-lg font-semibold text-gray-900 tracking-tight">{title}</h3>
+      <p className="text-sm text-gray-600">{desc}</p>
+    </div>
   </motion.article>
 )
 
-const tabs: TabContent[] = [
+const tabs = [
   {
     title: 'Residential',
+    badge: 'Homes & Living',
     icon: Home,
     content: (
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-8">
-        <Card title="Kitchen Remodeling" desc="Complete kitchen renovations with modern designs" accent={BRAND_GOLD} />
-        <Card title="Bathroom Updates" desc="Luxury bathroom renovations and upgrades" accent={BRAND_BLUE} />
-        <Card title="Room Additions" desc="Expand your living space professionally" accent={BRAND_GOLD} />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-8 lg:p-10">
+        <Card title="Kitchen Remodeling" desc="Modern kitchens with premium finishes and efficient layouts." />
+        <Card title="Luxury Bathrooms" desc="Spa-like retreats with custom tiling and fixtures." accent={BRAND_BLUE} />
+        <Card title="Room Additions" desc="Seamless expansions that feel like part of the original design." />
       </div>
     ),
   },
   {
     title: 'Commercial',
+    badge: 'Business Spaces',
     icon: Building2,
     content: (
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-8">
-        <Card title="Office Renovations" desc="Modern office space transformations" accent={BRAND_BLUE} />
-        <Card title="Retail Spaces" desc="Custom retail environment design" accent={BRAND_GOLD} />
-        <Card title="Restaurant Builds" desc="Specialized restaurant construction" accent={BRAND_BLUE} />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-8 lg:p-10">
+        <Card title="Office Environments" desc="High-performance workspaces that inspire focus and collaboration." accent={BRAND_BLUE} />
+        <Card title="Retail Concepts" desc="Experience-driven retail spaces tailored to your brand." />
+        <Card title="Hospitality & Dining" desc="Restaurants and lounges with architectural presence." accent={BRAND_BLUE} />
       </div>
     ),
   },
   {
     title: 'Specialty',
+    badge: 'Craft & Detail',
     icon: Wrench,
     content: (
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-8">
-        <Card title="Historic Restoration" desc="Careful restoration of historic properties" accent={BRAND_GOLD} />
-        <Card title="Green Building" desc="Sustainable construction practices" accent={BRAND_BLUE} />
-        <Card title="Custom Design" desc="Unique architectural solutions" accent={BRAND_GOLD} />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-8 lg:p-10">
+        <Card title="Historic Restoration" desc="Respectful restorations that preserve character and integrity." />
+        <Card title="Sustainable Builds" desc="Energy-conscious designs using modern green standards." accent={BRAND_BLUE} />
+        <Card title="Bespoke Projects" desc="One-of-a-kind constructions built around your vision." />
       </div>
     ),
   },
@@ -82,35 +83,24 @@ export default function SubNav() {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
   const [lastScrollY, setLastScrollY] = useState(0)
+
   const hoverWrapRef = useRef<HTMLDivElement | null>(null)
 
-  // Scroll detection
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollY = window.scrollY
-      
-      // Show subnav when scrolling down and past a certain threshold (e.g., 100px)
-      if (currentScrollY > 100) {
-        if (currentScrollY > lastScrollY) {
-          // Scrolling down
-          setIsVisible(true)
-        } else {
-          // Scrolling up
-          setIsVisible(false)
-        }
-      } else {
-        // At the top, hide subnav
+      const y = window.scrollY
+      if (y > 160 && y > lastScrollY) {
+        setIsVisible(true)
+      } else if (y < 120 || y < lastScrollY) {
         setIsVisible(false)
       }
-      
-      setLastScrollY(currentScrollY)
+      setLastScrollY(y)
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [lastScrollY])
 
-  // Close on ESC + keyboard cycling
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -133,92 +123,153 @@ export default function SubNav() {
   return (
     <AnimatePresence>
       {isVisible && (
-        <motion.div 
-          className="w-full fixed top-22 left-0 right-0 z-10"
-          initial={{ y: -100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: -100, opacity: 0 }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
+        <motion.div
+          className="fixed left-0 right-0 z-30 top-20"
+          initial={{ y: -90, opacity: 0, scale: 0.98 }}
+          animate={{ y: 0, opacity: 1, scale: 1 }}
+          exit={{ y: -90, opacity: 0, scale: 0.98 }}
+          transition={{ duration: 0.35, ease: 'easeInOut' }}
         >
-          {/* Decorative gradient glow (brand-tuned) */}
+          {/* Ambient glow */}
           <div
-            className="pointer-events-none absolute inset-0 mx-auto h-32 -translate-y-6 max-w-5xl opacity-60 blur-3xl"
+            className="pointer-events-none absolute inset-0 mx-auto h-44 -translate-y-10 max-w-5xl opacity-80 blur-[80px]"
             style={{
               background: `
-                radial-gradient(40% 60% at 50% 40%, ${BRAND_BLUE}2E, transparent 60%),
-                radial-gradient(30% 50% at 70% 50%, ${BRAND_GOLD}38, transparent 60%)
-              `.trim(),
+                radial-gradient(circle at 20% 0%, ${BRAND_BLUE}33, transparent 60%),
+                radial-gradient(circle at 80% 120%, ${BRAND_GOLD}33, transparent 60%)
+              `,
             }}
           />
 
-          <div className="max-w-7xl mx-auto">
-            {/* Hover wrapper: leaving this area closes the panel */}
+          <div className="max-w-7xl mx-auto px-3 sm:px-6">
+            {/* Desktop */}
             <div
               ref={hoverWrapRef}
               className="relative hidden md:block"
               onMouseLeave={() => setActiveTab(null)}
             >
-              {/* Desktop nav */}
-              <nav
-                className="flex items-center justify-center gap-2 rounded-md px-4 py-2 shadow-lg bg-white/70 backdrop-blur-xl border"
-                role="tablist"
-                aria-label="Service categories"
-                style={{ borderColor: `${BRAND_BLUE}26` }}
-              >
-                {tabs.map((t, i) => {
-                  const Icon = t.icon ?? Landmark
-                  const isActive = activeTab === i
-                  return (
-                    <motion.button
-                      key={t.title}
-                      role="tab"
-                      aria-selected={isActive}
-                      onMouseEnter={() => setActiveTab(i)}
-                      onFocus={() => setActiveTab(i)}
-                      onClick={() => setActiveTab(i)}
-                      className="relative px-5 py-3 text-sm font-medium focus:outline-none cursor-pointer"
-                      style={{ color: isActive ? '#111827' : '#374151' }}
-                    >
-                      <span className="inline-flex items-center gap-2 ">
-                        <Icon className="h-4 w-4" />
-                        <span className="tracking-wide">{t.title}</span>
-                      </span>
+              <div className="mb-2 flex items-center gap-3">
+                <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-300">
+                  Our Capabilities
+                </span>
+                <span className="h-px flex-1 bg-gradient-to-r from-slate-500/60 via-slate-500/20 to-transparent" />
+              </div>
 
-                      {/* Brand gold ink underline */}
-                      {isActive && (
-                        <motion.span
-                          layoutId="ink"
-                          className="absolute left-3 right-3 -bottom-0.5 h-[2px] rounded-full"
-                          style={{ backgroundColor: BRAND_GOLD }}
-                          transition={{ type: 'spring', stiffness: 500, damping: 40 }}
-                        />
-                      )}
-                    </motion.button>
-                  )
-                })}
-              </nav>
+              <div className="relative">
+                <div className="pointer-events-none absolute inset-0 rounded-2xl border border-white/10 shadow-[0_0_0_1px_rgba(15,23,42,0.25)]" />
 
-              {/* Desktop mega panel */}
+                <nav
+                  role="tablist"
+                  aria-label="Service categories"
+                  className="
+                    relative z-10 flex items-center justify-center gap-2
+                    rounded-2xl px-4 py-3
+                    bg-white/70 backdrop-blur-2xl shadow-xl border
+                  "
+                  style={{ borderColor: `${BRAND_BLUE}3d` }}
+                >
+                  {tabs.map((t, i) => {
+                    const Icon = t.icon ?? Landmark
+                    const isActive = activeTab === i
+                    return (
+                      <motion.button
+                        key={t.title}
+                        role="tab"
+                        aria-selected={isActive}
+                        onMouseEnter={() => setActiveTab(i)}
+                        onFocus={() => setActiveTab(i)}
+                        onClick={() => setActiveTab(i)}
+                        className={`
+                          relative px-6 py-3 text-sm font-medium cursor-pointer select-none
+                          rounded-xl transition-all duration-200
+                          ${isActive ? 'text-slate-900' : 'text-slate-600 hover:text-slate-800'}
+                        `}
+                      >
+                        <div className="flex items-center gap-2">
+                          <span
+                            className={`
+                              inline-flex h-7 w-7 items-center justify-center rounded-full text-[0.7rem]
+                              ${isActive ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-700'}
+                            `}
+                          >
+                            <Icon className="h-3.5 w-3.5" />
+                          </span>
+                          <span className="tracking-wide">{t.title}</span>
+                        </div>
+
+                        {isActive && (
+                          <motion.span
+                            layoutId="tabHighlight"
+                            className="absolute inset-0 rounded-xl -z-10 bg-white/70 shadow-[0_10px_40px_rgba(15,23,42,0.18)]"
+                            transition={{ type: 'spring', stiffness: 420, damping: 35 }}
+                          />
+                        )}
+
+                        {isActive && (
+                          <motion.span
+                            layoutId="tabInk"
+                            className="absolute left-5 right-5 -bottom-1 h-[3px] rounded-full"
+                            style={{ background: `linear-gradient(90deg, ${BRAND_GOLD}, #fbbf24)` }}
+                            transition={{ type: 'spring', stiffness: 500, damping: 36 }}
+                          />
+                        )}
+                      </motion.button>
+                    )
+                  })}
+                </nav>
+              </div>
+
+              {/* Mega panel */}
               <AnimatePresence>
                 {activeTab !== null && (
                   <motion.section
-                    initial={{ opacity: 0, y: -8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    transition={{ duration: 0.24 }}
+                    key={activeTab}
+                    initial={{ opacity: 0, y: -6, scale: 0.99 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -6, scale: 0.99 }}
+                    transition={{ duration: 0.22, ease: 'easeOut' }}
                     role="tabpanel"
-                    aria-labelledby={`tab-${activeTab}`}
-                    className="absolute left-0 right-0 z-30 mt-2 "
+                    aria-label={tabs[activeTab].title}
+                    className="absolute left-0 right-0 z-20 mt-3"
                     onMouseEnter={() => setActiveTab(activeTab)}
                   >
                     <div className="mx-auto max-w-7xl">
                       <div
-                        className="relative   overflow-hidden rounded-md bg-white/80 backdrop-blur-2xl shadow-2xl border"
-                        style={{ borderColor: `${BRAND_BLUE}26` }}
+                        className="
+                          relative overflow-hidden rounded-2xl
+                          bg-white/85 backdrop-blur-2xl border shadow-2xl
+                        "
+                        style={{ borderColor: `${BRAND_BLUE}30` }}
                       >
-                        {/* subtle background grid */}
-                        <div className="pointer-events-none  absolute inset-0 opacity-[0.04] [background:linear-gradient(to_bottom,transparent_23px,rgba(0,0,0,0.5)_24px),linear-gradient(to_right,transparent_23px,rgba(0,0,0,0.5)_24px)] [background-size:24px_24px]" />
-                        {tabs[activeTab].content}
+                        <div
+                          className="pointer-events-none absolute inset-0 opacity-40 mix-blend-soft-light"
+                          style={{
+                            background: `
+                              radial-gradient(circle at 0% 0%, ${BRAND_BLUE}22, transparent 55%),
+                              radial-gradient(circle at 100% 100%, ${BRAND_GOLD}22, transparent 55%)
+                            `,
+                          }}
+                        />
+                        <div className="pointer-events-none absolute inset-0 opacity-[0.06] [background:linear-gradient(to_bottom,transparent_23px,rgba(15,23,42,0.75)_24px),linear-gradient(to_right,transparent_23px,rgba(15,23,42,0.75)_24px)] [background-size:26px_26px]" />
+
+                        <div className="relative flex items-center justify-between px-8 pt-6 pb-3">
+                          <div className="space-y-1">
+                            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
+                              {tabs[activeTab].badge}
+                            </p>
+                            <h2 className="text-base font-semibold text-slate-900">
+                              {tabs[activeTab].title} Construction Services
+                            </h2>
+                          </div>
+                          <div className="flex items-center gap-2 text-[11px] text-slate-500">
+                            <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.8)]" />
+                            <span>Active category</span>
+                          </div>
+                        </div>
+
+                        <div className="relative mx-8 mb-1 h-px bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200" />
+
+                        <div className="relative">{tabs[activeTab].content}</div>
                       </div>
                     </div>
                   </motion.section>
@@ -226,47 +277,61 @@ export default function SubNav() {
               </AnimatePresence>
             </div>
 
-            {/* Mobile trigger */}
-            <div className="md:hidden flex justify-center">
+            {/* Mobile */}
+            <div className="md:hidden flex flex-col items-center gap-1">
+              <span className="text-[11px] uppercase tracking-[0.18em] text-slate-300">
+                Services
+              </span>
               <motion.button
                 onClick={() => setDrawerOpen(true)}
-                whileTap={{ scale: 0.98 }}
-                className="mt-2 w-[92%] cursor-pointer rounded-2xl px-4 py-3 text-base font-medium shadow-lg bg-white/75 backdrop-blur-xl border"
-                style={{ borderColor: `${BRAND_BLUE}26`, color: '#1f2937' }}
+                whileTap={{ scale: 0.96 }}
+                className="
+                  mt-1 w-[92%] rounded-2xl px-4 py-3 font-medium text-sm
+                  bg-white/75 backdrop-blur-xl shadow-lg border
+                "
+                style={{ borderColor: `${BRAND_BLUE}2b`, color: '#111827' }}
               >
                 Explore Services
               </motion.button>
             </div>
 
-            {/* Mobile drawer + backdrop */}
             <AnimatePresence>
               {drawerOpen && (
                 <>
                   <motion.div
-                    className="fixed inset-0 z-40 backdrop-blur-[2px]"
+                    className="fixed inset-0 z-40 backdrop-blur-[3px]"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    style={{ backgroundColor: '#00000066' }}
+                    style={{ backgroundColor: '#020617aa' }}
                     onClick={() => setDrawerOpen(false)}
                   />
                   <motion.aside
-                    className="fixed right-0 top-0 z-50 h-full w-[86%] max-w-sm bg-white shadow-2xl border-l"
-                    initial={{ x: '100%' }}
+                    className="
+                      fixed left-0 top-0 z-50 h-full w-[88%] max-w-sm
+                      bg-white/92 backdrop-blur-2xl shadow-2xl border-r
+                      rounded-r-2xl
+                    "
+                    initial={{ x: '-100%' }}
                     animate={{ x: 0 }}
-                    exit={{ x: '100%' }}
-                    transition={{ type: 'spring', stiffness: 240, damping: 30 }}
-                    style={{ borderColor: `${BRAND_BLUE}26` }}
+                    exit={{ x: '-100%' }}
+                    transition={{ type: 'spring', stiffness: 240, damping: 28 }}
+                    style={{ borderColor: `${BRAND_BLUE}30` }}
                   >
                     <div className="relative h-full overflow-y-auto">
                       <div
-                        className="sticky top-0 z-10 border-b px-5 py-4 bg-white/90 backdrop-blur-md"
+                        className="sticky top-0 z-20 px-6 py-4 bg-white/92 backdrop-blur-2xl border-b"
                         style={{ borderColor: `${BRAND_BLUE}26` }}
                       >
-                        <h2 className="text-lg font-semibold tracking-tight text-gray-900">
-                          Browse Services
+                        <p className="text-[11px] uppercase tracking-[0.18em] text-slate-400">
+                          Services
+                        </p>
+                        <h2 className="mt-1 text-lg font-semibold text-slate-900">
+                          Browse Categories
                         </h2>
-                        <p className="text-xs text-gray-500">Tap a category to explore</p>
+                        <p className="text-xs text-slate-500">
+                          Tap a category to see what we build.
+                        </p>
                       </div>
 
                       <div className="divide-y" style={{ borderColor: `${BRAND_BLUE}14` }}>
@@ -274,19 +339,26 @@ export default function SubNav() {
                           const Icon = t.icon ?? Leaf
                           return (
                             <details key={t.title} className="group">
-                              <summary className="list-none px-5 py-4 flex items-center justify-between cursor-pointer select-none">
-                                <span className="inline-flex items-center gap-3 text-[15px] font-medium text-gray-800">
-                                  <Icon className="h-4 w-4" />
-                                  {t.title}
+                              <summary className="list-none px-6 py-4 flex items-center justify-between cursor-pointer">
+                                <span className="inline-flex items-center gap-3 text-[15px] font-medium text-gray-900">
+                                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-700">
+                                    <Icon className="h-4 w-4" />
+                                  </span>
+                                  <span>
+                                    {t.title}
+                                    <span className="block text-[11px] font-normal text-slate-500">
+                                      {t.badge}
+                                    </span>
+                                  </span>
                                 </span>
                                 <span
-                                  className="text-gray-500 transition-transform group-open:rotate-180"
+                                  className="text-slate-500 transition-transform group-open:rotate-180"
                                   style={{ color: BRAND_BLUE }}
                                 >
                                   ▾
                                 </span>
                               </summary>
-                              <div className="px-3 pb-4">{t.content}</div>
+                              <div className="px-4 pb-4">{t.content}</div>
                             </details>
                           )
                         })}
