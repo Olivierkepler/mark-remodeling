@@ -14,20 +14,31 @@ const nextConfig: NextConfig = {
     ],
   },
 
-  // ⛔ Disable Turbopack — fixes the Vercel build error
+  // ✅ Keep Turbopack ON and configure it properly
   turbopack: {
-    resolveExtensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.mjs', '.cjs'],
+    resolveExtensions: [
+      ".ts",
+      ".tsx",
+      ".js",
+      ".jsx",
+      ".json",
+      ".mjs",
+      ".cjs",
+    ],
+
+    // 👇 Equivalent to your Webpack externals for Turbopack
+    // moduleOptions: {
+    //   externalModules: ["canvas"],
+    // },
   },
 
-  // Keep your existing Webpack customization
-  webpack: (config, { isServer }) => {
-    if (isServer) {
-      config.externals.push({
-        canvas: "canvas",
-      });
-    }
-    return config;
-  },
+  // ❌ REMOVE Webpack customization (Turbopack does not support it)
+  // webpack: (config, { isServer }) => {
+  //   if (isServer) {
+  //     config.externals.push({ canvas: "canvas" });
+  //   }
+  //   return config;
+  // },
 };
 
 export default nextConfig;
