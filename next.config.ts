@@ -14,20 +14,8 @@ const nextConfig: NextConfig = {
     ],
   },
 
-  // ✔ Keep Turbopack enabled
-  turbopack: {
-    resolveExtensions: [
-      ".ts",
-      ".tsx",
-      ".js",
-      ".jsx",
-      ".json",
-      ".mjs",
-      ".cjs",
-    ],
-  },
+  // 🚫 Disable Turbopack fully — use Webpack instead
 
-  // ❌ Removed Webpack block — not needed and breaks Turbopack
 };
 
 export default nextConfig;
