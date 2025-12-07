@@ -14,7 +14,7 @@ const nextConfig: NextConfig = {
     ],
   },
 
-  // ✅ Keep Turbopack ON
+  // ✔ Keep Turbopack enabled
   turbopack: {
     resolveExtensions: [
       ".ts",
@@ -27,7 +27,7 @@ const nextConfig: NextConfig = {
     ],
   },
 
-  // ❌ Removed Webpack config — not needed and breaks Turbopack
+  // ❌ Removed Webpack block — not needed and breaks Turbopack
 };
 
 export default nextConfig;
