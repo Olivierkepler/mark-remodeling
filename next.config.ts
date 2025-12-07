@@ -14,7 +14,7 @@ const nextConfig: NextConfig = {
     ],
   },
 
-  // ✅ Keep Turbopack ON and configure it properly
+  // ✅ Keep Turbopack ON
   turbopack: {
     resolveExtensions: [
       ".ts",
@@ -25,20 +25,9 @@ const nextConfig: NextConfig = {
       ".mjs",
       ".cjs",
     ],
-
-    // 👇 Equivalent to your Webpack externals for Turbopack
-    // moduleOptions: {
-    //   externalModules: ["canvas"],
-    // },
   },
 
-  // ❌ REMOVE Webpack customization (Turbopack does not support it)
-  // webpack: (config, { isServer }) => {
-  //   if (isServer) {
-  //     config.externals.push({ canvas: "canvas" });
-  //   }
-  //   return config;
-  // },
+  // ❌ Removed Webpack config — not needed and breaks Turbopack
 };
 
 export default nextConfig;
