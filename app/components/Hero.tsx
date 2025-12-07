@@ -80,7 +80,7 @@ export default function Hero() {
             "
           >
             We combine engineering precision, innovative design, and premium craftsmanship
-            to build environments that elevate the way you live and work.
+            to build environments that elevate the way you live and work
           </motion.p>
 
           {/* ACTION BUTTONS */}
