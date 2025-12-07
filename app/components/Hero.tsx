@@ -8,7 +8,7 @@ export default function Hero() {
     "https://holh1uldewromppp.public.blob.vercel-storage.com/images/hero/image-1754873406587.png";
 
   return (
-    <section className="relative w-full min-h-screen flex items-center justify-center text-white overflow-hidden">
+    <section className="relative w-full  min-h-screen flex items-center justify-center text-white overflow-hidden">
 
       {/* ================= BACKGROUND LAYERS ================= */}
       <div className="absolute inset-0">

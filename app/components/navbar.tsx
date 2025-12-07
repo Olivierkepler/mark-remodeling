@@ -14,9 +14,7 @@ export default function Navbar() {
 
   const toggle = () => setOpen((v) => !v);
 
-  /* ---------------------------------------------------- */
-  /* Close Drawer When Clicking Outside                   */
-  /* ---------------------------------------------------- */
+  /* Close Drawer When Clicking Outside */
   useEffect(() => {
     const close = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
@@ -27,38 +25,27 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", close);
   }, []);
 
-  /* ---------------------------------------------------- */
-  /* Detect Desktop / Mobile                              */
-  /* ---------------------------------------------------- */
+  /* Detect Desktop / Mobile */
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
     const apply = () => setDesktop(mq.matches);
     apply();
-
     mq.addEventListener("change", apply);
     return () => mq.removeEventListener("change", apply);
   }, []);
 
-  /* ---------------------------------------------------- */
-  /* Scroll Shadow Transition                             */
-  /* ---------------------------------------------------- */
+  /* Scroll Shadow Transition */
   useEffect(() => {
     if (!desktop) return;
-
     const update = () => setScrolled(window.scrollY > 10);
-
     update();
     const onScroll = () => requestAnimationFrame(update);
-
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [desktop]);
 
   const opacity = desktop ? (scrolled ? "opacity-100" : "opacity-95") : "opacity-100";
 
-  /* ---------------------------------------------------- */
-  /* Menu Links                                            */
-  /* ---------------------------------------------------- */
   const links = [
     { label: "Home", href: "/" },
     { label: "About", href: "/about" },
@@ -78,9 +65,7 @@ export default function Navbar() {
     >
       <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
-        {/* ---------------------------------------------------- */}
-        {/* BRAND / LOGO                                         */}
-        {/* ---------------------------------------------------- */}
+        {/* BRAND LOGO */}
         <Link href="/" className="flex items-center group select-none">
           <motion.div
             whileHover={{ scale: 1.1, rotate: -3 }}
@@ -94,9 +79,7 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* ---------------------------------------------------- */}
-        {/* DESKTOP NAVIGATION                                   */}
-        {/* ---------------------------------------------------- */}
+        {/* DESKTOP LINKS */}
         <div className="hidden md:flex space-x-10">
           {links.map(({ label, href }) => (
             <motion.div
@@ -109,13 +92,11 @@ export default function Navbar() {
                 className="relative text-white/90 hover:text-white transition font-medium group"
               >
                 {label}
-
-                {/* Modern Underline */}
                 <span
                   className="
                     absolute left-0 -bottom-1 h-[2px] w-0
                     bg-gradient-to-r from-orange-400 to-orange-600
-                    transition-all duration-300 group-hover:w-full 
+                    transition-all duration-300 group-hover:w-full
                   "
                 />
               </Link>
@@ -128,9 +109,7 @@ export default function Navbar() {
           <SearchBar onSearch={() => {}} />
         </div>
 
-        {/* ---------------------------------------------------- */}
-        {/* MOBILE TOGGLE                                        */}
-        {/* ---------------------------------------------------- */}
+        {/* MOBILE TOGGLE */}
         <button
           className="md:hidden text-white"
           aria-expanded={open}
@@ -141,24 +120,28 @@ export default function Navbar() {
       </nav>
 
       {/* ---------------------------------------------------- */}
-      {/* MOBILE OVERLAY                                        */}
+      {/* FULL-SCREEN OVERLAY — Solid White (fixed)            */}
       {/* ---------------------------------------------------- */}
       <AnimatePresence>
         {open && (
           <motion.div
             key="overlay"
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.7 }}
+            animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+            transition={{ duration: 0.22 }}
+            className="
+              fixed inset-0 z-[9999]
+              bg-white
+              pointer-events-auto
+            "
             onClick={() => setOpen(false)}
           />
         )}
       </AnimatePresence>
 
       {/* ---------------------------------------------------- */}
-      {/* MOBILE DRAWER (GLASS, ANIMATED, PREMIUM)              */}
+      {/* MOBILE DRAWER — Fully White + Black Text             */}
       {/* ---------------------------------------------------- */}
       <AnimatePresence>
         {open && (
@@ -170,16 +153,19 @@ export default function Navbar() {
             exit={{ x: "-100%" }}
             transition={{ type: "spring", stiffness: 260, damping: 28 }}
             className="
-              fixed top-0 left-0 h-full w-72 z-50
+              fixed top-0 left-0 h-full w-72 z-[10000]
               p-6 flex flex-col space-y-8
-              bg-white/10 backdrop-blur-2xl border-r border-white/20
-              shadow-[0_8px_40px_rgba(0,0,0,0.45)] saturate-150
+
+              bg-white        /* <<< full white */
+              shadow-[0_8px_40px_rgba(0,0,0,0.2)]
+              border-r border-black/10
+              text-black
             "
           >
             {/* Drawer Logo */}
             <Link
               href="/"
-              className="text-xl font-semibold tracking-wide text-white hover:text-orange-400 transition"
+              className="text-xl font-semibold tracking-wide hover:text-orange-600 transition"
               onClick={() => setOpen(false)}
             >
               ClairvilX
@@ -192,14 +178,13 @@ export default function Navbar() {
                   key={href}
                   href={href}
                   onClick={() => setOpen(false)}
-                  className="text-white text-lg tracking-wide relative group block"
+                  className="text-lg tracking-wide relative group block"
                 >
                   {label}
-
                   <span
                     className="
                       absolute left-0 -bottom-1 h-[2px] w-0
-                      bg-gradient-to-r from-orange-400 to-orange-600
+                      bg-gradient-to-r from-orange-500 to-orange-700
                       transition-all duration-300 group-hover:w-3/4
                     "
                   />
@@ -208,7 +193,7 @@ export default function Navbar() {
             </div>
 
             {/* Mobile Search */}
-            <div className="pt-6 border-t border-white/20">
+            <div className="pt-6 border-t border-black/20">
               <SearchBar onSearch={() => {}} />
             </div>
           </motion.div>
