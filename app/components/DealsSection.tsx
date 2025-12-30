@@ -32,7 +32,7 @@ export default function RenovationShowcase() {
                 height={40}
                 alt="Kepler Logo"
               />
-              <span className="text-2xl md:text-3xl font-bold">Kepler</span>
+              <span className="text-2xl md:text-3xl font-bold">Clairvil X</span>
             </div>
 
             <h1 className="text-3xl md:text-2xl font-black leading-tight mt-4">

@@ -52,22 +52,41 @@ export default function Navbar() {
   const opacityClass = isDesktop ? (isScrolled ? 'opacity-100' : 'opacity-70') : 'opacity-100'
 
   return (
-    <header className={`sticky top-0 z-50 bg-gradient-to-r bg-black text-white shadow-xl transition-opacity duration-300 ${opacityClass}`}>
-      <nav className="max-w-7xl mx-auto p-6 flex items-center justify-between">
-        {/* Logo */}
-        <div className="text-3xl font-semibold hover:text-gray-200 transition-colors flex items-center">
-          <Home className="w-8 h-8 text-orange-400 mr-2" />
-          <Link href="/" className="text-2xl font-semibold hover:text-gray-200 transition-colors">
-            ClairvilX
-          </Link>
-        </div>
+    <header className={`sticky top-0 z-50 bg-gradient-to-r bg-white/80 text-white shadow-xl transition-opacity duration-300 ${opacityClass}`}>
+      <nav className="max-w-7xl mx-auto p-4 flex items-center justify-between">
+       {/* Logo */}
+<div className="flex items-center gap-4">
+  {/* Logo Image */}
+  <div className="bg-white p-2 rounded-lg shadow-md flex items-center justify-center hover:scale-105 transition-transform duration-300">
+    <img
+      src="/images/fulllogo_transparent_nobuffer.png"
+      alt="Clairvil X Logo"
+      width={80}
+      height={80}
+      className="object-contain"
+    />
+  </div>
+
+  {/* Logo Text */}
+  <Link
+    href="/"
+    className="flex flex-col leading-tight hover:opacity-90 transition-opacity"
+  >
+    <span className="text-blue-950 text-xl font-bold tracking-wide">
+      CLAIRVIL X
+    </span>
+    <span className="text-gray-800 text-sm font-medium uppercase">
+      Construction
+    </span>
+  </Link>
+</div>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex space-x-10">
-          <Link href="/" className="hover:text-orange-400 transition duration-300 ease-in-out transform hover:scale-105">Home</Link>
-          <Link href="/about" className="hover:text-orange-400 transition duration-300 ease-in-out transform hover:scale-105">About</Link>
-          <Link href="/services" className="hover:text-orange-400 transition duration-300 ease-in-out transform hover:scale-105">Services</Link>
-          <Link href="/contact" className="hover:text-orange-400 transition duration-300 ease-in-out transform hover:scale-105">Contact</Link>
+          <Link href="/" className="hover:text-orange-400 text-black font-bold transition duration-300 ease-in-out transform hover:scale-105">Home</Link>
+          <Link href="/about" className="hover:text-orange-400 text-black font-bold transition duration-300 ease-in-out transform hover:scale-105">About</Link>
+          <Link href="/services" className="hover:text-orange-400 text-black  font-bold transition duration-300 ease-in-out transform hover:scale-105">Services</Link>
+          <Link href="/contact" className="hover:text-orange-400 text-black font-bold transition duration-300 ease-in-out transform hover:scale-105">Contact</Link>
         </div>
 
         {/* Desktop Search */}
@@ -79,7 +98,7 @@ export default function Navbar() {
         <div className="md:hidden flex items-center">
           <button
             onClick={toggleMenu}
-            className="text-white"
+            className="text-black"
             aria-expanded={isOpen}
             aria-controls="mobile-menu"
             aria-label="Toggle navigation menu"
