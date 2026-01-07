@@ -64,10 +64,14 @@ Output a single high-quality interior render.
     const imageUrl = `data:image/png;base64,${imageBase64}`;
 
     return NextResponse.json({ imageUrl });
-  } catch (err: any) {
+  } catch (err) {
+    const errorMessage =
+      typeof err === "object" && err !== null && "message" in err
+        ? (err as { message?: string }).message
+        : "Failed to generate redesign image";
     console.error("redesign-image error:", err);
     return NextResponse.json(
-      { error: err.message || "Failed to generate redesign image" },
+      { error: errorMessage || "Failed to generate redesign image" },
       { status: 500 }
     );
   }
