@@ -3,10 +3,10 @@
 import { useState } from "react";
 
 export default function RoomRedesign() {
-  const [style, setStyle] = useState("");
-  const [description, setDescription] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<any>(null);
+  const [style, setStyle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [result, setResult] = useState<{ output?: string } | null>(null);
 
   const styles = [
     "Modern",

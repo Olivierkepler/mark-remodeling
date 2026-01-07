@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { Stage, Layer, Image as KonvaImage, Line } from "react-konva";   // npm install react-konva
-import useImage from "use-image";   // npm install use-image
+import { Stage, Layer, Image as KonvaImage, Line } from "react-konva";
+import useImage from "use-image";
 import { Ruler } from "lucide-react";
+import type Konva from "konva";
+import type { KonvaEventObject } from "konva/lib/Node";
 
 export default function TraceAreaOnImage() {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -13,28 +15,34 @@ export default function TraceAreaOnImage() {
   const [referencePixels, setReferencePixels] = useState("");
   const [areaFt, setAreaFt] = useState<number | null>(null);
 
-  const stageRef = useRef<any>(null);
-  const [img] = useImage(imageUrl || "");
+  const stageRef = useRef<Konva.Stage | null>(null);
+  const [img] = useImage(imageUrl ?? "");
 
   // Handle file upload
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
     setImageUrl(URL.createObjectURL(file));
     setPoints([]);
     setIsClosed(false);
     setAreaFt(null);
+
+    // allow selecting the same file again
+    e.target.value = "";
   };
 
   // Add point on click
-  const handleClick = (e: any) => {
+  const handleClick = (_evt: KonvaEventObject<MouseEvent>) => {
     if (isClosed) return;
 
     const stage = stageRef.current;
+    if (!stage) return;
+
     const pointer = stage.getPointerPosition();
     if (!pointer) return;
 
-    setPoints([...points, pointer.x, pointer.y]);
+    setPoints((prev) => [...prev, pointer.x, pointer.y]);
   };
 
   // Close polygon
@@ -54,7 +62,7 @@ export default function TraceAreaOnImage() {
       const x2 = points[2 * ((i + 1) % n)];
       const y2 = points[2 * ((i + 1) % n) + 1];
 
-      area += (x1 * y2 - x2 * y1);
+      area += x1 * y2 - x2 * y1;
     }
 
     return Math.abs(area) / 2;
@@ -62,19 +70,16 @@ export default function TraceAreaOnImage() {
 
   // Convert pixel area → real-world ft²
   const calculateArea = () => {
-    if (!referenceFeet || !referencePixels) return;
+    const refFt = Number(referenceFeet);
+    const refPx = Number(referencePixels);
 
-    const refFt = parseFloat(referenceFeet);
-    const refPx = parseFloat(referencePixels);
-
+    if (!Number.isFinite(refFt) || !Number.isFinite(refPx)) return;
     if (refFt <= 0 || refPx <= 0) return;
 
     const pixelArea = computePixelArea();
 
-    // Conversion factor:
-    // (real feet / pixel length) ^ 2
+    // Conversion factor: (real feet / pixel length)^2
     const scaleFactor = Math.pow(refFt / refPx, 2);
-
     const realArea = pixelArea * scaleFactor;
 
     setAreaFt(realArea);
@@ -82,7 +87,6 @@ export default function TraceAreaOnImage() {
 
   return (
     <div className="space-y-6">
-
       {/* Upload Image */}
       <div>
         <label className="block font-medium mb-1">📸 Upload Room Image</label>
@@ -101,7 +105,7 @@ export default function TraceAreaOnImage() {
               className="cursor-crosshair bg-black"
             >
               <Layer>
-                <KonvaImage image={img} width={600} height={400} />
+                <KonvaImage image={img ?? undefined} width={600} height={400} />
 
                 {/* Polygon */}
                 <Line
@@ -118,6 +122,7 @@ export default function TraceAreaOnImage() {
           {/* Polygon Controls */}
           {!isClosed && points.length >= 6 && (
             <button
+              type="button"
               onClick={closePolygon}
               className="px-4 py-2 bg-orange-500 text-white rounded-lg"
             >
@@ -134,7 +139,8 @@ export default function TraceAreaOnImage() {
               </h3>
 
               <p className="text-sm text-gray-600">
-                Pick something in the image with a known size (door width, tile size, window height).
+                Pick something in the image with a known size (door width, tile
+                size, window height).
               </p>
 
               <input
@@ -154,6 +160,7 @@ export default function TraceAreaOnImage() {
               />
 
               <button
+                type="button"
                 onClick={calculateArea}
                 className="px-4 py-2 bg-black text-white rounded-lg w-full"
               >
@@ -163,12 +170,10 @@ export default function TraceAreaOnImage() {
           )}
 
           {/* Output */}
-          {areaFt && (
+          {areaFt !== null && (
             <div className="p-4 rounded-xl bg-green-50 border border-green-300">
               <h3 className="font-semibold text-green-700">📏 Estimated Area</h3>
-              <p className="text-lg font-bold mt-1">
-                {areaFt.toFixed(2)} ft²
-              </p>
+              <p className="text-lg font-bold mt-1">{areaFt.toFixed(2)} ft²</p>
             </div>
           )}
         </>
