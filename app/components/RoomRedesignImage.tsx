@@ -63,9 +63,14 @@ export default function RoomRedesignImage() {
 
       const data = await res.json();
       setResultUrl(data.imageUrl);
-    } catch (err: any) {
-      console.error(err);
-      setError(err.message || "Something went wrong.");
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error(err);
+        setError(err.message || "Something went wrong.");
+      } else {
+        console.error(err);
+        setError("Something went wrong.");
+      }
     } finally {
       setLoading(false);
     }

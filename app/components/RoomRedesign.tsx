@@ -3,16 +3,10 @@
 import { useState } from "react";
 
 export default function RoomRedesign() {
-  type RedesignResult = {
-    plan?: string;
-    suggestions?: string[];
-    [key: string]: unknown; // Allows additional properties if present
-  };
-
   const [style, setStyle] = useState("");
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<RedesignResult | null>(null);
+  const [result, setResult] = useState<any>(null);
 
   const styles = [
     "Modern",
@@ -86,15 +80,8 @@ export default function RoomRedesign() {
           <h3 className="font-semibold text-lg">Your Redesign Plan</h3>
 
           <pre className="whitespace-pre-wrap text-sm text-gray-700">
-            {result.plan}
+            {result.output}
           </pre>
-          {result.suggestions && result.suggestions.length > 0 && (
-            <ul className="list-disc list-inside text-sm text-gray-700">
-              {result.suggestions.map((s, i) => (
-                <li key={i}>{s}</li>
-              ))}
-            </ul>
-          )}
         </div>
       )}
     </div>
