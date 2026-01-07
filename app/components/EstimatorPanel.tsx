@@ -6,6 +6,10 @@ import { generateEstimatePDF } from "@/utils/generatePDF"; // ← ADDED
 
 type ServiceType = "kitchen" | "bathroom" | "flooring";
 type MaterialLevel = "basic" | "standard" | "premium";
+type Step = 1 | 2 | 3 | 4 | 5;
+
+type ExtrasKey = "demolition" | "plumbing" | "electrical";
+type ExtrasState = Record<ExtrasKey, boolean>;
 
 type EstimatorPanelProps = {
   open: boolean;
@@ -57,17 +61,24 @@ const materialMultipliers: Record<ServiceType, Record<MaterialLevel, number>> = 
   },
 };
 
+// Helper: keep step typed without `any`
+function clampStep(n: number): Step {
+  if (n <= 1) return 1;
+  if (n >= 5) return 5;
+  return n as Step;
+}
+
 export default function EstimatorPanel({
   open,
   onClose,
   onSendToChat,
   isDark,
 }: EstimatorPanelProps) {
-  const [step, setStep] = useState<1 | 2 | 3 | 4 | 5>(1);
+  const [step, setStep] = useState<Step>(1);
   const [service, setService] = useState<ServiceType | null>(null);
   const [roomSize, setRoomSize] = useState<string>("");
   const [material, setMaterial] = useState<MaterialLevel>("standard");
-  const [extras, setExtras] = useState({
+  const [extras, setExtras] = useState<ExtrasState>({
     demolition: false,
     plumbing: false,
     electrical: false,
@@ -89,9 +100,9 @@ export default function EstimatorPanel({
     const breakdown: string[] = [];
 
     breakdown.push(
-      `Base & size-adjusted cost: approx. $${(
-        perSq * parsedSqFt * mult
-      ).toFixed(0)}`
+      `Base & size-adjusted cost: approx. $${(perSq * parsedSqFt * mult).toFixed(
+        0
+      )}`
     );
 
     // Extras
@@ -140,11 +151,11 @@ export default function EstimatorPanel({
 
   const next = () => {
     if (!canNext()) return;
-    setStep((prev) => (prev < 5 ? ((prev + 1) as any) : prev));
+    setStep((prev) => clampStep(prev + 1));
   };
 
   const back = () => {
-    setStep((prev) => (prev > 1 ? ((prev - 1) as any) : prev));
+    setStep((prev) => clampStep(prev - 1));
   };
 
   const reset = () => {
@@ -211,12 +222,14 @@ export default function EstimatorPanel({
 
   const containerBase = `
     h-full flex flex-col rounded-2xl border shadow-lg overflow-hidden
-    ${isDark
-      ? "bg-slate-900/90 border-slate-700 text-slate-50"
-      : "bg-white/90 border-white/60 text-gray-900"}
+    ${
+      isDark
+        ? "bg-slate-900/90 border-slate-700 text-slate-50"
+        : "bg-white/90 border-white/60 text-gray-900"
+    }
   `;
 
-  const stepLabel = (s: number) => {
+  const stepLabel = (s: Step) => {
     switch (s) {
       case 1:
         return "Project Type";
@@ -237,7 +250,11 @@ export default function EstimatorPanel({
     <div
       className={`
         h-full transition-all duration-300 ease-out
-        ${open ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4 pointer-events-none"}
+        ${
+          open
+            ? "opacity-100 translate-x-0"
+            : "opacity-0 -translate-x-4 pointer-events-none"
+        }
       `}
     >
       <div className={containerBase}>
@@ -256,7 +273,7 @@ export default function EstimatorPanel({
               onClose();
             }}
             className="
-              inline-flex items-center justify-center w-7 h-7 
+              inline-flex items-center justify-center w-7 h-7
               rounded-full border border-black/10 dark:border-white/30
               text-xs hover:bg-black/5 dark:hover:bg-white/10
             "
@@ -284,25 +301,23 @@ export default function EstimatorPanel({
                 What type of project are you looking to estimate?
               </p>
               <div className="grid grid-cols-1 gap-2">
-                {(["kitchen", "bathroom", "flooring"] as ServiceType[]).map(
-                  (s) => (
-                    <button
-                      key={s}
-                      type="button"
-                      onClick={() => setService(s)}
-                      className={`
-                        text-left px-3 py-2 rounded-xl border text-xs md:text-sm
-                        ${
-                          service === s
-                            ? "border-orange-500/80 bg-orange-50 text-orange-900 dark:bg-orange-500/10 dark:text-orange-100"
-                            : "border-black/10 dark:border-white/15 hover:bg-black/5 dark:hover:bg-white/5"
-                        }
-                      `}
-                    >
-                      <div className="font-medium">{serviceLabels[s]}</div>
-                    </button>
-                  )
-                )}
+                {(["kitchen", "bathroom", "flooring"] as const).map((s) => (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => setService(s)}
+                    className={`
+                      text-left px-3 py-2 rounded-xl border text-xs md:text-sm
+                      ${
+                        service === s
+                          ? "border-orange-500/80 bg-orange-50 text-orange-900 dark:bg-orange-500/10 dark:text-orange-100"
+                          : "border-black/10 dark:border-white/15 hover:bg-black/5 dark:hover:bg-white/5"
+                      }
+                    `}
+                  >
+                    <div className="font-medium">{serviceLabels[s]}</div>
+                  </button>
+                ))}
               </div>
             </div>
           )}
@@ -339,25 +354,23 @@ export default function EstimatorPanel({
                 What level of finishes are you considering?
               </p>
               <div className="grid grid-cols-1 gap-2">
-                {(["basic", "standard", "premium"] as MaterialLevel[]).map(
-                  (lvl) => (
-                    <button
-                      key={lvl}
-                      type="button"
-                      onClick={() => setMaterial(lvl)}
-                      className={`
-                        text-left px-3 py-2 rounded-xl border text-xs md:text-sm
-                        ${
-                          material === lvl
-                            ? "border-orange-500/80 bg-orange-50 text-orange-900 dark:bg-orange-500/10 dark:text-orange-100"
-                            : "border-black/10 dark:border-white/15 hover:bg-black/5 dark:hover:bg-white/5"
-                        }
-                      `}
-                    >
-                      <div className="font-medium">{materialLabels[lvl]}</div>
-                    </button>
-                  )
-                )}
+                {(["basic", "standard", "premium"] as const).map((lvl) => (
+                  <button
+                    key={lvl}
+                    type="button"
+                    onClick={() => setMaterial(lvl)}
+                    className={`
+                      text-left px-3 py-2 rounded-xl border text-xs md:text-sm
+                      ${
+                        material === lvl
+                          ? "border-orange-500/80 bg-orange-50 text-orange-900 dark:bg-orange-500/10 dark:text-orange-100"
+                          : "border-black/10 dark:border-white/15 hover:bg-black/5 dark:hover:bg-white/5"
+                      }
+                    `}
+                  >
+                    <div className="font-medium">{materialLabels[lvl]}</div>
+                  </button>
+                ))}
               </div>
             </div>
           )}
@@ -370,18 +383,20 @@ export default function EstimatorPanel({
               </p>
 
               <div className="space-y-2 text-xs md:text-sm">
-                {[
-                  { key: "demolition", label: "Demolition / tear-out" },
-                  { key: "plumbing", label: "Plumbing adjustments" },
-                  { key: "electrical", label: "Electrical updates" },
-                ].map((opt) => (
+                {(
+                  [
+                    { key: "demolition", label: "Demolition / tear-out" },
+                    { key: "plumbing", label: "Plumbing adjustments" },
+                    { key: "electrical", label: "Electrical updates" },
+                  ] as const
+                ).map((opt) => (
                   <label
                     key={opt.key}
                     className="flex items-center gap-2 cursor-pointer"
                   >
                     <input
                       type="checkbox"
-                      checked={(extras as any)[opt.key]}
+                      checked={extras[opt.key]}
                       onChange={(e) =>
                         setExtras((prev) => ({
                           ...prev,
@@ -406,13 +421,13 @@ export default function EstimatorPanel({
 
               <div
                 className={`
-                rounded-xl border px-3 py-3 text-xs md:text-sm space-y-1
-                ${
-                  isDark
-                    ? "border-white/10 bg-white/5"
-                    : "border-black/5 bg-black/5"
-                }
-              `}
+                  rounded-xl border px-3 py-3 text-xs md:text-sm space-y-1
+                  ${
+                    isDark
+                      ? "border-white/10 bg-white/5"
+                      : "border-black/5 bg-black/5"
+                  }
+                `}
               >
                 <div className="flex items-center gap-2 mb-1">
                   <Check className="w-4 h-4 text-emerald-500" />
@@ -432,7 +447,7 @@ export default function EstimatorPanel({
                 <div>
                   <span className="font-medium">Extras:</span>{" "}
                   {Object.values(extras).some(Boolean)
-                    ? Object.entries(extras)
+                    ? (Object.entries(extras) as Array<[ExtrasKey, boolean]>)
                         .filter(([, v]) => v)
                         .map(([k]) =>
                           k.replace(/([A-Z])/g, " $1").toLowerCase()

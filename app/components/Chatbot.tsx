@@ -106,7 +106,7 @@ export default function Chatbot() {
   const [isRecording, setIsRecording] = useState(false);
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [estimatorOpen, setEstimatorOpen] = useState(false);
-  const [showMore, setShowMore] = useState(false);
+  
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
@@ -506,14 +506,14 @@ export default function Chatbot() {
                 /> */}
                 <div
     className="
-      h-10 w-10 sm:h-12 sm:w-12 rounded-xl overflow-hidden flex items-center justify-center
+      h-10 w-10 p-2 sm:h-12 sm:w-12 rounded-xl overflow-hidden flex items-center justify-center
       shadow-sm bg-white
       transition-all duration-300
       group-hover:shadow-md group-hover:scale-[1.06]
     "
   >
     <img
-      src="/logo1.png"
+      src="/images/fulllogo_transparent_nobuffer.png"
       alt="WebAIGen Logo"
       width={48}
       height={48}

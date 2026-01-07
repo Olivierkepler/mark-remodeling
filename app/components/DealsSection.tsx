@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
 import { useRouter } from "next/navigation";
-import { Sparkles } from "lucide-react";
+
 
 import "swiper/css";
 import "swiper/css/pagination";
