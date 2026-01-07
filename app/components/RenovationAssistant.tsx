@@ -8,15 +8,16 @@ import RoomRedesign from "./RoomRedesign";
 import RoomRedesignVision from "./RoomRedesignVision";
 import RoomRedesignImage from "./RoomRedesignImage"; // <-- NEW Level 3
 
-import { 
-  Ruler, 
-  Paintbrush, 
-  Wallet, 
-  Home, 
-  Image as ImageIcon, 
+import {
+  Ruler,
+  Paintbrush,
+  Wallet,
+  Home,
+  Image as ImageIcon,
   Pencil,
-  Scaling
+  Scaling,
 } from "lucide-react";
+import type { ReactNode } from "react";
 
 type Mode = "measure" | "redesign" | "cost";
 type MeasureSubMode = "auto" | "manual" | "calibrated";
@@ -26,7 +27,9 @@ export default function RenovationAssistant() {
   const [projectType, setProjectType] = useState<string>("");
   const [mode, setMode] = useState<Mode | null>(null);
   const [measureMode, setMeasureMode] = useState<MeasureSubMode | null>(null);
-  const [redesignMode, setRedesignMode] = useState<RedesignSubMode | null>(null);
+  const [redesignMode, setRedesignMode] = useState<RedesignSubMode | null>(
+    null
+  );
 
   const projectOptions = [
     "Bathroom Remodel",
@@ -42,14 +45,14 @@ export default function RenovationAssistant() {
 
   return (
     <div className="space-y-8">
-
       {/* Title */}
       <div>
         <h2 className="text-2xl font-semibold text-gray-900 flex items-center gap-2">
           🏗 Renovation AI Assistant
         </h2>
         <p className="text-sm text-gray-500 mt-1">
-          Tell us what you're working on so Kepler can personalize your tools.
+          Tell us what you&apos;re working on so Kepler can personalize your
+          tools.
         </p>
       </div>
 
@@ -70,9 +73,13 @@ export default function RenovationAssistant() {
           }}
           className="w-full border border-gray-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-orange-400 outline-none"
         >
-          <option value="" disabled>Select a project...</option>
-          {projectOptions.map((option, idx) => (
-            <option key={idx} value={option}>{option}</option>
+          <option value="" disabled>
+            Select a project...
+          </option>
+          {projectOptions.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
           ))}
         </select>
 
@@ -128,11 +135,11 @@ export default function RenovationAssistant() {
       {/* STEP 2 — Measure Sub-Modes */}
       {mode === "measure" && (
         <div className="space-y-4">
-
-          <h3 className="font-medium text-gray-800">Choose Measurement Method</h3>
+          <h3 className="font-medium text-gray-800">
+            Choose Measurement Method
+          </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-
             <MeasureCard
               icon={<ImageIcon className="w-5 h-5" />}
               title="AI Auto Measurement"
@@ -156,24 +163,20 @@ export default function RenovationAssistant() {
               active={measureMode === "calibrated"}
               onClick={() => setMeasureMode("calibrated")}
             />
-
           </div>
 
           {measureMode === "auto" && <RoomPhotoAnalyzer />}
           {measureMode === "manual" && <TraceAreaOnImage />}
           {measureMode === "calibrated" && <PixelRuler />}
-
         </div>
       )}
 
       {/* STEP 3 — Redesign Sub-Modes */}
       {mode === "redesign" && (
         <div className="space-y-4">
-
           <h3 className="font-medium text-gray-800">Choose Redesign Method</h3>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            
             <MeasureCard
               icon={<Paintbrush className="w-5 h-5" />}
               title="Describe My Room (Text)"
@@ -197,7 +200,6 @@ export default function RenovationAssistant() {
               active={redesignMode === "image"}
               onClick={() => setRedesignMode("image")}
             />
-
           </div>
 
           {redesignMode === "text" && <RoomRedesign />}
@@ -213,23 +215,32 @@ export default function RenovationAssistant() {
           text="Enter your project details to get estimated pricing."
         />
       )}
-
     </div>
   );
 }
 
-
-
 /* ---------- Shared Card Components ---------- */
 
-function ModeCard({ icon, title, description, active, onClick }: any) {
+type CardProps = {
+  icon: ReactNode;
+  title: string;
+  description: string;
+  active: boolean;
+  onClick: () => void;
+};
+
+function ModeCard({ icon, title, description, active, onClick }: CardProps) {
   return (
     <button
+      type="button"
       onClick={onClick}
       className={`
         text-left rounded-xl border p-4 flex flex-col gap-2 transition-all
-        ${active ? "border-orange-500 bg-orange-50 shadow-sm" 
-                : "border-gray-200 hover:border-orange-300 hover:bg-orange-50/40"}
+        ${
+          active
+            ? "border-orange-500 bg-orange-50 shadow-sm"
+            : "border-gray-200 hover:border-orange-300 hover:bg-orange-50/40"
+        }
       `}
     >
       <div className="flex items-center gap-2 text-sm font-semibold text-gray-900">
@@ -243,20 +254,22 @@ function ModeCard({ icon, title, description, active, onClick }: any) {
   );
 }
 
-function MeasureCard({ icon, title, description, active, onClick }: any) {
+function MeasureCard({ icon, title, description, active, onClick }: CardProps) {
   return (
     <button
+      type="button"
       onClick={onClick}
       className={`
         text-left rounded-xl border p-4 flex flex-col gap-2 transition-all
-        ${active ? "border-black bg-black/5 shadow-sm" 
-                : "border-gray-200 hover:border-black/40 hover:bg-black/5"}
+        ${
+          active
+            ? "border-black bg-black/5 shadow-sm"
+            : "border-gray-200 hover:border-black/40 hover:bg-black/5"
+        }
       `}
     >
       <div className="flex items-center gap-2 text-sm font-semibold text-gray-900">
-        <span className={active ? "text-black" : "text-gray-700"}>
-          {icon}
-        </span>
+        <span className={active ? "text-black" : "text-gray-700"}>{icon}</span>
         <span>{title}</span>
       </div>
       <p className="text-xs text-gray-500">{description}</p>
@@ -264,7 +277,12 @@ function MeasureCard({ icon, title, description, active, onClick }: any) {
   );
 }
 
-function PlaceholderBlock({ title, text }: any) {
+type PlaceholderProps = {
+  title: string;
+  text: string;
+};
+
+function PlaceholderBlock({ title, text }: PlaceholderProps) {
   return (
     <div className="w-full mx-auto bg-white/80 backdrop-blur border border-dashed border-gray-200 rounded-xl p-5 text-sm text-gray-700">
       <h3 className="font-semibold text-gray-900 mb-1">{title}</h3>

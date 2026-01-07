@@ -74,10 +74,16 @@ Estimate:
     const json = JSON.parse(completion.choices[0].message.content ?? "{}");
 
     return NextResponse.json({ analysis: json });
-  } catch (err: any) {
+  } catch (err) {
+    const message =
+      err instanceof Error
+        ? err.message
+        : typeof err === "string"
+        ? err
+        : "Unknown error";
     console.error("❌ API Error:", err);
     return NextResponse.json(
-      { error: "Processing failed", details: err.message },
+      { error: "Processing failed", details: message },
       { status: 500 }
     );
   }
