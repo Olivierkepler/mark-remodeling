@@ -512,7 +512,7 @@ export default function Chatbot() {
       group-hover:shadow-md group-hover:scale-[1.06]
     "
   >
-    <img
+    <Image
       src="/images/fulllogo_transparent_nobuffer.png"
       alt="WebAIGen Logo"
       width={48}

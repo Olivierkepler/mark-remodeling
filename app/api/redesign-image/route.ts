@@ -27,8 +27,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const arrayBuffer = await file.arrayBuffer();
-    const base64Image = Buffer.from(arrayBuffer).toString("base64");
+
 
     // Prompt engineering for redesign
     const prompt = `
