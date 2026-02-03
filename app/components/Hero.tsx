@@ -33,7 +33,7 @@ function Hero() {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight md:leading-tight tracking-tight md:tracking-normal"
           >
-            We <span className="text-red-500">live</span> to renovate
+            We <span className="text-red-500">live</span> to renovate.
           </motion.h1>
 
           <motion.p
