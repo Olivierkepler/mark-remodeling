@@ -113,7 +113,7 @@ function Hero() {
             </div>
           </div>
 
-          <div className="absolute -bottom-0 -right-20 hidden md:flex items-center gap-3 bg-black border border-white/20 p-4 rounded-2xl backdrop-blur-xl shadow-2xl">
+          <div className="absolute bottom-8 -right-20 hidden md:flex items-center gap-3 bg-black border border-white/20 p-4 rounded-2xl backdrop-blur-xl shadow-2xl">
              <div className="w-10 h-10 rounded-full bg-amber-500 flex items-center justify-center text-black">
                 <ShieldCheck className="w-6 h-6" />
              </div>
