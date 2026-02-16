@@ -1,157 +1,151 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { Menu, X, Home } from 'lucide-react'
+import { Menu, X, ArrowRight, Phone } from 'lucide-react'
 import Link from 'next/link'
+import { motion, AnimatePresence } from 'framer-motion'
 import SearchBar from './searchbar'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
-  const [, setSearchQuery] = useState('') 
   const [isScrolled, setIsScrolled] = useState(false)
-  const [isDesktop, setIsDesktop] = useState(false)
-  const menuRef = useRef<HTMLDivElement | null>(null)
-
-  const toggleMenu = () => setIsOpen((v) => !v)
-  const handleSearchChange = (q: string) => setSearchQuery(q)
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) setIsOpen(false)
-    }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
+    const handleScroll = () => setIsScrolled(window.scrollY > 20)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  useEffect(() => {
-    const mq = window.matchMedia('(min-width: 768px)')
-    const apply = () => setIsDesktop(mq.matches)
-    apply()
-    mq.addEventListener('change', apply)
-    return () => mq.removeEventListener('change', apply)
-  }, [])
-
-  useEffect(() => {
-    if (!isDesktop) return
-    const update = () => setIsScrolled(window.scrollY > 0)
-    update()
-    let ticking = false
-    const onScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => { update(); ticking = false })
-        ticking = true
-      }
-    }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [isDesktop])
-
-  const opacityClass = isDesktop ? (isScrolled ? 'opacity-100' : 'opacity-70') : 'opacity-100'
-
-  // Helper class for desktop links to keep code clean
-  const navLinkClass = "hover:text-orange-400 text-black font-bold transition duration-300 ease-in-out transform hover:scale-105"
+  // Dynamic classes for text and logo colors
+  const textColor = isScrolled ? 'text-slate-950' : 'text-white'
+  const navLinkClass = `relative text-sm font-black uppercase tracking-[0.2em] ${textColor} hover:text-amber-600 transition-colors duration-300 group`
 
   return (
-    <header className={`sticky top-0 z-50 bg-gradient-to-r bg-white/80 text-white shadow-xl transition-opacity duration-300 ${opacityClass}`}>
-      <nav className="max-w-7xl mx-auto p-4 flex items-center justify-between">
-        {/* Logo */}
-        <div className="flex items-center gap-4">
-          <div className="bg-white p-2 rounded-lg shadow-md flex items-center justify-center hover:scale-105 transition-transform duration-300">
+    <motion.header 
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${
+        isScrolled 
+        ? 'py-3 bg-white/90 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.08)]' 
+        : 'py-6 bg-transparent'
+      }`}
+    >
+      <nav className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between">
+        
+        {/* LOGO AREA */}
+        <Link href="/" className="flex items-center gap-4 group">
+          <div className="relative h-12 w-12 bg-slate-950 rounded-xl flex items-center justify-center overflow-hidden transition-transform duration-500 group-hover:scale-110 shadow-2xl border border-white/10">
             <img
               src="/images/fulllogo_transparent_nobuffer.png"
-              alt="Clairvil X Logo"
-              width={80}
-              height={80}
-              className="object-contain"
+              alt="Logo"
+              className="object-contain p-1"
             />
+            <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           </div>
 
-          <Link href="/" className="flex flex-col leading-tight hover:opacity-90 transition-opacity">
-            <span className="text-blue-950 text-xl font-bold tracking-wide">CLAIRVIL X</span>
-            <span className="text-gray-800 text-sm font-medium uppercase">Construction</span>
-          </Link>
-        </div>
+          <div className="flex flex-col">
+            <span className={`text-xl font-black italic tracking-tighter leading-none transition-colors duration-300 ${textColor}`}>
+              CLAIRVIL X
+            </span>
+            <span className="text-amber-600 text-[10px] font-black uppercase tracking-[0.4em] mt-1">
+              Construction
+            </span>
+          </div>
+        </Link>
 
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex space-x-8 lg:space-x-10">
-          <Link href="/" className={navLinkClass}>Home</Link>
-          <Link href="/about" className={navLinkClass}>About</Link>
-          <Link href="/services" className={navLinkClass}>Services</Link>
-          {/* New Legal Links */}
-          <Link href="/privacy-policy" className={navLinkClass}>Privacy</Link>
-          <Link href="/terms" className={navLinkClass}>Terms</Link>
-          <Link href="/contact" className={navLinkClass}>Contact</Link>
-        </div>
-
-        {/* Desktop Search */}
-        <div className="hidden md:flex items-center space-x-6">
-          <SearchBar onSearch={handleSearchChange as (q: string) => void} />
-        </div>
-
-        {/* Mobile Hamburger */}
-        <div className="md:hidden flex items-center">
-          <button
-            onClick={toggleMenu}
-            className="text-black"
-            aria-expanded={isOpen}
-            aria-controls="mobile-menu"
-            aria-label="Toggle navigation menu"
-          >
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
-        </div>
-      </nav>
-
-      {/* Mobile overlay */}
-      <div
-        className={`fixed top-0 left-0 w-full h-full z-40 bg-gray-800/30 ${isOpen ? 'block' : 'hidden'}`}
-        onClick={() => setIsOpen(false)}
-      />
-
-      {/* Mobile drawer */}
-      <div
-        id="mobile-menu"
-        className={`fixed top-0 right-0 w-64 h-full bg-gradient-to-r from-gray-800 to-gray-600 p-6 space-y-4 transform transition-transform duration-300 ease-in-out z-50 ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
-        ref={menuRef}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Mobile navigation"
-      >
-        <div className="text-white text-2xl font-semibold">
-          <Link href="/" className="hover:text-orange-400 transition duration-300 ease-in-out" onClick={() => setIsOpen(false)}>
-            ClairvilX
-          </Link>
-        </div>
-
-        <div className="space-y-6">
-          {[
-            ['Home', '/'],
-            ['About', '/about'],
-            ['Services', '/services'],
-            ['Privacy Policy', '/privacy-policy'],
-            ['Terms of Service', '/terms'],
-            ['Contact', '/contact'],
-          ].map(([label, href]) => (
-            <Link
-              key={href}
-              href={href}
-              onClick={() => setIsOpen(false)}
-              className="text-white block hover:scale-105 transition duration-300 ease-in-out group"
+        {/* DESKTOP NAV: Text switches from White to Black on scroll */}
+        <div className="hidden lg:flex items-center space-x-10">
+          {['Home', 'About', 'Services', 'Terms', 'Contact'].map((item) => (
+            <Link 
+              key={item} 
+              href={item === 'Home' ? '/' : `/${item.toLowerCase()}`} 
+              className={navLinkClass}
             >
-              <span className="flex items-center">
-                {label}
-                <span className="opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-2 transition-all duration-300 ml-2">→</span>
-              </span>
+              {item}
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-amber-500 transition-all duration-300 group-hover:w-full" />
             </Link>
           ))}
         </div>
 
-        <div className="pt-4">
-          <SearchBar onSearch={handleSearchChange as (q: string) => void} />
+        {/* CTA SECTION */}
+        <div className="hidden lg:flex items-center gap-8">
+          {/* We wrap SearchBar to ensure its internal icons also adapt if needed */}
+          <div className={`transition-colors duration-300 ${textColor}`}>
+            <SearchBar onSearch={() => {}} />
+          </div>
+          
+          <Link 
+            href="tel:8573467357"
+            className={`flex items-center gap-3 px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 
+              ${isScrolled 
+                ? 'bg-slate-950 text-white hover:bg-amber-600' 
+                : 'bg-white text-slate-950 hover:bg-amber-500'
+              } hover:shadow-[0_0_20px_rgba(217,119,6,0.4)]`}
+          >
+            <Phone className="w-3.5 h-3.5" />
+            Book Inquiry
+          </Link>
         </div>
-      </div>
-    </header>
+
+        {/* MOBILE TRIGGER: Swaps from White to Black on scroll */}
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className={`lg:hidden p-2 rounded-xl transition-colors ${textColor} hover:bg-slate-100/10`}
+        >
+          {isOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
+        </button>
+      </nav>
+
+      {/* MOBILE DRAWER: Stays consistently clean */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, x: '100%' }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: '100%' }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="fixed inset-0 h-screen bg-white z-[110] p-8 flex flex-col justify-between"
+          >
+            <div className="flex flex-col space-y-8 mt-20">
+              <span className="text-[10px] font-black uppercase tracking-[0.5em] text-amber-600">Navigation</span>
+              {['Home', 'About', 'Services', 'Privacy', 'Terms', 'Contact'].map((item, i) => (
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  key={item}
+                >
+                  <Link 
+                    href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
+                    onClick={() => setIsOpen(false)}
+                    className="text-5xl font-black italic tracking-tighter text-slate-950 hover:text-amber-600 transition-colors flex items-center justify-between group"
+                  >
+                    {item}
+                    <ArrowRight className="opacity-0 group-hover:opacity-100 transition-opacity w-10 h-10" />
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+
+            <div className="space-y-6">
+              <div className="h-px bg-slate-100 w-full" />
+              <div className="flex flex-col gap-2">
+                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Direct Line</p>
+                <Link href="tel:8573467357" className="text-2xl font-black text-slate-950 tracking-tighter">
+                  857-346-7357
+                </Link>
+              </div>
+            </div>
+
+            <button 
+              onClick={() => setIsOpen(false)}
+              className="absolute top-8 right-8 p-3 bg-slate-100 rounded-full text-slate-950"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.header>
   )
 }
