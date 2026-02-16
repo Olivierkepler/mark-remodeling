@@ -1,8 +1,13 @@
+/* Project: Clairvil X Construction & Services
+  Theme: Building The Future - Legacy Meets Modern
+  Updated: February 16, 2026 
+*/
+
 @import "tailwindcss";
 
 :root {
   --background: #ffffff; 
-  --foreground: #000000; /* changed to pure black for text */
+  --foreground: #000000; 
 }
 
 @theme inline {
@@ -23,6 +28,7 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  overflow-x: hidden; /* Added for mobile x-axis stability */
 }
 
 /* BOT AVATAR BLINKING */
@@ -80,135 +86,16 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-/* Message fade + slide animation */
-@keyframes messageFadeIn {
-  0% { opacity: 0; transform: translateY(6px); }
-  100% { opacity: 1; transform: translateY(0); }
+/* Unified Message Animations */
+@keyframes fadeInMsg {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.message-animate {
-  animation: messageFadeIn 0.25s ease-out both;
-}
-/* Curved bubble tail — left (assistant) */
-.bubble-tail-left {
-  position: absolute;
-  bottom: 0.4rem;
-  left: -6px;
-  width: 14px;
-  height: 14px;
-  background: white;
-  border-radius: 50%;
-  clip-path: ellipse(70% 100% at 100% 50%);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-}
-
-/* Curved bubble tail — right (user) */
-.bubble-tail-right {
-  position: absolute;
-  bottom: 0.4rem;
-  right: -6px;
-  width: 14px;
-  height: 14px;
-  background: #ffe4c4; /* matches orange-100 */
-  border-radius: 50%;
-  clip-path: ellipse(70% 100% at 0% 50%);
-}
-
-/* Fade-in animation */
-.message-animate {
-  animation: fadeIn 0.35s ease forwards;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-/* Curved bubble tail — left (assistant) */
-.bubble-tail-left {
-  position: absolute;
-  bottom: 0.6rem;
-  left: -6px;
-  width: 14px;
-  height: 14px;
-  background: white;
-  border-radius: 50%;
-  clip-path: ellipse(70% 100% at 100% 50%);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-}
-
-/* Curved bubble tail — right (user) */
-.bubble-tail-right {
-  position: absolute;
-  bottom: 0.6rem;
-  right: -6px;
-  width: 14px;
-  height: 14px;
-  background: #ffe4c4; /* close to tailwind orange-100 */
-  border-radius: 50%;
-  clip-path: ellipse(70% 100% at 0% 50%);
-}
-
-/* Message fade-in */
-.message-animate {
-  animation: fadeIn 0.35s ease forwards;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-/* Curved bubble tail — left (assistant) */
-.bubble-tail-left {
-  position: absolute;
-  bottom: 0.6rem;
-  left: -6px;
-  width: 14px;
-  height: 14px;
-  background: white;
-  border-radius: 50%;
-  clip-path: ellipse(70% 100% at 100% 50%);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-}
-
-/* Curved bubble tail — right (user) */
-.bubble-tail-right {
-  position: absolute;
-  bottom: 0.6rem;
-  right: -6px;
-  width: 14px;
-  height: 14px;
-  background: #ffe4c4; /* close to orange-100 */
-  border-radius: 50%;
-  clip-path: ellipse(70% 100% at 0% 50%);
-}
-
-/* Message fade-in */
 .message-animate {
   animation: fadeInMsg 0.28s ease-out forwards;
 }
 
-@keyframes fadeInMsg {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 @keyframes fadeIn {
   from { opacity: 0; transform: scale(.95); }
   to { opacity: 1; transform: scale(1); }
@@ -217,14 +104,42 @@ body {
 .animate-fadeIn {
   animation: fadeIn .2s ease-out;
 }
+
+/* Bubble Tails */
+.bubble-tail-left {
+  position: absolute;
+  bottom: 0.6rem;
+  left: -6px;
+  width: 14px;
+  height: 14px;
+  background: white;
+  border-radius: 50%;
+  clip-path: ellipse(70% 100% at 100% 50%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.bubble-tail-right {
+  position: absolute;
+  bottom: 0.6rem;
+  right: -6px;
+  width: 14px;
+  height: 14px;
+  background: #ffe4c4;
+  border-radius: 50%;
+  clip-path: ellipse(70% 100% at 0% 50%);
+}
+
+/* UI Elements */
 @keyframes float {
   0% { transform: translateY(0); }
   50% { transform: translateY(-6px); }
   100% { transform: translateY(0); }
 }
+
 .animate-float {
   animation: float 4s ease-in-out infinite;
 }
+
 .glass-btn {
   @apply inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 backdrop-blur-xl border border-white/40 shadow-md hover:bg-white/50 transition;
 }
