@@ -7,7 +7,7 @@ import SearchBar from './searchbar'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
-  const [, setSearchQuery] = useState('') // elide unused state variable to satisfy no-unused-vars
+  const [, setSearchQuery] = useState('') 
   const [isScrolled, setIsScrolled] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)
   const menuRef = useRef<HTMLDivElement | null>(null)
@@ -15,7 +15,6 @@ export default function Navbar() {
   const toggleMenu = () => setIsOpen((v) => !v)
   const handleSearchChange = (q: string) => setSearchQuery(q)
 
-  // Close menu if clicked outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) setIsOpen(false)
@@ -24,7 +23,6 @@ export default function Navbar() {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  // Track desktop vs mobile (md = 768px)
   useEffect(() => {
     const mq = window.matchMedia('(min-width: 768px)')
     const apply = () => setIsDesktop(mq.matches)
@@ -33,7 +31,6 @@ export default function Navbar() {
     return () => mq.removeEventListener('change', apply)
   }, [])
 
-  // Only apply scroll listener on desktop
   useEffect(() => {
     if (!isDesktop) return
     const update = () => setIsScrolled(window.scrollY > 0)
@@ -51,42 +48,39 @@ export default function Navbar() {
 
   const opacityClass = isDesktop ? (isScrolled ? 'opacity-100' : 'opacity-70') : 'opacity-100'
 
+  // Helper class for desktop links to keep code clean
+  const navLinkClass = "hover:text-orange-400 text-black font-bold transition duration-300 ease-in-out transform hover:scale-105"
+
   return (
     <header className={`sticky top-0 z-50 bg-gradient-to-r bg-white/80 text-white shadow-xl transition-opacity duration-300 ${opacityClass}`}>
       <nav className="max-w-7xl mx-auto p-4 flex items-center justify-between">
-       {/* Logo */}
-<div className="flex items-center gap-4">
-  {/* Logo Image */}
-  <div className="bg-white p-2 rounded-lg shadow-md flex items-center justify-center hover:scale-105 transition-transform duration-300">
-    <img
-      src="/images/fulllogo_transparent_nobuffer.png"
-      alt="Clairvil X Logo"
-      width={80}
-      height={80}
-      className="object-contain"
-    />
-  </div>
+        {/* Logo */}
+        <div className="flex items-center gap-4">
+          <div className="bg-white p-2 rounded-lg shadow-md flex items-center justify-center hover:scale-105 transition-transform duration-300">
+            <img
+              src="/images/fulllogo_transparent_nobuffer.png"
+              alt="Clairvil X Logo"
+              width={80}
+              height={80}
+              className="object-contain"
+            />
+          </div>
 
-  {/* Logo Text */}
-  <Link
-    href="/"
-    className="flex flex-col leading-tight hover:opacity-90 transition-opacity"
-  >
-    <span className="text-blue-950 text-xl font-bold tracking-wide">
-      CLAIRVIL X
-    </span>
-    <span className="text-gray-800 text-sm font-medium uppercase">
-      Construction
-    </span>
-  </Link>
-</div>
+          <Link href="/" className="flex flex-col leading-tight hover:opacity-90 transition-opacity">
+            <span className="text-blue-950 text-xl font-bold tracking-wide">CLAIRVIL X</span>
+            <span className="text-gray-800 text-sm font-medium uppercase">Construction</span>
+          </Link>
+        </div>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex space-x-10">
-          <Link href="/" className="hover:text-orange-400 text-black font-bold transition duration-300 ease-in-out transform hover:scale-105">Home</Link>
-          <Link href="/about" className="hover:text-orange-400 text-black font-bold transition duration-300 ease-in-out transform hover:scale-105">About</Link>
-          <Link href="/services" className="hover:text-orange-400 text-black  font-bold transition duration-300 ease-in-out transform hover:scale-105">Services</Link>
-          <Link href="/contact" className="hover:text-orange-400 text-black font-bold transition duration-300 ease-in-out transform hover:scale-105">Contact</Link>
+        <div className="hidden md:flex space-x-8 lg:space-x-10">
+          <Link href="/" className={navLinkClass}>Home</Link>
+          <Link href="/about" className={navLinkClass}>About</Link>
+          <Link href="/services" className={navLinkClass}>Services</Link>
+          {/* New Legal Links */}
+          <Link href="/privacy-policy" className={navLinkClass}>Privacy</Link>
+          <Link href="/terms" className={navLinkClass}>Terms</Link>
+          <Link href="/contact" className={navLinkClass}>Contact</Link>
         </div>
 
         {/* Desktop Search */}
@@ -108,7 +102,7 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile overlay (click anywhere outside to close) */}
+      {/* Mobile overlay */}
       <div
         className={`fixed top-0 left-0 w-full h-full z-40 bg-gray-800/30 ${isOpen ? 'block' : 'hidden'}`}
         onClick={() => setIsOpen(false)}
@@ -136,6 +130,8 @@ export default function Navbar() {
             ['Home', '/'],
             ['About', '/about'],
             ['Services', '/services'],
+            ['Privacy Policy', '/privacy-policy'],
+            ['Terms of Service', '/terms'],
             ['Contact', '/contact'],
           ].map(([label, href]) => (
             <Link
@@ -152,7 +148,7 @@ export default function Navbar() {
           ))}
         </div>
 
-        <div className="flex items-center space-x-6">
+        <div className="pt-4">
           <SearchBar onSearch={handleSearchChange as (q: string) => void} />
         </div>
       </div>
