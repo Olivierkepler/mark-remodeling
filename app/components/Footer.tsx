@@ -43,12 +43,12 @@ const Footer = () => {
               </li>
 
               <li>
-                <Link href="/privacy-polity" className="text-gray-300 hover:text-orange-400 transition duration-300">
+                <Link href="/terms" className="text-gray-300 hover:text-orange-400 transition duration-300">
                   Terms of Service
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="text-gray-300 hover:text-orange-400 transition duration-300">
+                <Link href="/privacy-policy" className="text-gray-300 hover:text-orange-400 transition duration-300">
                   Privacy Policy
                 </Link>
               </li>
@@ -59,9 +59,9 @@ const Footer = () => {
           <div>
             <h3 className="text-xl font-semibold mb-4">Contact Us</h3>
             <ul className="space-y-2 text-gray-300">
-              <li>123 Construction Ave</li>
-              <li>Building City, BC 12345</li>
-              <li>Phone: (555) 123-4567</li>
+              <li>30 Pleasant Street, Floor 2</li>
+              <li>Randolph, MA 02368</li>
+              <li>Phone: (781) 390-4510</li>
               <li>Email: info@ClairvilX.com</li>
             </ul>
           </div>
@@ -89,7 +89,7 @@ const Footer = () => {
 
         {/* Copyright */}
         <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
-          <p>&copy; {new Date().getFullYear()} ClairvilX. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Clairvil X Construction and Services LLC. All rights reserved.</p>
         </div>
       </div>
     </footer>
