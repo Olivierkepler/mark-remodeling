@@ -11,7 +11,7 @@ const Footer = () => {
           
           {/* Company Info */}
           <div>
-            <h3 className="text-xl font-semibold mb-4">ClairvilX</h3>
+            <h3 className="text-xl font-semibold mb-4">Clairvil X Construction and Services LLC</h3>
             <p className="text-gray-300">
               Building dreams into reality with quality craftsmanship and dedication to excellence.
             </p>
@@ -39,6 +39,17 @@ const Footer = () => {
               <li>
                 <Link href="/contact" className="text-gray-300 hover:text-orange-400 transition duration-300">
                   Contact
+                </Link>
+              </li>
+
+              <li>
+                <Link href="/privacy-polity" className="text-gray-300 hover:text-orange-400 transition duration-300">
+                  Terms of Service
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className="text-gray-300 hover:text-orange-400 transition duration-300">
+                  Privacy Policy
                 </Link>
               </li>
             </ul>
