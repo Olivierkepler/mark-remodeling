@@ -2,145 +2,153 @@
 
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Autoplay } from "swiper/modules";
+import { Pagination, Autoplay, EffectFade } from "swiper/modules";
 import { useRouter } from "next/navigation";
-
+import { motion } from "framer-motion";
+import { Sparkles, Play, ArrowUpRight, Zap } from "lucide-react";
 
 import "swiper/css";
 import "swiper/css/pagination";
+import "swiper/css/effect-fade";
 
 export default function RenovationShowcase() {
   const router = useRouter();
 
+  const slides = [
+    "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
+    "https://images.unsplash.com/photo-1503387762-592deb58ef4e",
+    "https://images.unsplash.com/photo-1507089947368-19c1da9775ae",
+  ];
 
   return (
-    <div className="w-full px-4 sm:px-6 lg:px-10 mt-10 flex flex-col lg:flex-row gap-8">
+    <div className="w-full px-6 lg:px-12 mt-12 mb-20 flex flex-col lg:flex-row gap-6 font-sans">
+      
+      {/* LEFT BLOCK – THE INTELLIGENT CORE */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="w-full lg:w-[65%] bg-[#0A0A0A] rounded-[2.5rem] text-white relative overflow-hidden border border-white/5"
+      >
+        {/* Ambient Glow Background */}
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-orange-500/10 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/3" />
 
-      {/* LEFT BLOCK – PROMO SECTION */}
-      <div className="w-full lg:w-2/3 bg-gradient-to-r from-black to-black/80 rounded-2xl text-white relative">
-
-        <div className="flex flex-col lg:flex-row justify-between items-center gap-10">
-
-          {/* LEFT – TEXT CONTENT */}
-          <div className="w-full lg:w-1/2 pl-10  flex flex-col gap-3">
-            <p className="text-xs opacity-80 ">Sponsored</p>
-
-            <div className="flex items-center gap-2">
-              <Image
-                src="/images/robot.png"
-                width={40}
-                height={40}
-                alt="Kepler Logo"
-              />
-              <span className="text-2xl md:text-3xl font-bold">Clairvil X</span>
+        <div className="flex flex-col lg:flex-row h-full">
+          {/* CONTENT AREA */}
+          <div className="flex-1 p-8 md:p-12 lg:p-16 flex flex-col justify-center z-10">
+            <div className="flex items-center gap-3 mb-8">
+              <div className="px-3 py-1 rounded-full bg-white/5 border border-white/10 flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
+                <span className="text-[10px] uppercase tracking-[0.2em] font-black text-slate-400">Next-Gen Systems</span>
+              </div>
+              <span className="text-[10px] uppercase tracking-[0.2em] font-black text-amber-500/60">© 2026</span>
             </div>
 
-            <h1 className="text-3xl md:text-2xl font-black leading-tight mt-4">
-              SAVE BIG ON YOUR NEXT RENOVATION <br /> WITHOUT SACRIFICING QUALITY
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-12 h-12 relative bg-white rounded-xl flex items-center justify-center shadow-2xl">
+                <Image src="/images/robot.png" fill className="p-2 object-contain" alt="Logo" />
+              </div>
+              <h2 className="text-3xl font-black italic tracking-tighter">CLAIRVIL X</h2>
+            </div>
+
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-[0.95] tracking-tighter mb-6 uppercase">
+              Renovation <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-200">
+                Redefined.
+              </span>
             </h1>
 
-            <p className="opacity-90 leading-relaxed text-sm md:text-base mt-2">
-              Unlock contractor-level pricing, premium materials, and personalized renovation
-              planning—all from one powerful app.
+            <p className="max-w-md text-slate-400 text-sm md:text-base leading-relaxed mb-10 border-l-2 border-orange-500/30 pl-6">
+              Access contractor-direct logistics, elite material sourcing, and 
+              AI-driven project orchestration in one singular ecosystem.
             </p>
 
-            {/* ✨ FUTURISTIC RENOVATION AI BUTTON */}
-            <div className="relative group w-fit mt-5">
-              <button
+            {/* AI COMMAND BUTTON */}
+            <div className="flex items-center gap-6">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => router.push("/cmd")}
-                className="backdrop-blur-xl bg-white/10 border border-white/20 shadow-[0_0_25px_rgba(255,150,80,0.4)] hover:shadow-[0_0_45px_rgba(255,150,80,0.7)] rounded-2xl p-2 text-white flex items-center justify-center gap-2 transition-all duration-500 hover:scale-110 hover:-rotate-2 animate-float cursor-pointer"
+                className="relative group bg-white text-black px-8 py-4 rounded-2xl flex items-center gap-3 transition-all"
               >
-                <Image
-                  src="/images/robot.png"
-                  width={50}
-                  height={50}
-                  alt="Kepler Logo"
-                />
-                <span className="font-semibold text-sm md:text-base">Renovation AI</span>
-              </button>
+                <Zap className="w-5 h-5 fill-current" />
+                <span className="font-black uppercase tracking-widest text-xs">Launch AI</span>
+                
+                {/* Tooltip Overlay */}
+                <div className="absolute -top-14 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all bg-black text-white text-[10px] px-4 py-2 rounded-lg border border-white/20 whitespace-nowrap">
+                  Initialize Kepler Assistant
+                </div>
+              </motion.button>
 
-              {/* Tooltip */}
-              <span
-                className="absolute left-full ml-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 bg-white/10 backdrop-blur-xl border border-white/20 text-white text-xs md:text-sm px-3 md:px-4 py-2 rounded-xl shadow-lg whitespace-nowrap transition-all duration-500"
-              >
-                Open AI Renovation Assistant →
-              </span>
-
-              {/* Neon Glow */}
-              <div className="absolute inset-0 rounded-2xl -z-10 bg-gradient-to-br from-orange-500/50 to-yellow-400/40 opacity-0 group-hover:opacity-60 blur-xl transition-all duration-500"></div>
+              <div className="flex flex-col">
+                <span className="text-[10px] font-black uppercase text-orange-500 tracking-widest">Pricing Model</span>
+                <span className="text-white text-sm font-bold">Contractor Direct</span>
+              </div>
             </div>
-
-            <style>{`
-              @keyframes float {
-                0% { transform: translateY(0); }
-                50% { transform: translateY(-6px); }
-                100% { transform: translateY(0); }
-              }
-              .animate-float {
-                animation: float 4s ease-in-out infinite;
-              }
-            `}</style>
           </div>
 
-          {/* RIGHT – IMAGE CAROUSEL */}
-          <div className="relative w-full lg:w-1/2 h-[280px] sm:h-[350px] md:h-[420px] lg:h-[450px] rounded-b-2xl lg:rounded-r-2xl overflow-hidden">
+          {/* VISUAL SHOWCASE AREA */}
+          <div className="w-full lg:w-1/2 relative min-h-[400px] border-l border-white/5">
             <Swiper
-              modules={[Pagination, Autoplay]}
+              modules={[Pagination, Autoplay, EffectFade]}
+              effect="fade"
               pagination={{ clickable: true }}
-              autoplay={{ delay: 3000 }}
+              autoplay={{ delay: 4000 }}
               loop={true}
               className="w-full h-full"
             >
-              {[
-                "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
-                "https://images.unsplash.com/photo-1570129477492-45c003edd2be",
-                "https://images.unsplash.com/photo-1503387762-592deb58ef4e",
-                "https://images.unsplash.com/photo-1507089947368-19c1da9775ae",
-              ].map((url, i) => (
+              {slides.map((url, i) => (
                 <SwiperSlide key={i}>
-                  <div className="relative w-full h-full">
-                    <Image
-                      src={url}
-                      alt={`Renovation Slide ${i}`}
-                      fill
-                      className="object-cover rounded-b-2xl lg:rounded-r-2xl"
-                      priority={i === 0}
-                    />
+                  <div className="relative w-full h-full group">
+                    <Image src={url} alt="Slide" fill className="object-cover transition-transform duration-[5000ms] group-hover:scale-110" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-transparent to-transparent opacity-60" />
                   </div>
                 </SwiperSlide>
               ))}
             </Swiper>
           </div>
         </div>
-      </div>
+      </motion.div>
 
-      {/* RIGHT BLOCK – STATIC / VIDEO PROMO */}
-      <div className="w-full lg:flex-1 rounded-2xl overflow-hidden relative h-[300px] sm:h-[380px] md:h-[450px] lg:h-auto">
+      {/* RIGHT BLOCK – THE SECONDARY EXPERIENCE */}
+      <motion.div 
+        initial={{ opacity: 0, x: 20 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        className="w-full lg:flex-1 group relative rounded-[2.5rem] overflow-hidden bg-slate-900 border border-white/5"
+      >
         <Image
           src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb"
-          alt="Holiday Decor"
+          alt="Luxury Interior"
           fill
-          className="object-cover"
+          className="object-cover opacity-70 grayscale-[0.5] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
         />
+        
+        {/* Glass Overlay */}
+        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
 
-        <div className="absolute top-8 left-8 text-white drop-shadow-xl max-w-[220px]">
-          <h2 className="text-2xl md:text-3xl font-black leading-tight">
-            START DECKING<br />THE HALLS
+        <div className="absolute inset-x-8 bottom-12 text-white">
+          <div className="flex items-center gap-2 mb-4">
+             <div className="h-px w-8 bg-orange-500" />
+             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-orange-400">Curated Design</span>
+          </div>
+          
+          <h2 className="text-4xl font-black leading-[0.9] tracking-tighter uppercase mb-6">
+            Elite <br /> Aesthetics
           </h2>
 
-          <p className="mt-3 text-sm md:text-base opacity-90">
-            Holiday Decor for<br />Inside & Out
-          </p>
-
-          <button className="mt-4 border-b border-white text-sm md:text-base hover:opacity-80">
-            Shop Now
+          <button className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest bg-white/10 backdrop-blur-md border border-white/20 px-6 py-3 rounded-xl hover:bg-white hover:text-black transition-all">
+            Explore Portfolio <ArrowUpRight className="w-4 h-4" />
           </button>
         </div>
 
-        <button className="absolute top-4 right-4 bg-white/80 backdrop-blur p-3 rounded-full shadow text-black text-lg">
-          ▶
-        </button>
-      </div>
+        <motion.button 
+          whileHover={{ scale: 1.1, rotate: 90 }}
+          className="absolute top-8 right-8 w-14 h-14 bg-white rounded-full flex items-center justify-center text-black shadow-2xl transition-transform"
+        >
+          <Play className="w-6 h-6 fill-current" />
+        </motion.button>
+      </motion.div>
     </div>
   );
 }
