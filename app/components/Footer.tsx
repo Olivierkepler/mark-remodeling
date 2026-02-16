@@ -32,7 +32,7 @@ const Footer = () => {
               <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(255,255,255,0.1)]">
                 <img src="/images/fulllogo_transparent_nobuffer.png" alt="Logo" className="w-8 h-8 object-contain" />
               </div>
-              <span className="text-2xl font-black italic tracking-tighter uppercase">Clairvil X</span>
+              <span className="text-2xl font-black italic tracking-tighter uppercase">Clairvil X Construction and Services LLC</span>
             </div>
             
             <h2 className="text-3xl md:text-4xl font-extralight leading-tight tracking-tighter">
