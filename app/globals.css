@@ -24,14 +24,37 @@
   }
 }
 
+/* --- MOBILE STABILITY & SCROLL FIX --- */
+html {
+  /* Force vertical scrolling to be active */
+  overflow-y: auto;
+  /* Prevent horizontal overflow at the root */
+  overflow-x: hidden;
+  /* Ensure height is determined by content */
+  height: auto;
+  scroll-behavior: smooth;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
-  overflow-x: hidden; /* Added for mobile x-axis stability */
+  
+  /* Y-Axis: Allow scrolling */
+  overflow-y: visible;
+  /* X-Axis: Stable width */
+  overflow-x: hidden;
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  
+  /* Smooth momentum scrolling for mobile Safari */
+  -webkit-overflow-scrolling: touch;
+  /* Fixes text size adjustment on orientation change */
+  -webkit-text-size-adjust: 100%;
 }
 
-/* BOT AVATAR BLINKING */
+/* --- BOT AVATAR BLINKING --- */
 @keyframes blink {
   0%, 90%, 100% { transform: scaleY(1); }
   95% { transform: scaleY(0.1); }
@@ -41,7 +64,7 @@ body {
   animation: blink 4s infinite;
 }
 
-/* TYPING DOTS */
+/* --- TYPING DOTS --- */
 @keyframes typingDot {
   0% { opacity: 0.2; transform: translateY(0); }
   50% { opacity: 1; transform: translateY(-3px); }
@@ -52,7 +75,7 @@ body {
 .dot-2 { animation: typingDot 1s infinite 0.2s; }
 .dot-3 { animation: typingDot 1s infinite 0.4s; }
 
-/* AI WAVE ANIMATION */
+/* --- AI WAVE ANIMATION --- */
 @keyframes wave {
   0% { transform: scaleY(1); }
   50% { transform: scaleY(2.4); }
@@ -63,7 +86,7 @@ body {
   animation: wave 1.2s infinite ease-in-out;
 }
 
-/* ANIMATED GRADIENT BORDER */
+/* --- ANIMATED GRADIENT BORDER --- */
 .gradient-border {
   position: relative;
 }
@@ -86,7 +109,7 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-/* Unified Message Animations */
+/* --- Unified Message Animations --- */
 @keyframes fadeInMsg {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
@@ -105,7 +128,7 @@ body {
   animation: fadeIn .2s ease-out;
 }
 
-/* Bubble Tails */
+/* --- Bubble Tails --- */
 .bubble-tail-left {
   position: absolute;
   bottom: 0.6rem;
@@ -129,7 +152,7 @@ body {
   clip-path: ellipse(70% 100% at 0% 50%);
 }
 
-/* UI Elements */
+/* --- UI Elements --- */
 @keyframes float {
   0% { transform: translateY(0); }
   50% { transform: translateY(-6px); }
