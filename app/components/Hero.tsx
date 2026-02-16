@@ -10,7 +10,7 @@ function Hero() {
     'https://holh1uldewromppp.public.blob.vercel-storage.com/images/hero/image-1754873406587.png'
 
   return (
-    <section className="relative min-h-screen pt-24 pb-12 w-full flex items-center overflow-hidden bg-[#050505]">
+    <section className="relative min-h-screen pt-28 pb-12 w-full flex items-center overflow-hidden bg-[#050505]">
       {/* Background with Mobile-Specific Overlay */}
       <div className="absolute inset-0 z-0">
         <Image
