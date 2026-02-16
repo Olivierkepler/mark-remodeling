@@ -1,109 +1,109 @@
 'use client'
 
 import Image from 'next/image'
-import Script from 'next/script' // Important for the form loader
+import Script from 'next/script'
 import { motion } from 'framer-motion'
-import { Phone, Mail, ArrowRight, ShieldCheck, Star } from 'lucide-react'
+import { Phone, ShieldCheck, Star, ArrowRight, CheckCircle2 } from 'lucide-react'
 
 function Hero() {
   const HERO_URL =
     'https://holh1uldewromppp.public.blob.vercel-storage.com/images/hero/image-1754873406587.png'
 
   return (
-    <section className="relative min-h-screen lg:min-h-[90vh] flex items-center text-white overflow-hidden bg-[#0a0a0a]">
-      {/* Premium Background */}
-      <div className="absolute inset-0">
+    <section className="relative min-h-[95vh] pt-30 pb-10 w-full flex items-center overflow-hidden bg-[#050505]">
+      {/* Background */}
+      <div className="absolute inset-0 z-0">
         <Image
           src={HERO_URL}
-          alt="Luxury Construction Craftsmanship"
+          alt="Luxury Renovation Craftsmanship"
           fill
           priority
-          sizes="100vw"
-          className="object-cover scale-105"
+          className="object-cover object-center opacity-80 scale-105 select-none"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent z-10" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent z-10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black via-black/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-black/20" />
       </div>
 
-      <div className="relative z-20 max-w-7xl mx-auto px-6 lg:px-12 py-20 flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 w-full py-20 lg:py-0 flex flex-col lg:flex-row items-center gap-16">
         
-        {/* Left Content */}
-        <div className="flex flex-col text-left max-w-2xl">
+        {/* LEFT CONTENT */}
+        <div className="flex-1 text-left">
           <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-2 mb-6 w-fit px-3 py-1 rounded-full bg-white/10 border border-white/20 backdrop-blur-md"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 backdrop-blur-xl mb-8"
           >
-            <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-            <span className="text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-amber-200">
-              Massachusetts Premium Contractor
+            <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+            <span className="text-[10px] tracking-[0.3em] font-bold text-amber-200 uppercase">
+              The Gold Standard in MA Construction
             </span>
           </motion.div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-5xl md:text-7xl lg:text-8xl font-light leading-[1.1] tracking-tight"
           >
-            Building <br />
-            <span className="font-extrabold italic text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-amber-200">
-              Legacies.
-            </span>
-          </motion.h1>
+            <h1 className="text-6xl md:text-8xl lg:text-9xl font-extralight tracking-tighter text-white leading-[0.95] mb-6">
+              Precision <br />
+              <span className="font-black italic text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-white to-slate-400">
+                Crafted.
+              </span>
+            </h1>
+            
+            <p className="max-w-md text-lg md:text-xl text-slate-300/90 font-light leading-relaxed mb-10 border-l-2 border-amber-500/50 pl-6">
+              Specializing in high-end residential transformations where architectural integrity meets unparalleled luxury.
+            </p>
+          </motion.div>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="mt-8 text-lg md:text-xl text-slate-300 max-w-lg leading-relaxed font-light"
-          >
-            Clairvil X Construction redefines luxury living through uncompromising precision and architectural excellence.
-          </motion.p>
+          <motion.div className="flex flex-col sm:flex-row items-start sm:items-center gap-8 text-white/70">
+            <div className="flex -space-x-3">
+               {[1,2,3,4].map(i => (
+                 <div key={i} className="w-10 h-10 rounded-full border-2 border-black bg-slate-800 flex items-center justify-center text-[10px] font-bold">
+                    {i === 4 ? '5.0' : <CheckCircle2 className="w-4 h-4 text-amber-400" />}
+                 </div>
+               ))}
+               <div className="pl-6 flex flex-col justify-center">
+                  <span className="text-white font-bold text-sm leading-none">Rated 5/5 Stars</span>
+                  <span className="text-[10px] uppercase tracking-widest opacity-60">Verified Reviews</span>
+               </div>
+            </div>
 
-          <div className="mt-10 flex items-center gap-6">
-             <div className="flex flex-col gap-1">
-                <span className="text-amber-200 text-xs uppercase tracking-widest font-bold">Direct Line</span>
-                <a href="tel:8573467357" className="text-xl font-medium hover:text-amber-200 transition-colors">857-346-7357</a>
-             </div>
-             <div className="w-[1px] h-10 bg-white/20" />
-             <div className="flex flex-col gap-1">
-                <span className="text-amber-200 text-xs uppercase tracking-widest font-bold">Email</span>
-                <a href="mailto:mhclairvil@gmail.com" className="text-xl font-medium hover:text-amber-200 transition-colors">Contact Us</a>
-             </div>
-          </div>
+            <a href="tel:8573467357" className="group flex items-center gap-4 hover:text-white transition-colors">
+               <div className="p-3 rounded-full bg-white/5 border border-white/10 group-hover:bg-amber-500 group-hover:text-black transition-all">
+                  <Phone className="w-5 h-5" />
+               </div>
+               <span className="text-lg font-semibold tracking-tight">857-346-7357</span>
+            </a>
+          </motion.div>
         </div>
 
-        {/* Right Content: LeadConnector Embedded Form */}
+        {/* RIGHT CONTENT: THE FORM */}
         <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.4 }}
-          className="w-full max-w-[500px] relative"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="w-full lg:w-[480px] relative"
         >
-          {/* Glassmorphism Container for Form */}
-          <div className="relative z-10 bg-white/95 rounded-2xl shadow-2xl overflow-hidden p-1 border border-white/20">
-            <div className="bg-gray-50 p-4 border-b border-gray-200">
-                <h3 className="text-gray-900 font-bold text-lg">Request a Private Quote</h3>
-                <p className="text-gray-500 text-sm">Fill out the form below to begin your project.</p>
+          <div className="absolute -inset-1 bg-gradient-to-b from-amber-500/20 to-blue-500/20 blur-2xl rounded-[2rem] opacity-50" />
+          
+          <div className="relative bg-[#ffffff] rounded-3xl shadow-2xl overflow-hidden">
+            <div className="bg-[#111] px-8 py-4 flex justify-between items-center">
+               <div>
+                  <h3 className="text-white font-bold text-xl tracking-tight">Project Inquiry</h3>
+                  <p className="text-amber-200/70 text-[10px] uppercase tracking-[0.2em] font-bold">Elite Concierge Service</p>
+               </div>
+               <img src="/images/fulllogo_transparent_nobuffer.png" alt="Logo" width={60} height={60} className="object-contain" />
             </div>
             
-            <div className="w-full min-h-[550px] lg:min-h-[600px]">
+            {/* SCROLLABLE WRAPPER */}
+            <div className="w-full h-[580px] lg:h-[620px] overflow-y-auto scrollbar-hide">
                 <iframe
                     src="https://api.leadconnectorhq.com/widget/form/5olFlOgVmZkKBiE3PglC"
-                    style={{ width: '100%', height: '100%', border: 'none', borderRadius: '3px' }}
+                    /* Setting height to 1000px forces the parent container to scroll */
+                    style={{ width: '100%', height: '1000px', border: 'none' }}
                     id="inline-5olFlOgVmZkKBiE3PglC" 
                     data-layout="{'id':'INLINE'}"
-                    data-trigger-type="alwaysShow"
-                    data-trigger-value=""
-                    data-activation-type="alwaysActivated"
-                    data-activation-value=""
-                    data-deactivation-type="neverDeactivate"
-                    data-deactivation-value=""
                     data-form-name="Form 4"
-                    data-height="990"
-                    data-layout-iframe-id="inline-5olFlOgVmZkKBiE3PglC"
-                    data-form-id="5olFlOgVmZkKBiE3PglC"
                     title="Form 4"
                 />
                 <Script 
@@ -112,11 +112,17 @@ function Hero() {
                 />
             </div>
           </div>
-          
-          {/* Ambient Glow */}
-          <div className="absolute -inset-4 bg-amber-500/20 blur-3xl rounded-full -z-10" />
-        </motion.div>
 
+          <div className="absolute -bottom-6 -right-6 hidden md:flex items-center gap-3 bg-black border border-white/20 p-4 rounded-2xl backdrop-blur-xl shadow-2xl">
+             <div className="w-10 h-10 rounded-full bg-amber-500 flex items-center justify-center text-black">
+                <ShieldCheck className="w-6 h-6" />
+             </div>
+             <div className="pr-4 text-white">
+                <p className="text-[10px] opacity-50 uppercase font-bold tracking-tighter">Licensed & Insured</p>
+                <p className="text-sm font-bold leading-none">HIC #123456</p>
+             </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   )
