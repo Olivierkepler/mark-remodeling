@@ -119,7 +119,7 @@ function Hero() {
              </div>
              <div className="pr-4 text-white">
                 <p className="text-[10px] opacity-50 uppercase font-bold tracking-tighter">Licensed & Insured</p>
-                <p className="text-sm font-bold leading-none">HIC #123456</p>
+                <p className="text-sm font-bold leading-none">HIC #213061</p>
              </div>
           </div>
         </motion.div>
