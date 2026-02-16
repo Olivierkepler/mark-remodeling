@@ -55,11 +55,38 @@ export default function PrivacyPolicy() {
 
           {/* Section 4 */}
           <section className="bg-blue-50 p-6 rounded-lg">
-            <h2 className="text-2xl font-semibold mb-3">4. Text Messages and Marketing Communications</h2>
-            <p>If you provide your phone number, you may receive appointment confirmations, project updates, or promotional offers.</p>
-            <p className="mt-2 font-bold italic">You may opt out at any time by replying STOP to any message.</p>
-            <p className="mt-2">We do not sell or share your phone number with third parties for marketing purposes.</p>
-          </section>
+            <h2 className="text-2xl font-semibold mb-3">4. SMS Communications & Opt-In Policy</h2>
+          
+          <p>
+
+By providing your mobile phone number through our website forms, estimate requests, appointment bookings, or other contact methods, you expressly consent to receive non-marketing and/or marketing text messages from Clairvil X Construction and Services.
+
+These messages may include:
+
+Appointment confirmations
+
+Project updates
+
+Scheduling reminders
+
+Customer service communications
+
+Promotional offers (if applicable)
+
+Message frequency may vary depending on your interaction with us.
+
+Message and data rates may apply based on your mobile carrier plan.
+
+You can opt out of receiving text messages at any time by replying STOP to any message. After you send STOP, you will receive a confirmation message and will no longer receive SMS messages from us.
+
+For assistance, reply HELP or contact us at:
+
+Phone: +1 (781) 390-4510
+Email: info@clairvilx.com
+
+Your mobile information will not be sold, rented, or shared with third parties for marketing purposes.</p>
+          
+           </section>
 
           {/* Section 5 and 6 */}
           <div className="grid md:grid-cols-2 gap-8">
@@ -95,7 +122,7 @@ export default function PrivacyPolicy() {
               <p>We are not responsible for the privacy practices of linked third-party websites (like social media platforms).</p>
             </section>
             <section>
-              <h2 className="text-xl font-semibold mb-2">10. Childrenandapos;s Privacy</h2>
+              <h2 className="text-xl font-semibold mb-2">10. Children's Privacy</h2>
               <p>Our services are not intended for individuals under 18 years of age.</p>
             </section>
           </div>

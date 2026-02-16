@@ -69,20 +69,24 @@ const Footer = () => {
           {/* Social Links */}
           <div>
             <h3 className="text-xl font-semibold mb-4">Follow Us</h3>
-            <div className="flex space-x-4">
-              <a href="#" className="text-gray-300 hover:text-orange-400 transition duration-300">
-                <FacebookIcon className="w-6 h-6" />
-              </a>
-              <a href="#" className="text-gray-300 hover:text-orange-400 transition duration-300">
-                <TwitterIcon className="w-6 h-6" />
-              </a>
-              <a href="#" className="text-gray-300 hover:text-orange-400 transition duration-300">
-                <InstagramIcon className="w-6 h-6" />
-              </a>
-              <a href="#" className="text-gray-300 hover:text-orange-400 transition duration-300">
-                <LinkedinIcon className="w-6 h-6" />
-              </a>
-            </div>
+            <div className="flex space-x-5">
+  {[
+    { id: 'fb', icon: FacebookIcon, href: 'https://www.facebook.com/profile.php?id=61580135264497' },
+    { id: 'ig', icon: InstagramIcon, href: 'https://www.instagram.com/clairvil_x_construction/' },
+    { id: 'li', icon: LinkedinIcon, href: 'https://www.linkedin.com/company/109205116/admin/dashboard/' },
+  ].map((social) => (
+    <a
+      key={social.id}
+      href={social.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-gray-400 hover:text-amber-500 transition-all duration-300 hover:-translate-y-1"
+      aria-label={`Visit Clairvil X on ${social.id}`}
+    >
+      <social.icon className="w-6 h-6" />
+    </a>
+  ))}
+</div>
           </div>
 
         </div>
