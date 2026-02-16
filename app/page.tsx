@@ -19,7 +19,7 @@ export default function Home() {
       {/* <RenovationAssistant /> */}
       {/* <RoomPhotoAnalyzer /> */}
       <FeaturedProjects />
-      <ServicesSection services={services} />
+      <ServicesSection />
 
       <About />
 

@@ -1,117 +1,149 @@
-// app/components/Services.tsx
 'use client';
 
+import React from 'react';
 import { motion } from 'framer-motion';
+import { 
+  UtensilsCrossed, 
+  Bath, 
+  Warehouse, 
+  PlusSquare, 
+  Home, 
+  Wrench, 
+  ArrowUpRight,
+  Star,
+  ArrowRight
+} from 'lucide-react';
 
-type Service = {
+interface Service {
   title: string;
   description: string;
-  icon?: string;      // emoji or Tailwind-powered SVG if you prefer
-  href?: string;      // optional "Learn more" link
-};
+  icon: React.ReactNode;
+  tag: string;
+}
 
 const defaultServices: Service[] = [
-  { title: 'Kitchen Remodeling',  description: 'Full kitchen renovations: cabinetry, countertops, appliances, lighting, and layout optimization.', icon: '🍽️' },
-  { title: 'Bathroom Remodeling', description: 'Modern fixtures, custom tile work, walk-in showers, vanities, and spa-level details.',      icon: '🚿' },
-  { title: 'Basement Finishing',  description: 'Turn unused basements into media rooms, guest suites, gyms, or play spaces.',              icon: '🏡' },
-  { title: 'Room Additions',      description: 'Add square footage with seamless additions that match your home’s style.',                 icon: '➕' },
-  { title: 'Exterior Renovations',description: 'Siding, roofing, doors, windows, and outdoor living spaces built to last.',               icon: '🏠' },
-  { title: 'Handyman Services',   description: 'Repairs, maintenance, and small upgrades handled quickly and professionally.',             icon: '🧰' },
+  { title: 'Kitchen Remodeling', tag: 'Culinary Spaces', description: 'Bespoke cabinetry, premium stone surfaces, and layout optimization for the modern chef.', icon: <UtensilsCrossed className="w-6 h-6" /> },
+  { title: 'Bathroom Remodeling', tag: 'Private Spas', description: 'Curated tile work, walk-in steam showers, and high-end fixtures for ultimate relaxation.', icon: <Bath className="w-6 h-6" /> },
+  { title: 'Basement Finishing', tag: 'Entertainment', description: 'Converting subterranean levels into sophisticated lounges, media rooms, or fitness suites.', icon: <Warehouse className="w-6 h-6" /> },
+  { title: 'Room Additions', tag: 'Expansion', description: 'Seamlessly integrated square footage designed to match your home’s original character.', icon: <PlusSquare className="w-6 h-6" /> },
+  { title: 'Exterior Renovations', tag: 'Curb Appeal', description: 'Luxury siding, architectural roofing, and outdoor living environments built for longevity.', icon: <Home className="w-6 h-6" /> },
+  { title: 'Handyman Services', tag: 'Maintenance', description: 'White-glove repair and maintenance services handled with professional-grade precision.', icon: <Wrench className="w-6 h-6" /> },
 ];
 
 export default function ServicesSection({ services = defaultServices }: { services?: Service[] }) {
   return (
-    <section id="services" className="relative ">
-      {/* soft background */}
-      <div
-        aria-hidden
-        className="absolute inset-0 -z-10"
-        style={{
-          background:
-            'radial-gradient(60% 50% at 10% 10%, rgba(30,58,138,0.06), transparent 60%), radial-gradient(50% 40% at 90% 20%, rgba(245,158,11,0.08), transparent 60%)',
-        }}
-      />
-
-      <div className="mx-auto max-w-full px-6 lg:px-4">
+    <section id="services" className="relative bg-[#050505] py-24 lg:py-32 overflow-hidden">
+      {/* Background Architectural Accent */}
+      <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-[600px] h-[600px] bg-amber-500/10 blur-[120px] rounded-full pointer-events-none" />
+      
+      <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-12">
+        
         {/* Header */}
-        <div className="mx-auto max-w-2xl text-center">
-          <span className="inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wide text-gray-600 border-gray-200">
-            Our Services
-          </span>
-          <h2 className="mt-4 text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900">
-            Renovations that blend <span className="text-amber-500">craft</span> and <span className="text-blue-700">precision</span>
-          </h2>
-          <p className="mt-4 text-gray-600">
-            From concept to completion, we manage every detail so your project finishes on time and on budget.
-          </p>
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-20">
+          <div className="max-w-2xl">
+            <motion.span 
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-amber-400 text-xs font-bold uppercase tracking-[0.4em] block mb-4"
+            >
+              Our Expertise
+            </motion.span>
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="text-4xl md:text-6xl font-light text-white tracking-tighter leading-tight"
+            >
+              Mastering the Art of <br />
+              <span className="font-black italic text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-amber-200">
+                Structural Luxury.
+              </span>
+            </motion.h2>
+          </div>
+          <motion.p 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+            className="text-slate-400 max-w-sm text-sm md:text-base font-light leading-relaxed border-l border-white/10 pl-8"
+          >
+            We don’t just renovate; we restore purpose and elegance to your living environment through disciplined craft.
+          </motion.p>
         </div>
 
-        {/* Cards */}
-        <motion.ul
+        {/* Grid */}
+        <motion.div
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, amount: 0.2 }}
-          variants={{ hidden: {}, show: { transition: { staggerChildren: 0.06 } } }}
-          className="mt-12   grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={{
+            hidden: { opacity: 0 },
+            show: {
+              opacity: 1,
+              transition: { staggerChildren: 0.1 }
+            }
+          }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5 border border-white/5"
         >
-          {services.map((s, i) => (
-            <motion.li
+          {services.map((service, i) => (
+            <motion.div
               key={i}
               variants={{
-                hidden: { y: 12, opacity: 0 },
-                show:   { y: 0,  opacity: 1, transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } },
+                hidden: { opacity: 0, y: 20 },
+                show: { opacity: 1, y: 0, transition: { duration: 0.6 } }
               }}
-              className="group relative  overflow-hidden rounded-2xl border bg-white p-6 shadow-sm transition hover:shadow-md"
-              style={{ borderColor: 'rgba(30,58,138,0.12)' }}
+              className="group relative bg-[#0a0a0a] p-10 transition-all duration-500 hover:bg-[#111111]"
             >
-              {/* accent ring on hover */}
-              <div className="pointer-events-none  absolute inset-0 rounded-2xl ring-1 ring-transparent transition group-hover:ring-amber-300/50" />
+              <div className="flex flex-col h-full">
+                <div className="flex justify-between items-start mb-12">
+                  <div className="p-3 bg-white/5 rounded-xl text-amber-400 group-hover:bg-amber-500 group-hover:text-black transition-all duration-500">
+                    {service.icon}
+                  </div>
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-white/30 font-bold">{service.tag}</span>
+                </div>
 
-              {/* icon */}
-              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-100 to-amber-50 text-2xl">
-                {s.icon ?? '🔧'}
+                <h3 className="text-xl font-bold text-white mb-4 tracking-tight group-hover:text-amber-200 transition-colors">
+                  {service.title}
+                </h3>
+                <p className="text-slate-400 text-sm leading-relaxed mb-8 font-light">
+                  {service.description}
+                </p>
+
+                <div className="mt-auto pt-6 border-t border-white/5 flex items-center justify-between opacity-40 group-hover:opacity-100 transition-opacity">
+                   <span className="text-[10px] uppercase tracking-widest text-white font-medium text-xs">Bespoke Solution</span>
+                   <ArrowUpRight className="w-4 h-4 text-amber-500" />
+                </div>
               </div>
-
-              {/* content */}
-              <h3 className="text-lg font-semibold text-gray-900">{s.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-gray-600">{s.description}</p>
-
-              {/* footer/cta */}
-              <div className="mt-5 flex items-center justify-between">
-                <span className="text-xs font-medium text-gray-500">Licensed • Insured • Guaranteed</span>
-                {s.href ? (
-                  <a
-                    href={s.href}
-                    className="text-sm font-semibold text-amber-600 hover:text-amber-700"
-                  >
-                    Learn more →
-                  </a>
-                ) : (
-                  <a
-                    href="#contact"
-                    className="text-sm font-semibold text-blue-700 hover:text-blue-800"
-                  >
-                    Get a quote →
-                  </a>
-                )}
-              </div>
-            </motion.li>
+            </motion.div>
           ))}
-        </motion.ul>
+        </motion.div>
 
-        {/* Bottom CTA bar */}
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 rounded-2xl border bg-white/70 p-5 backdrop-blur-xl shadow md:flex-row"
-             style={{ borderColor: 'rgba(30,58,138,0.12)' }}>
-          <p className="text-sm text-gray-700">
-            Not sure where to start? We’ll help you prioritize, plan, and price the perfect scope.
-          </p>
+        {/* Bottom CTA */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-20 flex flex-col md:flex-row items-center justify-between gap-8 p-10 rounded-[2rem] bg-gradient-to-br from-[#111] to-black border border-white/10 shadow-2xl"
+        >
+          <div className="flex items-center gap-6">
+            <div className="h-12 w-12 rounded-full bg-amber-500 flex items-center justify-center text-black">
+              <Star className="w-6 h-6 fill-black" />
+            </div>
+            <div>
+              <h4 className="text-white font-bold text-lg leading-none mb-2 tracking-tight">Ready to elevate your home?</h4>
+              <p className="text-slate-400 text-sm">Join over 200+ homeowners who trusted our structural expertise.</p>
+            </div>
+          </div>
           <a
             href="#contact"
-            className="rounded-full bg-amber-500 px-5 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-amber-600"
+            className="group px-8 py-4 rounded-full bg-white text-black font-bold text-sm uppercase tracking-widest flex items-center gap-3 hover:bg-amber-500 transition-all"
           >
-            Book a free consultation
+            Start Your Journey
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </a>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
