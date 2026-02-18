@@ -57,7 +57,7 @@ const Footer = () => {
           <div className="lg:col-span-3">
             <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-amber-500 mb-8">Navigation</h3>
             <ul className="grid grid-cols-2 lg:grid-cols-1 gap-y-4">
-              {['Home', 'About', 'Services', 'Contact', 'Terms', 'Privacy'].map((item) => (
+              {['Home', 'About', 'Services', 'Contact', 'Terms', 'privacy-policy'].map((item) => (
                 <li key={item}>
                   <Link 
                     href={item === 'Home' ? '/' : `/${item.toLowerCase().replace(' ', '-')}`} 
