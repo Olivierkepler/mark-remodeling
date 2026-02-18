@@ -34,7 +34,7 @@ export default function Navbar() {
         
         {/* LOGO AREA */}
         <Link href="/" className="flex items-center gap-4 group">
-          <div className="relative h-12 w-12 bg-slate-950 rounded-xl flex items-center justify-center overflow-hidden transition-transform duration-500 group-hover:scale-110 shadow-2xl border border-white/10">
+          <div className="relative h-12 w-12 bg-white rounded-xl flex items-center justify-center overflow-hidden transition-transform duration-500 group-hover:scale-110 shadow-2xl border border-white/10">
             <img
               src="/images/fulllogo_transparent_nobuffer.png"
               alt="Logo"
